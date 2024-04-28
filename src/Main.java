@@ -6,7 +6,9 @@ public class Main {
 
 //        SwingUtilities.invokeLater(Window::new);
 //        SwingUtilities.invokeLater(Window2::new);
-        SwingUtilities.invokeLater(Window3::new);
+//        SwingUtilities.invokeLater(Window3::new);
+//        SwingUtilities.invokeLater(LabelWindow::new);
+        SwingUtilities.invokeLater(WindowWithPanels::new);
 
     }
 }
