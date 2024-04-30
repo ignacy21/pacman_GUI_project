@@ -7,13 +7,14 @@ import java.awt.*;
 
 public class PacmanPanel extends JPanel implements Runnable {
 
-    private Pacman pacman = new Pacman(300, 300, 5);
+    private final Pacman pacman;
 
     private final Thread thread = new Thread(this);
 
-    public PacmanPanel() {
+    public PacmanPanel(Pacman pacman) {
         thread.start();
 
+        this.pacman = pacman;
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(pacman);
@@ -22,6 +23,7 @@ public class PacmanPanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
+        int animationCounter = 0;
         while (thread != null) {
 
             update();

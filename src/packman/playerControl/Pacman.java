@@ -14,23 +14,46 @@ public class Pacman implements Player {
     private int xPosition;
     private int yPosition;
     private int speed;
-
     private int animationCounter = 0;
-    private final List<BufferedImage> animation;
+    private final List<BufferedImage> animationUp;
+    private final List<BufferedImage> animationDown;
+    private final List<BufferedImage> animationLeft;
+    private final List<BufferedImage> animationRight;
 
 
     public Pacman(int xPosition, int yPosition, int speed) {
-        List<BufferedImage> animation1;
+        List<BufferedImage> animationUp;
+        List<BufferedImage> animationDown;
+        List<BufferedImage> animationLeft;
+        List<BufferedImage> animationRight;
         try {
-            animation1 = List.of(
-                    ImageIO.read(new File("resources/images/pacman_1.png")),
-                    ImageIO.read(new File("resources/images/pacman_2.png")),
-                    ImageIO.read(new File("resources/images/pacman_3.png"))
+            animationUp = List.of(
+                    ImageIO.read(new File("resources/images/pacman/up/pacman_1.png")),
+                    ImageIO.read(new File("resources/images/pacman/up/pacman_2.png")),
+                    ImageIO.read(new File("resources/images/pacman/pacman.png"))
             );
+            animationDown = List.of(
+                    ImageIO.read(new File("resources/images/pacman/down/pacman_1.png")),
+                    ImageIO.read(new File("resources/images/pacman/down/pacman_2.png")),
+                    ImageIO.read(new File("resources/images/pacman/pacman.png"))
+                    );
+            animationRight = List.of(
+                    ImageIO.read(new File("resources/images/pacman/right/pacman_1.png")),
+                    ImageIO.read(new File("resources/images/pacman/right/pacman_2.png")),
+                    ImageIO.read(new File("resources/images/pacman/pacman.png"))
+                    );
+            animationLeft = List.of(
+                    ImageIO.read(new File("resources/images/pacman/left/pacman_1.png")),
+                    ImageIO.read(new File("resources/images/pacman/left/pacman_2.png")),
+                    ImageIO.read(new File("resources/images/pacman/pacman.png"))
+                    );
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.animation = animation1;
+        this.animationUp = animationUp;
+        this.animationDown = animationDown;
+        this.animationLeft = animationLeft;
+        this.animationRight = animationRight;
         this.direction = Direction.UP;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
@@ -86,17 +109,21 @@ public class Pacman implements Player {
 
     @Override
     public void repaint(Graphics2D g2) {
-//        try {
-//            Thread.sleep(100);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-        if (animationCounter >= 3) {
-            animationCounter = 0;
+        List<BufferedImage> animationList = animationUp;
+        switch (direction) {
+            case DOWN -> animationList = animationDown;
+            case LEFT -> animationList = animationLeft;
+            case RIGHT -> animationList = animationRight;
         }
-        BufferedImage bufferedImage = animation.get(animationCounter++);
+
+        int animationUpdate = 4;
+        if (animationCounter >= 3 * animationUpdate) {
+            animationCounter = animationUpdate;
+        }
+
+        BufferedImage bufferedImage = animationList.get(animationCounter / animationUpdate);
+        animationCounter++;
         g2.setColor(Color.RED);
-//        g2.fillRect(xPosition, yPosition, 45, 45);
         g2.drawImage(bufferedImage, xPosition, yPosition, 45, 45, null);
     }
 
