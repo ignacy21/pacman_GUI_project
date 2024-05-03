@@ -5,12 +5,12 @@ import java.awt.*;
 
 public class PacmanFrame extends JFrame {
 
-    public PacmanFrame() {
+    public PacmanFrame(int width, int height) {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(new Dimension(1200, 700));
-        this.setLocationRelativeTo(null);
+        this.setSize(new Dimension(width, height));
 //        this.getContentPane().setBackground(Color.BLACK);
+        this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setTitle("PACMAN");
         this.setVisible(true);

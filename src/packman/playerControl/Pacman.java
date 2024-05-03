@@ -83,21 +83,6 @@ public class Pacman implements Player {
     }
 
     @Override
-    public int getCoordinateX() {
-        return xPosition;
-    }
-
-    @Override
-    public int getCoordinateY() {
-        return yPosition;
-    }
-
-    @Override
-    public int getSpeed() {
-        return speed;
-    }
-
-    @Override
     public void update() {
         switch (direction) {
             case UP -> yPosition -= speed;
@@ -108,7 +93,7 @@ public class Pacman implements Player {
     }
 
     @Override
-    public void repaint(Graphics2D g2) {
+    public void drawPackman(Graphics2D g2) {
         List<BufferedImage> animationList = animationUp;
         switch (direction) {
             case DOWN -> animationList = animationDown;
@@ -124,7 +109,25 @@ public class Pacman implements Player {
         BufferedImage bufferedImage = animationList.get(animationCounter / animationUpdate);
         animationCounter++;
         g2.setColor(Color.RED);
-        g2.drawImage(bufferedImage, xPosition, yPosition, 45, 45, null);
+        int size = 15;
+        size *= 3;
+        g2.drawImage(bufferedImage, xPosition, yPosition, size, size, null);
+    }
+
+
+    @Override
+    public int getCoordinateX() {
+        return xPosition;
+    }
+
+    @Override
+    public int getCoordinateY() {
+        return yPosition;
+    }
+
+    @Override
+    public int getSpeed() {
+        return speed;
     }
 
 }
