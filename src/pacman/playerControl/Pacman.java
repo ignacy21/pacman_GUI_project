@@ -14,6 +14,7 @@ public class Pacman implements Player {
     private int xPosition;
     private int yPosition;
     private int speed;
+    private int size;
     private int animationCounter = 0;
     private final List<BufferedImage> animationUp;
     private final List<BufferedImage> animationDown;
@@ -21,7 +22,8 @@ public class Pacman implements Player {
     private final List<BufferedImage> animationRight;
 
 
-    public Pacman(int xPosition, int yPosition, int speed) {
+    public Pacman(int xPosition, int yPosition, int speed, int size) {
+        this.size = size;
         List<BufferedImage> animationUp;
         List<BufferedImage> animationDown;
         List<BufferedImage> animationLeft;
@@ -109,8 +111,6 @@ public class Pacman implements Player {
         BufferedImage bufferedImage = animationList.get(animationCounter / animationUpdate);
         animationCounter++;
         g2.setColor(Color.RED);
-        int size = 15;
-        size *= 3;
         g2.drawImage(bufferedImage, xPosition, yPosition, size, size, null);
     }
 
