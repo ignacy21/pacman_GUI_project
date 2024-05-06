@@ -1,4 +1,4 @@
-package packman.playerControl;
+package pacman.playerControl;
 
 public enum Direction {
     UP,

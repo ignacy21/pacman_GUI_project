@@ -1,4 +1,4 @@
-package packman.board;
+package pacman.mainPanel;
 
 import javax.swing.*;
 import java.awt.*;

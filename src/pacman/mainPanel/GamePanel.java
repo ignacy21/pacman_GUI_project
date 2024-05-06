@@ -1,7 +1,7 @@
-package packman.board;
+package pacman.mainPanel;
 
-import packman.playerControl.Pacman;
-import packman.tiles.TileManager;
+import pacman.playerControl.Pacman;
+import pacman.tiles.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,16 +10,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     public static int TILE_SIZE;
     private final Pacman pacman;
-    private final int width;
-    private final int height;
+    private final String boardPath;
     private final TileManager tileManager = new TileManager(this);
 
     private final Thread thread = new Thread(this);
 
-    public GamePanel(Pacman pacman, int width, int height, int tileSeize) {
+    public GamePanel(Pacman pacman, int tileSeize, String boardPath) {
+        this.boardPath = boardPath;
         TILE_SIZE = tileSeize;
-        this.width = width;
-        this.height = height;
 
         thread.start();
         this.pacman = pacman;
@@ -54,7 +52,7 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        tileManager.drawTile(g2, width, height);
+        tileManager.drawTile(g2, boardPath);
         pacman.drawPackman(g2);
     }
 }

@@ -1,4 +1,4 @@
-package packman.tiles;
+package pacman.tiles;
 
 import java.awt.image.BufferedImage;
 
