@@ -1,6 +1,7 @@
 package pacman.mainPanel;
 
 import pacman.playerControl.Pacman;
+import pacman.tiles.Tile;
 import pacman.tiles.TileManager;
 
 import javax.swing.*;
@@ -11,15 +12,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     public static int TILE_SIZE;
     private final Pacman pacman;
-    private final List<List<Integer>> board;
-    private final TileManager tileManager = new TileManager(this);
+    private final List<List<Tile>> board;
+    private final TileManager tileManager = new TileManager();
 
     private final Thread thread = new Thread(this);
 
-    public GamePanel(Pacman pacman, int tileSeize, List<List<Integer>> board) {
+    public GamePanel(Pacman pacman, int tileSeize, List<List<Tile>> board) {
         this.board = board;
         TILE_SIZE = tileSeize;
-
         thread.start();
         this.pacman = pacman;
         this.setBackground(Color.BLACK);

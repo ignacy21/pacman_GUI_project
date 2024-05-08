@@ -4,23 +4,22 @@ import pacman.mainPanel.GamePanel;
 import pacman.mainPanel.PacmanFrame;
 import pacman.playerControl.Pacman;
 import pacman.tiles.BoardService;
+import pacman.tiles.Tile;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.util.List;
 
-import static pacman.mainPanel.GamePanel.TILE_SIZE;
-
 public class RunPacman {
 
     public static void main(String[] args) throws IOException {
         BoardService boardService = new BoardService();
-//        List<List<Integer>> boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1.txt");
-        List<List<Integer>> boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board2.txt");
+//        List<List<Tile>> boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1.txt");
+        List<List<Tile>> boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board2.txt");
         int tilesHeight = boardFromFile.size();
         int tilesWidth = boardFromFile.getFirst().size();
         SwingUtilities.invokeLater(() -> {
-            int TILE_SIZE = 27;
+            int TILE_SIZE = 28;
             int width = TILE_SIZE * tilesWidth;
             int height = TILE_SIZE * tilesHeight;
 
