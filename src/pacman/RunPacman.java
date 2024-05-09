@@ -19,11 +19,11 @@ public class RunPacman {
         int tilesHeight = boardFromFile.size();
         int tilesWidth = boardFromFile.getFirst().size();
         SwingUtilities.invokeLater(() -> {
-            int TILE_SIZE = 28;
+            int TILE_SIZE = 30;
             int width = TILE_SIZE * tilesWidth;
             int height = TILE_SIZE * tilesHeight;
 
-            Pacman pacman = new Pacman(300, 300, 5, TILE_SIZE);
+            Pacman pacman = new Pacman(45, 450, 6, TILE_SIZE);
 
             System.out.println(width);
             System.out.println(height);

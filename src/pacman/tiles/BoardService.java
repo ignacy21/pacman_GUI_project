@@ -9,8 +9,11 @@ public class BoardService {
 
     Map<Integer, Tile> nameTileMap = new HashMap<>();
     {
-        nameTileMap.put(0, new Tile("void", null));
-        nameTileMap.put(1, new Tile("block", findImage("tile.png")));
+        Tile voidTile = new Tile("void", null);
+        nameTileMap.put(0, voidTile);
+        Tile blockTile = new Tile("block", findImage("tile.png"));
+        blockTile.setCollision(true);
+        nameTileMap.put(1, blockTile);
     }
 
     public List<List<Tile>> createBoardFromFile(String path) throws IOException {

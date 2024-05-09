@@ -14,7 +14,8 @@ public class Pacman implements Player {
     private int xPosition;
     private int yPosition;
     private int speed;
-    private int size;
+    private final int size;
+    private boolean isColliding = false;
     private int animationCounter = 0;
     private final List<BufferedImage> animationUp;
     private final List<BufferedImage> animationDown;
@@ -86,11 +87,13 @@ public class Pacman implements Player {
 
     @Override
     public void update() {
-        switch (direction) {
-            case UP -> yPosition -= speed;
-            case DOWN -> yPosition += speed;
-            case LEFT -> xPosition -= speed;
-            case RIGHT -> xPosition += speed;
+        if (!isColliding) {
+            switch (direction) {
+                case UP -> yPosition -= speed;
+                case DOWN -> yPosition += speed;
+                case LEFT -> xPosition -= speed;
+                case RIGHT -> xPosition += speed;
+            }
         }
     }
 
@@ -126,8 +129,32 @@ public class Pacman implements Player {
     }
 
     @Override
+    public boolean isColliding() {
+        return isColliding;
+    }
+    @Override
+    public Direction getDirection() {
+        return direction;
+    }
+
+    @Override
+    public void setColliding(boolean colliding) {
+        isColliding = colliding;
+    }
+
+    @Override
     public int getSpeed() {
         return speed;
     }
 
+    @Override
+    public String toString() {
+        return "Pacman{" +
+                "direction=" + direction +
+                ", xPosition=" + xPosition +
+                ", yPosition=" + yPosition +
+                ", speed=" + speed +
+                ", isColliding=" + isColliding +
+                '}';
+    }
 }

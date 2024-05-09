@@ -29,4 +29,9 @@ public class Tile {
         return name;
     }
 
+    @Override
+    public String toString() {
+        return "tileName: " + name;
+
+    }
 }

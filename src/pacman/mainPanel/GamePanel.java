@@ -3,6 +3,7 @@ package pacman.mainPanel;
 import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
 import pacman.tiles.TileManager;
+import pacman.tiles.collision.CollisionService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +17,8 @@ public class GamePanel extends JPanel implements Runnable {
     private final TileManager tileManager = new TileManager();
 
     private final Thread thread = new Thread(this);
+
+    private final CollisionService collisionService = new CollisionService(this);
 
     public GamePanel(Pacman pacman, int tileSeize, List<List<Tile>> board) {
         this.board = board;
@@ -39,7 +42,10 @@ public class GamePanel extends JPanel implements Runnable {
                 throw new RuntimeException(e);
             }
 
+            collisionService.checkCollision(pacman);
+            System.out.println(pacman);
             repaint();
+
         }
     }
 
@@ -55,5 +61,13 @@ public class GamePanel extends JPanel implements Runnable {
 
         tileManager.drawTile(g2, board);
         pacman.drawPackman(g2);
+    }
+
+    public List<List<Tile>> getBoard() {
+        return board;
+    }
+
+    public Pacman getPacman() {
+        return pacman;
     }
 }
