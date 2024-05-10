@@ -25,7 +25,6 @@ public class CollisionService {
         List<List<Tile>> board = gamePanel.getBoard();
         Pacman pacman = gamePanel.getPacman();
         int speed = pacman.getSpeed();
-        int spare = TILE_SIZE / 2;
 
 
         int playersUp = player.getCoordinateY();
@@ -33,49 +32,40 @@ public class CollisionService {
         int playersRight = player.getCoordinateX() + TILE_SIZE;
         int playersBottom = player.getCoordinateY() + TILE_SIZE;
 
-        int yU = (playersUp - speed) / TILE_SIZE;
-        int xU = (playersLeft + speed) / TILE_SIZE;
-//        System.out.println("xU: " + xU);
-//        System.out.println("yU: " + yU);
-        Tile tileUp = board.get(yU).get(xU);
+        int yUp = (playersUp - speed) / TILE_SIZE;
+        int xUpLt = (playersLeft - speed) / TILE_SIZE;
+        int xUpRt = (playersRight - speed) / TILE_SIZE;
+        Tile tileUpLt = board.get(yUp).get(xUpLt);
+        Tile tileUpRt = board.get(yUp).get(xUpRt);
 
-        int xB = (playersLeft + speed) / TILE_SIZE;
-        int yB = (playersBottom + speed) / TILE_SIZE;
-//        System.out.println("xB: " + xB);
-//        System.out.println("yB: " + yB);
-        Tile tileBottom = board.get(yB).get(xB);
+        int xBotLt = (playersLeft + speed) / TILE_SIZE;
+        int xBotRt = (playersRight + speed) / TILE_SIZE;
+        int yBot = (playersBottom) / TILE_SIZE;
+        Tile tileBotLt = board.get(yBot).get(xBotLt);
+        Tile tileBotRt = board.get(yBot).get(xBotRt);
 
-        int yR = (playersUp + speed) / TILE_SIZE;
-        int xR = (playersRight + speed) / TILE_SIZE;
-//        System.out.println("xR: " + xR);
-//        System.out.println("yR: " + yR);
-        Tile tileRight = board.get(yR).get(xR);
+        int yRtUp = (playersUp + speed) / TILE_SIZE;
+        int yRtBot = (playersBottom + speed) / TILE_SIZE;
+        int xRt = (playersRight) / TILE_SIZE;
+        Tile tileRightUp = board.get(yRtUp).get(xRt);
+        Tile tileRightBot = board.get(yRtBot).get(xRt);
 
-        int yL = (playersUp + speed) / TILE_SIZE;
-        int xL = (playersLeft - speed) / TILE_SIZE;
-//        System.out.println("xL: " + xL);
-//        System.out.println("yL: " + yL);
-        Tile tileLeft = board.get(yL).get(xL);
+        int yLtUp = (playersUp + speed) / TILE_SIZE;
+        int yLtBot = (playersBottom + speed) / TILE_SIZE;
+        int xLt = (playersLeft - speed) / TILE_SIZE;
+        Tile tileLeftUp = board.get(yLtUp).get(xLt);
+        Tile tileLeftBot = board.get(yLtBot).get(xLt);
 
-        if (direction == UP && tileUp.isCollision()) {
-            pacman.setColliding(true);
-            System.out.println("colliding: UP");
-//            return false;
-        } else if (direction == DOWN && tileBottom.isCollision()) {
-            pacman.setColliding(true);
-            System.out.println("colliding: DOWN");
-//            return false;
-        } else if (direction == LEFT && tileLeft.isCollision()) {
-            pacman.setColliding(true);
-            System.out.println("colliding: LEFT");
-//            return false;
-        } else if (direction == RIGHT && tileRight.isCollision()) {
-            pacman.setColliding(true);
-            System.out.println("colliding: RIGHT");
-//            return false;
+        if (direction == UP && (tileUpLt.isCollision() || tileUpRt.isCollision())) {
+            pacman.setColliding(playersLeft % TILE_SIZE != 0 || playersRight % TILE_SIZE != 0 || tileUpRt.isCollision());
+        } else if (direction == DOWN && (tileBotLt.isCollision() || tileBotRt.isCollision())) {
+            pacman.setColliding(playersLeft % TILE_SIZE != 0 || playersRight % TILE_SIZE != 0 || tileBotLt.isCollision());
+        } else if (direction == LEFT && (tileLeftUp.isCollision() || tileLeftBot.isCollision())) {
+            pacman.setColliding(playersUp % TILE_SIZE != 0 || playersBottom % TILE_SIZE != 0 || tileLeftUp.isCollision());
+        } else if (direction == RIGHT && (tileRightUp.isCollision() || tileRightBot.isCollision())) {
+            pacman.setColliding(playersUp % TILE_SIZE != 0 || playersBottom % TILE_SIZE != 0 || tileRightUp.isCollision());
         } else {
             pacman.setColliding(false);
-//            return true;
         }
     }
 

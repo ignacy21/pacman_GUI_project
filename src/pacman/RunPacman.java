@@ -23,7 +23,8 @@ public class RunPacman {
             int width = TILE_SIZE * tilesWidth;
             int height = TILE_SIZE * tilesHeight;
 
-            Pacman pacman = new Pacman(45, 450, 6, TILE_SIZE);
+//            Pacman pacman = new Pacman(135, 450, 5, TILE_SIZE);
+            Pacman pacman = new Pacman(135, 450, 3, TILE_SIZE);
 
             System.out.println(width);
             System.out.println(height);
