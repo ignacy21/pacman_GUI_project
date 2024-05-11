@@ -42,7 +42,6 @@ public class GamePanel extends JPanel implements Runnable {
                 throw new RuntimeException(e);
             }
 
-            collisionService.checkCollision(pacman);
             System.out.println(pacman);
             repaint();
 
@@ -60,6 +59,7 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         tileManager.drawTile(g2, board);
+        collisionService.checkCollision(pacman);
         pacman.drawPackman(g2);
     }
 

@@ -147,6 +147,14 @@ public class Pacman implements Player {
         return speed;
     }
 
+    public void setXPosition(int xPosition) {
+        this.xPosition = xPosition;
+    }
+
+    public void setYPosition(int yPosition) {
+        this.yPosition = yPosition;
+    }
+
     @Override
     public String toString() {
         return "Pacman{" +

@@ -25,7 +25,7 @@ public class CollisionService {
         List<List<Tile>> board = gamePanel.getBoard();
         Pacman pacman = gamePanel.getPacman();
         int speed = pacman.getSpeed();
-
+        int halfOfTile = TILE_SIZE / 2;
 
         int playersUp = player.getCoordinateY();
         int playersLeft = player.getCoordinateX();
@@ -57,15 +57,53 @@ public class CollisionService {
         Tile tileLeftBot = board.get(yLtBot).get(xLt);
 
         if (direction == UP && (tileUpLt.isCollision() || tileUpRt.isCollision())) {
-            pacman.setColliding(playersLeft % TILE_SIZE != 0 || playersRight % TILE_SIZE != 0 || tileUpRt.isCollision());
+            collisionDetection(playersLeft, playersRight, tileUpRt, pacman, halfOfTile, "Y");
         } else if (direction == DOWN && (tileBotLt.isCollision() || tileBotRt.isCollision())) {
-            pacman.setColliding(playersLeft % TILE_SIZE != 0 || playersRight % TILE_SIZE != 0 || tileBotLt.isCollision());
+            collisionDetection(playersLeft, playersRight, tileBotLt, pacman, halfOfTile, "Y");
         } else if (direction == LEFT && (tileLeftUp.isCollision() || tileLeftBot.isCollision())) {
+            collisionDetection(playersUp, playersBottom, tileLeftUp, pacman, halfOfTile, "X");
             pacman.setColliding(playersUp % TILE_SIZE != 0 || playersBottom % TILE_SIZE != 0 || tileLeftUp.isCollision());
         } else if (direction == RIGHT && (tileRightUp.isCollision() || tileRightBot.isCollision())) {
-            pacman.setColliding(playersUp % TILE_SIZE != 0 || playersBottom % TILE_SIZE != 0 || tileRightUp.isCollision());
+            collisionDetection(playersUp, playersBottom, tileRightUp, pacman, halfOfTile, "X");
         } else {
             pacman.setColliding(false);
+        }
+    }
+
+    private void collisionDetection(
+            int crucialCoordinate1,
+            int crucialCoordinate2,
+            Tile tileThatMayBeVoid,
+            Pacman pacman,
+            int halfOfTile,
+            String correctCoordinate
+    ) {
+        if (crucialCoordinate1 % TILE_SIZE == 0 && crucialCoordinate2 % TILE_SIZE == 0 && !tileThatMayBeVoid.isCollision()) {
+            pacman.setColliding(false);
+        } else {
+            if (correctCoordinate.equals("Y")) {
+                int mod = pacman.getCoordinateY() % TILE_SIZE;
+                correctYCoordinate(mod, halfOfTile, pacman);
+            } else  {
+                int mod = pacman.getCoordinateX() % TILE_SIZE;
+                correctXCoordinate(mod, halfOfTile, pacman);
+            }
+            pacman.setColliding(true);
+        }
+    }
+
+    private static void correctYCoordinate(int mod, int halfOfTile, Pacman pacman) {
+        if (mod < halfOfTile) {
+            pacman.setYPosition(pacman.getCoordinateY() - mod);
+        } else {
+            pacman.setYPosition(pacman.getCoordinateY() + TILE_SIZE - mod);
+        }
+    }
+    private static void correctXCoordinate(int mod, int halfOfTile, Pacman pacman) {
+        if (mod < halfOfTile) {
+            pacman.setXPosition(pacman.getCoordinateX() - mod);
+        } else {
+            pacman.setXPosition(pacman.getCoordinateX() + TILE_SIZE - mod);
         }
     }
 
