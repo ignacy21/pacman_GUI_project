@@ -4,6 +4,7 @@ import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
 import pacman.tiles.TileManager;
 import pacman.tiles.collision.CollisionService;
+import pacman.tiles.point.PointCounterService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +20,8 @@ public class GamePanel extends JPanel implements Runnable {
     private final Thread thread = new Thread(this);
 
     private final CollisionService collisionService = new CollisionService(this);
+    private final PointCounterService pointCounterService = new PointCounterService(this);
+
 
     public GamePanel(Pacman pacman, int tileSeize, List<List<Tile>> board) {
         this.board = board;
@@ -42,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
                 throw new RuntimeException(e);
             }
 
-            System.out.println(pacman);
+//            System.out.println(pacman);
             repaint();
 
         }
@@ -60,6 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         tileManager.drawTile(g2, board);
         collisionService.checkCollision(pacman);
+        pointCounterService.collectPoints(pacman);
         pacman.drawPackman(g2);
     }
 

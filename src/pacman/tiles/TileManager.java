@@ -13,8 +13,8 @@ public class TileManager {
             List<Tile> tileRow = board.get(i);
             for (int j = 0, x = 0; j < tileRow.size(); j++, x += TILE_SIZE) {
                 Tile tile = tileRow.get(j);
-                switch (tile.getName()) {
-                    case "block" -> graphics2D.drawImage(tile.getImage(), x, y, TILE_SIZE, TILE_SIZE, null);
+                if (!"void".equals(tile.getName())) {
+                    graphics2D.drawImage(tile.getImage(), x, y, TILE_SIZE, TILE_SIZE, null);
                 }
 //                System.out.printf("TILE [%s] x[%s] y[%s]\n",tile.getName(), x, y);
             }
