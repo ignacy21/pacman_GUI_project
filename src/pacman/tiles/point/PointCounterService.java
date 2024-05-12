@@ -33,11 +33,15 @@ public class PointCounterService {
         List<Tile> row = new ArrayList<>(board.get(playersCurrentY));
         Tile tile = row.get(playersCurrentX);
 
-        if ("point".equals(tile.getName())) {
+        if (tile.getName().contains("point")) {
             System.out.println("YEYEYEYE");
             row.set(playersCurrentX, voidTile);
             board.set(playersCurrentY, row);
-            gamePanel.setSCORE(gamePanel.getSCORE() + 100);
+            if ("point1".equals(tile.getName())) {
+                gamePanel.setSCORE(gamePanel.getSCORE() + 100);
+            } else if ("point2".equals(tile.getName())) {
+                gamePanel.setSCORE(gamePanel.getSCORE() + 500);
+            }
         }
         return board;
     }
