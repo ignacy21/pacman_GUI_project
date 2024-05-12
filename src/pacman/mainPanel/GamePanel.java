@@ -13,8 +13,9 @@ import java.util.List;
 public class GamePanel extends JPanel implements Runnable {
 
     public static int TILE_SIZE;
+    private int SCORE = 0;
     private final Pacman pacman;
-    private final List<List<Tile>> board;
+    private List<List<Tile>> board;
     private final TileManager tileManager = new TileManager();
 
     private final Thread thread = new Thread(this);
@@ -63,12 +64,22 @@ public class GamePanel extends JPanel implements Runnable {
 
         tileManager.drawTile(g2, board);
         collisionService.checkCollision(pacman);
-        pointCounterService.collectPoints(pacman);
+        List<List<Tile>> lists = pointCounterService.collectPoints(pacman);
+        this.board = lists;
         pacman.drawPackman(g2);
+        System.out.println(SCORE);
     }
 
     public List<List<Tile>> getBoard() {
         return board;
+    }
+
+    public void setSCORE(int SCORE) {
+        this.SCORE = SCORE;
+    }
+
+    public int getSCORE() {
+        return SCORE;
     }
 
     public Pacman getPacman() {
