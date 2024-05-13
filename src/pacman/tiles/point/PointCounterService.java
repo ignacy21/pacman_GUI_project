@@ -1,28 +1,25 @@
 package pacman.tiles.point;
 
-import pacman.mainPanel.GamePanel;
-import pacman.playerControl.Direction;
-import pacman.playerControl.Pacman;
+import pacman.mainPanel.PacmanPanel;
 import pacman.playerControl.Player;
 import pacman.tiles.Tile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static pacman.mainPanel.GamePanel.TILE_SIZE;
+import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
 
 public class PointCounterService {
 
-    private final GamePanel gamePanel;
+    private final PacmanPanel pacmanPanel;
 
-    public PointCounterService(GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
+    public PointCounterService(PacmanPanel pacmanPanel) {
+        this.pacmanPanel = pacmanPanel;
     }
 
     public List<List<Tile>> collectPoints(Player player) {
         Tile voidTile = new Tile("void", null);
-        List<List<Tile>> board = new ArrayList<>(gamePanel.getBoard());
+        List<List<Tile>> board = new ArrayList<>(pacmanPanel.getBoard());
         int halfOfTile = TILE_SIZE / 2;
 
         int playersLeft = player.getCoordinateX();
@@ -34,13 +31,12 @@ public class PointCounterService {
         Tile tile = row.get(playersCurrentX);
 
         if (tile.getName().contains("point")) {
-            System.out.println("YEYEYEYE");
             row.set(playersCurrentX, voidTile);
             board.set(playersCurrentY, row);
             if ("point1".equals(tile.getName())) {
-                gamePanel.setSCORE(gamePanel.getSCORE() + 100);
+                pacmanPanel.setSCORE(pacmanPanel.getSCORE() + 100);
             } else if ("point2".equals(tile.getName())) {
-                gamePanel.setSCORE(gamePanel.getSCORE() + 500);
+                pacmanPanel.setSCORE(pacmanPanel.getSCORE() + 500);
             }
         }
         return board;

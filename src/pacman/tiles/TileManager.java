@@ -3,13 +3,13 @@ package pacman.tiles;
 import java.awt.*;
 import java.util.List;
 
-import static pacman.mainPanel.GamePanel.TILE_SIZE;
+import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
 
 public class TileManager {
 
-    public void drawTile(Graphics2D graphics2D, List<List<Tile>> board) {
+    public void paintTiles(Graphics2D graphics2D, List<List<Tile>> board, int displayHeight) {
 
-        for (int i = 0, y = 0; i < board.size(); i++, y += TILE_SIZE) {
+        for (int i = 0, y = displayHeight; i < board.size(); i++, y += TILE_SIZE) {
             List<Tile> tileRow = board.get(i);
             for (int j = 0, x = 0; j < tileRow.size(); j++, x += TILE_SIZE) {
                 Tile tile = tileRow.get(j);

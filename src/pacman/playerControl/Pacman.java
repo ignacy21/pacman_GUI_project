@@ -98,7 +98,7 @@ public class Pacman implements Player {
     }
 
     @Override
-    public void drawPackman(Graphics2D g2) {
+    public void drawEntity(Graphics2D g2, int displayHeight) {
         List<BufferedImage> animationList = animationUp;
         switch (direction) {
             case DOWN -> animationList = animationDown;
@@ -114,7 +114,7 @@ public class Pacman implements Player {
         BufferedImage bufferedImage = animationList.get(animationCounter / animationUpdate);
         animationCounter++;
         g2.setColor(Color.RED);
-        g2.drawImage(bufferedImage, xPosition, yPosition, size, size, null);
+        g2.drawImage(bufferedImage, xPosition, yPosition + displayHeight, size, size, null);
     }
 
 
