@@ -14,7 +14,7 @@ public class PacmanPanel extends JPanel  {
 
     public static int TILE_SIZE;
     private int SCORE = 0;
-    private final int displayHeight;
+    private final int displayHeight = 0;
     private final Pacman pacman;
     private List<List<Tile>> board;
     private final TileManager tileManager = new TileManager();
@@ -23,7 +23,6 @@ public class PacmanPanel extends JPanel  {
 
     public PacmanPanel(Pacman pacman, int tileSeize, List<List<Tile>> board, int displayHeight, int width, int height) {
         this.board = board;
-        this.displayHeight = displayHeight;
         TILE_SIZE = tileSeize;
         this.pacman = pacman;
         this.setBackground(Color.BLACK);
