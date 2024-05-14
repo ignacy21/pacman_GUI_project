@@ -1,6 +1,7 @@
 package pacman.mainPanel;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -16,15 +17,21 @@ public class GamePanel extends JPanel implements Runnable {
 
         JPanel displayPanel = new JPanel();
         displayPanel.setLayout(new GridLayout(2, 1));
-        displayPanel.setBackground(Color.BLUE);
+        displayPanel.setBackground(Color.BLACK);
         displayPanel.setPreferredSize(new Dimension(getWidth(), displayHeight));
+        Border border = BorderFactory.createLineBorder(Color.BLUE, 4);
+        displayPanel.setBorder(border);
+
+        Font pacFont = new Font("Pac-Font", Font.BOLD, displayHeight/2);
 
         JLabel scoreText = new JLabel("SCORE:");
-        scoreText.setBackground(Color.BLUE);
         scoreText.setHorizontalAlignment(SwingConstants.CENTER);
+        scoreText.setFont(pacFont);
+        scoreText.setForeground(Color.WHITE);
 
         scoreLabel = new JLabel("0", SwingConstants.CENTER);
-        scoreLabel.setBackground(Color.BLUE);
+        scoreLabel.setFont(pacFont);
+        scoreLabel.setForeground(Color.WHITE);
 
         displayPanel.add(scoreText, BorderLayout.CENTER);
         displayPanel.add(scoreLabel, BorderLayout.SOUTH);

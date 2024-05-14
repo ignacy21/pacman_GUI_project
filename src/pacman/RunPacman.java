@@ -28,8 +28,8 @@ public class RunPacman {
 
             int displayHeight = TILE_SIZE * 2;
 
-//            Pacman pacman = new Pacman(135, 450, 5, TILE_SIZE);
-            Pacman pacman = new Pacman(435, 250, 6, TILE_SIZE);
+            Pacman pacman = new Pacman(135, 450, 5, TILE_SIZE);
+//            Pacman pacman = new Pacman(435, 250, 6, TILE_SIZE);
             PacmanFrame pacmanFrame = new PacmanFrame(width, height + 30 + displayHeight);
 
             PacmanPanel pacmanPanel = new PacmanPanel(
