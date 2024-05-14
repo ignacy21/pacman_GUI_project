@@ -47,16 +47,43 @@ public class CollisionService {
             return wantToReverse;
         }
 
-        if (playersBottom % TILE_SIZE == 0 && playersLeft % TILE_SIZE == 0) {
-            return switch (direction) {
-                case UP -> !tileUp.isCollision();
-                case DOWN -> !tileDown.isCollision();
-                case LEFT -> !leftTile.isCollision();
-                case RIGHT -> !rightTile.isCollision();
-            };
+        int turnGap = 3;
+        if (playersBottom % TILE_SIZE <= turnGap && playersLeft % TILE_SIZE <= turnGap) {
+            if (direction == UP || direction == DOWN) {
+                int mod = playersLeft % TILE_SIZE;
+                switch (direction) {
+                    case UP -> {
+                        if (!tileUp.isCollision())
+                            correctXCoordinate(mod, TILE_SIZE / 2, player);
+                        return !tileUp.isCollision();
+                    }
+                    case DOWN -> {
+                        if (!tileDown.isCollision())
+                            correctXCoordinate(mod, TILE_SIZE / 2, player);
+                        return !tileDown.isCollision();
+                    }
+                }
+            } else if (direction == LEFT || direction == RIGHT) {
+                int mod = playersBottom % TILE_SIZE;
+
+                switch (direction) {
+                    case RIGHT -> {
+                        if (!rightTile.isCollision())
+                            correctYCoordinate(mod, TILE_SIZE / 2, player);
+                        return !rightTile.isCollision();
+                    }
+                    case LEFT -> {
+                        if (!leftTile.isCollision())
+                            correctYCoordinate(mod, TILE_SIZE / 2, player);
+                        return !leftTile.isCollision();
+                    }
+                }
+            }
         }
+
         return false;
     }
+
 
     public void checkCollision() {
         Direction direction = player.getDirection();
@@ -120,7 +147,7 @@ public class CollisionService {
             if (correctCoordinate.equals("Y")) {
                 int mod = pacman.getCoordinateY() % TILE_SIZE;
                 correctYCoordinate(mod, halfOfTile, pacman);
-            } else  {
+            } else {
                 int mod = pacman.getCoordinateX() % TILE_SIZE;
                 correctXCoordinate(mod, halfOfTile, pacman);
             }
