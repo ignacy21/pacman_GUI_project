@@ -14,27 +14,9 @@ public class GamePanel extends JPanel implements Runnable {
         thread.start();
 
         setLayout(new BorderLayout());
-
-        JPanel displayPanel = new JPanel();
-        displayPanel.setLayout(new GridLayout(2, 1));
-        displayPanel.setBackground(Color.BLACK);
-        displayPanel.setPreferredSize(new Dimension(getWidth(), displayHeight));
-        Border border = BorderFactory.createLineBorder(Color.BLUE, 4);
-        displayPanel.setBorder(border);
-
-        Font pacFont = new Font("Pac-Font", Font.BOLD, displayHeight/2);
-
-        JLabel scoreText = new JLabel("SCORE:");
-        scoreText.setHorizontalAlignment(SwingConstants.CENTER);
-        scoreText.setFont(pacFont);
-        scoreText.setForeground(Color.WHITE);
-
         scoreLabel = new JLabel("0", SwingConstants.CENTER);
-        scoreLabel.setFont(pacFont);
-        scoreLabel.setForeground(Color.WHITE);
 
-        displayPanel.add(scoreText, BorderLayout.CENTER);
-        displayPanel.add(scoreLabel, BorderLayout.SOUTH);
+        JPanel displayPanel = displayPanelCreation(displayHeight);
 
         this.add(displayPanel, BorderLayout.NORTH);
         this.add(pacmanPanel, BorderLayout.CENTER);
@@ -54,5 +36,28 @@ public class GamePanel extends JPanel implements Runnable {
             scoreLabel.setText(String.valueOf(pacmanPanel.getSCORE()));
             repaint();
         }
+    }
+
+    private JPanel displayPanelCreation(int displayHeight) {
+        JPanel displayPanel = new JPanel();
+        displayPanel.setLayout(new GridLayout(2, 1));
+        displayPanel.setBackground(Color.BLACK);
+        displayPanel.setPreferredSize(new Dimension(getWidth(), displayHeight));
+        Border border = BorderFactory.createLineBorder(Color.BLUE, 4);
+        displayPanel.setBorder(border);
+
+        Font pacFont = new Font("Pac-Font", Font.BOLD, displayHeight /2);
+
+        JLabel scoreText = new JLabel("SCORE:");
+        scoreText.setHorizontalAlignment(SwingConstants.CENTER);
+        scoreText.setFont(pacFont);
+        scoreText.setForeground(Color.WHITE);
+
+        scoreLabel.setFont(pacFont);
+        scoreLabel.setForeground(Color.WHITE);
+
+        displayPanel.add(scoreText, BorderLayout.CENTER);
+        displayPanel.add(scoreLabel, BorderLayout.SOUTH);
+        return displayPanel;
     }
 }

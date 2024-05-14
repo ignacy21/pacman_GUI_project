@@ -1,16 +1,26 @@
 package pacman.playerControl;
 
+import pacman.tiles.Tile;
+import pacman.tiles.collision.CollisionService;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
 
 public class Pacman implements Player {
 
+
     private Direction direction;
+    private Direction wantToTurn;
+    private int countTurn = 0;
+    private final CollisionService collisionService;
     private int xPosition;
     private int yPosition;
     private int speed;
@@ -23,7 +33,7 @@ public class Pacman implements Player {
     private final List<BufferedImage> animationRight;
 
 
-    public Pacman(int xPosition, int yPosition, int speed, int size) {
+    public Pacman(int xPosition, int yPosition, int speed, int size, List<List<Tile>> board) {
         this.size = size;
         List<BufferedImage> animationUp;
         List<BufferedImage> animationDown;
@@ -61,6 +71,7 @@ public class Pacman implements Player {
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.speed = speed;
+        collisionService = new CollisionService(this, board);
     }
 
     @Override
@@ -74,19 +85,47 @@ public class Pacman implements Player {
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
+        turn(keyCode);
+    }
+
+    private void turn(int keyCode) {
         if (keyCode == KeyEvent.VK_UP) {
-            direction = Direction.UP;
+            if (collisionService.canPacmanTurn(direction, Direction.UP))
+                direction = Direction.UP;
+            wantToTurn = Direction.UP;
         } else if (keyCode == KeyEvent.VK_DOWN) {
-            direction = Direction.DOWN;
+            if (collisionService.canPacmanTurn(direction, Direction.DOWN))
+                direction = Direction.DOWN;
+            wantToTurn = Direction.DOWN;
         } else if (keyCode == KeyEvent.VK_LEFT) {
-            direction = Direction.LEFT;
+            if (collisionService.canPacmanTurn(direction, Direction.LEFT))
+                direction = Direction.LEFT;
+            wantToTurn = Direction.LEFT;
         } else if (keyCode == KeyEvent.VK_RIGHT) {
-            direction = Direction.RIGHT;
+            if (collisionService.canPacmanTurn(direction, Direction.RIGHT))
+                direction = Direction.RIGHT;
+            wantToTurn = Direction.RIGHT;
         }
     }
 
     @Override
     public void update() {
+        if (countTurn < 50) {
+            countTurn++;
+            if (wantToTurn != null) {
+                switch (wantToTurn) {
+                    case UP -> turn(KeyEvent.VK_UP);
+                    case DOWN -> turn(KeyEvent.VK_DOWN);
+                    case RIGHT -> turn(KeyEvent.VK_RIGHT);
+                    case LEFT -> turn(KeyEvent.VK_LEFT);
+                }
+            }
+
+        } else {
+            countTurn = 0;
+            wantToTurn = null;
+        }
+
         if (!isColliding) {
             switch (direction) {
                 case UP -> yPosition -= speed;

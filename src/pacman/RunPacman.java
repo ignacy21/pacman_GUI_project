@@ -15,12 +15,12 @@ public class RunPacman {
 
     public static void main(String[] args) throws IOException {
         BoardService boardService = new BoardService();
-        List<List<Tile>> boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1.txt");
-//        List<List<Tile>> boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board2.txt");
+//        List<List<Tile>> boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1.txt");
+        List<List<Tile>> boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board2.txt");
         int tilesHeight = boardFromFile.size();
         int tilesWidth = boardFromFile.getFirst().size();
         SwingUtilities.invokeLater(() -> {
-            int TILE_SIZE = 45;
+            int TILE_SIZE = 25;
             int width = TILE_SIZE * tilesWidth;
             int height = TILE_SIZE * tilesHeight;
 
@@ -28,7 +28,7 @@ public class RunPacman {
 
             int displayHeight = TILE_SIZE * 2;
 
-            Pacman pacman = new Pacman(135, 450, 5, TILE_SIZE);
+            Pacman pacman = new Pacman(135, 450, 5, TILE_SIZE, boardFromFile);
 //            Pacman pacman = new Pacman(435, 250, 6, TILE_SIZE);
             PacmanFrame pacmanFrame = new PacmanFrame(width, height + 30 + displayHeight);
 

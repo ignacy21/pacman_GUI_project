@@ -1,10 +1,11 @@
 package pacman.tiles.collision;
 
-import pacman.mainPanel.PacmanPanel;
 import pacman.playerControl.Direction;
 import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
 
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
@@ -12,16 +13,53 @@ import static pacman.playerControl.Direction.*;
 
 public class CollisionService {
 
-    private final PacmanPanel pacmanPanel;
 
+    private final Pacman player;
+    private final List<List<Tile>> board;
 
-    public CollisionService(PacmanPanel pacmanPanel) {
-        this.pacmanPanel = pacmanPanel;
+    public CollisionService(Pacman player, List<List<Tile>> board) {
+        this.player = player;
+        this.board = board;
     }
 
-    public void checkCollision(Pacman player) {
+    public boolean canPacmanTurn(Direction currentDirection, Direction direction) {
+        int halfOfTile = TILE_SIZE / 2;
+
+        int playersLeft = player.getCoordinateX();
+        int playersBottom = player.getCoordinateY() + TILE_SIZE;
+
+        int playersCurrentX = (playersLeft + halfOfTile) / TILE_SIZE;
+        int playersCurrentY = (playersBottom - halfOfTile) / TILE_SIZE;
+        List<Tile> row = new ArrayList<>(board.get(playersCurrentY));
+        Tile rightTile = row.get(playersCurrentX + 1);
+        Tile leftTile = row.get(playersCurrentX - 1);
+        Tile tileDown = board.get(playersCurrentY + 1).get(playersCurrentX);
+        Tile tileUp = board.get(playersCurrentY - 1).get(playersCurrentX);
+
+        boolean wantToReverse = false;
+        switch (currentDirection) {
+            case UP -> wantToReverse = direction == DOWN;
+            case DOWN -> wantToReverse = direction == UP;
+            case LEFT -> wantToReverse = direction == RIGHT;
+            case RIGHT -> wantToReverse = direction == LEFT;
+        }
+        if (wantToReverse) {
+            return wantToReverse;
+        }
+
+        if (playersBottom % TILE_SIZE == 0 && playersLeft % TILE_SIZE == 0) {
+            return switch (direction) {
+                case UP -> !tileUp.isCollision();
+                case DOWN -> !tileDown.isCollision();
+                case LEFT -> !leftTile.isCollision();
+                case RIGHT -> !rightTile.isCollision();
+            };
+        }
+        return false;
+    }
+
+    public void checkCollision() {
         Direction direction = player.getDirection();
-        List<List<Tile>> board = pacmanPanel.getBoard();
         int spareAdd = 1;
         int halfOfTile = TILE_SIZE / 2;
 
@@ -97,6 +135,7 @@ public class CollisionService {
             pacman.setYPosition(pacman.getCoordinateY() + TILE_SIZE - mod);
         }
     }
+
     private static void correctXCoordinate(int mod, int halfOfTile, Pacman pacman) {
         if (mod < halfOfTile) {
             pacman.setXPosition(pacman.getCoordinateX() - mod);

@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class PacmanPanel extends JPanel  {
+public class PacmanPanel extends JPanel {
 
     public static int TILE_SIZE;
     private int SCORE = 0;
@@ -18,13 +18,14 @@ public class PacmanPanel extends JPanel  {
     private final Pacman pacman;
     private List<List<Tile>> board;
     private final TileManager tileManager = new TileManager();
-    private final CollisionService collisionService = new CollisionService(this);
+    private final CollisionService collisionService;
     private final PointCounterService pointCounterService = new PointCounterService(this);
 
     public PacmanPanel(Pacman pacman, int tileSeize, List<List<Tile>> board, int displayHeight, int width, int height) {
         this.board = board;
         TILE_SIZE = tileSeize;
         this.pacman = pacman;
+        collisionService = new CollisionService(pacman, board);
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(pacman);
@@ -46,10 +47,6 @@ public class PacmanPanel extends JPanel  {
         drawPacman(g2);
     }
 
-    public List<List<Tile>> getBoard() {
-        return board;
-    }
-
     public void setSCORE(int SCORE) {
         this.SCORE = SCORE;
     }
@@ -67,8 +64,8 @@ public class PacmanPanel extends JPanel  {
     }
 
     private void checkCollisions() {
-        collisionService.checkCollision(pacman);
-        List<List<Tile>> lists = pointCounterService.collectPoints(pacman);
+        collisionService.checkCollision();
+        List<List<Tile>> lists = pointCounterService.collectPoints(pacman, board);
         this.board = lists;
     }
 
