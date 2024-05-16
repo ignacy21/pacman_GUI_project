@@ -11,12 +11,12 @@ public class BoardService {
     {
         Tile voidTile = new Tile("void", null);
         nameTileMap.put(0, voidTile);
-        Tile blockTile = new Tile("block", findImage("tile.png"));
+        Tile blockTile = new Tile("block", findImage("tile_16x16.png"));
         blockTile.setCollision(true);
         nameTileMap.put(1, blockTile);
         Tile point1Tile = new Tile("point1", findImage("point_1.png"));
         nameTileMap.put(2, point1Tile);
-        Tile point2Tile = new Tile("point2", findImage("point_2.png"));
+        Tile point2Tile = new Tile("point2", findImage("point2.png"));
         nameTileMap.put(3, point2Tile);
     }
 
