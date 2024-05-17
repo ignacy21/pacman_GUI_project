@@ -35,7 +35,7 @@ public class RunPacman {
                     pacman,
                     TILE_SIZE,
                     boardFromFile,
-                    3
+                    2
             );
             GamePanel gamePanel = new GamePanel(pacmanPanel, displayHeight);
             pacmanFrame.add(gamePanel);

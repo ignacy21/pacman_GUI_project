@@ -34,20 +34,48 @@ public class PacmanPanel extends JPanel {
         this.setDoubleBuffered(true);
         this.addKeyListener(pacman);
         this.setFocusable(true);
-        enemies = List.of(new Ghost(
-                TILE_SIZE * (board.getFirst().size() - 13),
-                TILE_SIZE * 1,
-                Direction.UP,
+        Ghost blinky = new Ghost(
+                TILE_SIZE * (board.getFirst().size() - 2),
+                TILE_SIZE,
+                Direction.LEFT,
                 enemiesSpeed,
                 TILE_SIZE,
                 board,
                 "blinky"
-        ));
+        );
+        Ghost pinky = new Ghost(
+                TILE_SIZE,
+                TILE_SIZE,
+                Direction.RIGHT,
+                enemiesSpeed,
+                TILE_SIZE,
+                board,
+                "pinky"
+        );
+        Ghost clyde = new Ghost(
+                TILE_SIZE,
+                TILE_SIZE * (board.size() - 2),
+                Direction.RIGHT,
+                enemiesSpeed,
+                TILE_SIZE,
+                board,
+                "clyde"
+        );
+        Ghost inky = new Ghost(
+                TILE_SIZE * (board.getFirst().size() - 2),
+                TILE_SIZE * (board.size() - 2),
+                Direction.LEFT,
+                enemiesSpeed,
+                TILE_SIZE,
+                board,
+                "inky"
+        );
+        enemies = List.of(clyde, blinky, inky, pinky);
     }
 
     public void updatePacman() {
         pacman.update();
-        enemies.getFirst().update();
+        enemies.forEach(Ghost::update);
     }
 
 
@@ -60,9 +88,11 @@ public class PacmanPanel extends JPanel {
         checkCollisions();
         drawPacman(g2);
 
-        Ghost first = enemies.getFirst();
-        first.setWhereToGo(new int[]{pacman.getCoordinateX(), pacman.getCoordinateY()});
-        first.drawEntity(g2);
+        enemies.forEach(ghost -> {
+                    ghost.setWhereToGo(new int[]{pacman.getCoordinateX(), pacman.getCoordinateY()});
+                    ghost.drawEntity(g2);
+                }
+        );
     }
 
     public void setSCORE(int SCORE) {
