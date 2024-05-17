@@ -8,5 +8,5 @@ public interface Entity {
     int getCoordinateY();
     int getSpeed();
     void update();
-    void drawEntity(Graphics2D graphics2D, int displayHeight);
+    void drawEntity(Graphics2D graphics2D);
 }

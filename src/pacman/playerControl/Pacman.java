@@ -9,10 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
-import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
 
 public class Pacman implements Player {
 
@@ -137,7 +134,7 @@ public class Pacman implements Player {
     }
 
     @Override
-    public void drawEntity(Graphics2D g2, int displayHeight) {
+    public void drawEntity(Graphics2D g2) {
         List<BufferedImage> animationList = animationUp;
         switch (direction) {
             case DOWN -> animationList = animationDown;
@@ -146,14 +143,14 @@ public class Pacman implements Player {
         }
 
         int animationUpdate = 4;
-        if (animationCounter >= 3 * animationUpdate) {
-            animationCounter = animationUpdate;
+        if (animationCounter >= animationList.size() * animationUpdate) {
+            animationCounter = 0;
         }
 
         BufferedImage bufferedImage = animationList.get(animationCounter / animationUpdate);
         animationCounter++;
         g2.setColor(Color.RED);
-        g2.drawImage(bufferedImage, xPosition, yPosition + displayHeight, size, size, null);
+        g2.drawImage(bufferedImage, xPosition, yPosition, size, size, null);
     }
 
 

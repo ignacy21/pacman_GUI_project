@@ -46,7 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
         Border border = BorderFactory.createLineBorder(Color.BLUE, 4);
         displayPanel.setBorder(border);
 
-        Font pacFont = new Font("Pac-Font", Font.BOLD, displayHeight /2);
+        Font pacFont = new Font("Pac-Font", Font.BOLD, displayHeight / 2);
 
         JLabel scoreText = new JLabel("SCORE:");
         scoreText.setHorizontalAlignment(SwingConstants.CENTER);

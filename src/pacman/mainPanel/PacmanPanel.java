@@ -1,5 +1,7 @@
 package pacman.mainPanel;
 
+import pacman.ghosts.Ghost;
+import pacman.playerControl.Direction;
 import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
 import pacman.tiles.TileManager;
@@ -14,14 +16,16 @@ public class PacmanPanel extends JPanel {
 
     public static int TILE_SIZE;
     private int SCORE = 0;
-    private final int displayHeight = 0;
     private final Pacman pacman;
     private List<List<Tile>> board;
     private final TileManager tileManager = new TileManager();
     private final CollisionService collisionService;
     private final PointCounterService pointCounterService = new PointCounterService(this);
+    private final List<Ghost> enemies;
+    private int enemiesSpeed;
 
-    public PacmanPanel(Pacman pacman, int tileSeize, List<List<Tile>> board, int displayHeight, int width, int height) {
+    public PacmanPanel(Pacman pacman, int tileSeize, List<List<Tile>> board, int enemiesSpeed) {
+        this.enemiesSpeed = enemiesSpeed;
         this.board = board;
         TILE_SIZE = tileSeize;
         this.pacman = pacman;
@@ -30,10 +34,20 @@ public class PacmanPanel extends JPanel {
         this.setDoubleBuffered(true);
         this.addKeyListener(pacman);
         this.setFocusable(true);
+        enemies = List.of(new Ghost(
+                TILE_SIZE * (board.getFirst().size() - 13),
+                TILE_SIZE * 1,
+                Direction.UP,
+                enemiesSpeed,
+                TILE_SIZE,
+                board,
+                "blinky"
+        ));
     }
 
     public void updatePacman() {
         pacman.update();
+        enemies.getFirst().update();
     }
 
 
@@ -45,6 +59,10 @@ public class PacmanPanel extends JPanel {
         drawTiles(g2);
         checkCollisions();
         drawPacman(g2);
+
+        Ghost first = enemies.getFirst();
+        first.setWhereToGo(new int[]{pacman.getCoordinateX(), pacman.getCoordinateY()});
+        first.drawEntity(g2);
     }
 
     public void setSCORE(int SCORE) {
@@ -60,7 +78,7 @@ public class PacmanPanel extends JPanel {
     }
 
     private void drawTiles(Graphics2D g2) {
-        tileManager.paintTiles(g2, board, displayHeight);
+        tileManager.paintTiles(g2, board);
     }
 
     private void checkCollisions() {
@@ -70,7 +88,7 @@ public class PacmanPanel extends JPanel {
     }
 
     private void drawPacman(Graphics2D g2) {
-        pacman.drawEntity(g2, displayHeight);
+        pacman.drawEntity(g2);
     }
 
 }

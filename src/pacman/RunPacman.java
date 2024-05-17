@@ -1,8 +1,8 @@
 package pacman;
 
-import pacman.mainPanel.PacmanPanel;
 import pacman.mainPanel.GamePanel;
 import pacman.mainPanel.PacmanFrame;
+import pacman.mainPanel.PacmanPanel;
 import pacman.playerControl.Pacman;
 import pacman.tiles.BoardService;
 import pacman.tiles.Tile;
@@ -20,7 +20,7 @@ public class RunPacman {
         int tilesHeight = boardFromFile.size();
         int tilesWidth = boardFromFile.getFirst().size();
         SwingUtilities.invokeLater(() -> {
-            int TILE_SIZE = 27;
+            int TILE_SIZE = 25;
             int width = TILE_SIZE * tilesWidth;
             int height = TILE_SIZE * tilesHeight;
 
@@ -28,16 +28,14 @@ public class RunPacman {
 
             int displayHeight = TILE_SIZE * 2;
 
-            Pacman pacman = new Pacman(TILE_SIZE, TILE_SIZE, 6, TILE_SIZE, boardFromFile);
+            Pacman pacman = new Pacman(TILE_SIZE, TILE_SIZE, 3, TILE_SIZE, boardFromFile);
             PacmanFrame pacmanFrame = new PacmanFrame(width, height + 30 + displayHeight);
 
             PacmanPanel pacmanPanel = new PacmanPanel(
                     pacman,
                     TILE_SIZE,
                     boardFromFile,
-                    displayHeight,
-                    width,
-                    height
+                    3
             );
             GamePanel gamePanel = new GamePanel(pacmanPanel, displayHeight);
             pacmanFrame.add(gamePanel);

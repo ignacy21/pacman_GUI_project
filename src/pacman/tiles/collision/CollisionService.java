@@ -4,7 +4,6 @@ import pacman.playerControl.Direction;
 import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,26 +27,19 @@ public class CollisionService {
         int playersLeft = player.getCoordinateX();
         int playersBottom = player.getCoordinateY() + TILE_SIZE;
 
-        int playersCurrentX = (playersLeft + halfOfTile) / TILE_SIZE;
-        int playersCurrentY = (playersBottom - halfOfTile) / TILE_SIZE;
-        List<Tile> row = new ArrayList<>(board.get(playersCurrentY));
-        Tile rightTile = row.get(playersCurrentX + 1);
-        Tile leftTile = row.get(playersCurrentX - 1);
-        Tile tileDown = board.get(playersCurrentY + 1).get(playersCurrentX);
-        Tile tileUp = board.get(playersCurrentY - 1).get(playersCurrentX);
+        int playersCurrentTileX = (playersLeft + halfOfTile) / TILE_SIZE;
+        int playersCurrentTileY = (playersBottom - halfOfTile) / TILE_SIZE;
+        List<Tile> row = new ArrayList<>(board.get(playersCurrentTileY));
+        Tile rightTile = row.get(playersCurrentTileX + 1);
+        Tile leftTile = row.get(playersCurrentTileX - 1);
+        Tile tileDown = board.get(playersCurrentTileY + 1).get(playersCurrentTileX);
+        Tile tileUp = board.get(playersCurrentTileY - 1).get(playersCurrentTileX);
 
-        boolean wantToReverse = false;
-        switch (currentDirection) {
-            case UP -> wantToReverse = direction == DOWN;
-            case DOWN -> wantToReverse = direction == UP;
-            case LEFT -> wantToReverse = direction == RIGHT;
-            case RIGHT -> wantToReverse = direction == LEFT;
-        }
-        if (wantToReverse) {
-            return wantToReverse;
+        if (allowPacmanToReverse(currentDirection, direction)) {
+            return true;
         }
 
-        int turnGap = 3;
+        int turnGap = player.getSpeed() - 1;
         if (playersBottom % TILE_SIZE <= turnGap && playersLeft % TILE_SIZE <= turnGap) {
             if (direction == UP || direction == DOWN) {
                 int mod = playersLeft % TILE_SIZE;
@@ -81,6 +73,20 @@ public class CollisionService {
             }
         }
 
+        return false;
+    }
+
+    private static boolean allowPacmanToReverse(Direction currentDirection, Direction direction) {
+        boolean wantToReverse = false;
+        switch (currentDirection) {
+            case UP -> wantToReverse = direction == DOWN;
+            case DOWN -> wantToReverse = direction == UP;
+            case LEFT -> wantToReverse = direction == RIGHT;
+            case RIGHT -> wantToReverse = direction == LEFT;
+        }
+        if (wantToReverse) {
+            return true;
+        }
         return false;
     }
 
