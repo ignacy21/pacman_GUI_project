@@ -1,6 +1,7 @@
 package pacman.mainPanel;
 
 import pacman.ghosts.Ghost;
+import pacman.ghosts.GhostMode;
 import pacman.playerControl.Direction;
 import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
@@ -10,7 +11,10 @@ import pacman.tiles.point.PointCounterService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
+
+import static pacman.ghosts.GhostMode.CHASE;
 
 public class PacmanPanel extends JPanel {
 
@@ -21,7 +25,7 @@ public class PacmanPanel extends JPanel {
     private final TileManager tileManager = new TileManager();
     private final CollisionService collisionService;
     private final PointCounterService pointCounterService = new PointCounterService(this);
-    private final List<Ghost> enemies;
+    private final List<Ghost> enemies = new ArrayList<>();
     private int enemiesSpeed;
 
     public PacmanPanel(Pacman pacman, int tileSeize, List<List<Tile>> board, int enemiesSpeed) {
@@ -34,6 +38,7 @@ public class PacmanPanel extends JPanel {
         this.setDoubleBuffered(true);
         this.addKeyListener(pacman);
         this.setFocusable(true);
+        int[] pacmanCoordinate = {pacman.getCoordinateX(), pacman.getCoordinateY()};
         Ghost blinky = new Ghost(
                 TILE_SIZE * (board.getFirst().size() - 2),
                 TILE_SIZE,
@@ -41,6 +46,8 @@ public class PacmanPanel extends JPanel {
                 enemiesSpeed,
                 TILE_SIZE,
                 board,
+                pacmanCoordinate,
+                new int[]{TILE_SIZE * (board.getFirst().size() - 2), TILE_SIZE},
                 "blinky"
         );
         Ghost pinky = new Ghost(
@@ -50,6 +57,8 @@ public class PacmanPanel extends JPanel {
                 enemiesSpeed,
                 TILE_SIZE,
                 board,
+                pacmanCoordinate,
+                new int[]{TILE_SIZE, TILE_SIZE},
                 "pinky"
         );
         Ghost clyde = new Ghost(
@@ -59,6 +68,8 @@ public class PacmanPanel extends JPanel {
                 enemiesSpeed,
                 TILE_SIZE,
                 board,
+                pacmanCoordinate,
+                new int[]{TILE_SIZE, TILE_SIZE * (board.size() - 2)},
                 "clyde"
         );
         Ghost inky = new Ghost(
@@ -68,9 +79,19 @@ public class PacmanPanel extends JPanel {
                 enemiesSpeed,
                 TILE_SIZE,
                 board,
+                pacmanCoordinate,
+                new int[]{TILE_SIZE * (board.getFirst().size() - 2), TILE_SIZE * (board.size() - 2)},
                 "inky"
         );
-        enemies = List.of(clyde, blinky, inky, pinky);
+
+        clyde.setGhostMode(CHASE);
+        blinky.setGhostMode(CHASE);
+        inky.setGhostMode(CHASE);
+        pinky.setGhostMode(CHASE);
+        enemies.add(clyde);
+//        enemies.add(blinky);
+//        enemies.add(inky);
+//        enemies.add(pinky);
     }
 
     public void updatePacman() {
@@ -89,7 +110,7 @@ public class PacmanPanel extends JPanel {
         drawPacman(g2);
 
         enemies.forEach(ghost -> {
-                    ghost.setWhereToGo(new int[]{pacman.getCoordinateX(), pacman.getCoordinateY()});
+                    ghost.setPacmanCoordinate(new int[]{pacman.getCoordinateX(), pacman.getCoordinateY()});
                     ghost.drawEntity(g2);
                 }
         );

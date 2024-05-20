@@ -28,7 +28,7 @@ public class RunPacman {
 
             int displayHeight = TILE_SIZE * 2;
 
-            Pacman pacman = new Pacman(TILE_SIZE, TILE_SIZE, 3, TILE_SIZE, boardFromFile);
+            Pacman pacman = new Pacman(TILE_SIZE * 12, TILE_SIZE * 17, 3, TILE_SIZE, boardFromFile);
             PacmanFrame pacmanFrame = new PacmanFrame(width, height + 30 + displayHeight);
 
             PacmanPanel pacmanPanel = new PacmanPanel(

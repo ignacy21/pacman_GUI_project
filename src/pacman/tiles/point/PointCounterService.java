@@ -30,6 +30,8 @@ public class PointCounterService {
         Tile tile = row.get(playersCurrentX);
 
         if (tile.getName().contains("point")) {
+            voidTile.setColumnNumber(tile.getColumnNumber());
+            voidTile.setRowNumber(tile.getRowNumber());
             row.set(playersCurrentX, voidTile);
             board.set(playersCurrentY, row);
             if ("point1".equals(tile.getName())) {

@@ -1,12 +1,13 @@
 package pacman.ghosts;
 
 import pacman.playerControl.Direction;
+import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Stream;
 
+import static pacman.ghosts.GhostMode.CHASE;
 import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
 import static pacman.playerControl.Direction.*;
 
@@ -24,7 +25,8 @@ public class GhostService {
         int halfOfTile = TILE_SIZE / 2;
 
         Direction direction = ghost.getDirection();
-        int[] whereToGo = ghost.getWhereToGo();
+        int pacmanX = ghost.getPacmanCoordinate()[0];
+        int pacmanY = ghost.getPacmanCoordinate()[1];
 
 
         int ghostLeft = ghost.getCoordinateX();
@@ -40,29 +42,51 @@ public class GhostService {
 
             Random random = new Random();
             Tile[] tiles = tilesAroundGivenTile(ghostCurrentTileX, ghostCurrentTileY);
-//        Tile tileUp = tiles[0];
-//        Tile tileDown = tiles[1];
-//        Tile rightTile = tiles[2];
-//        Tile leftTile = tiles[3];
+            Map<Integer, Tile> map = new HashMap<>();
+//            map.put(0, tiles[0]);   // upper tile
+//            map.put(1, tiles[1]);   // lower tile
+//            map.put(2, tiles[2]);   // right tile
+//            map.put(3, tiles[3]);   // left tile
 
-            List<Integer> tileOptionsToTurn = new ArrayList<>();
-            int optionsToTurn = -1;
+            List<Integer> tileOptionsToTurnNum = new ArrayList<>();
             for (int i = 0; i < tiles.length; i++) {
                 if (!tiles[i].isCollision()) {
-                    tileOptionsToTurn.add(i);
-                    optionsToTurn++;
+                    tileOptionsToTurnNum.add(i);
+                    map.put(i, tiles[i]);
+                } else {
+                    tiles[i] = null;
                 }
             }
-            switch (direction) {
-                case UP -> tileOptionsToTurn.removeIf(d -> d == 1);
-                case DOWN -> tileOptionsToTurn.removeIf(d -> d == 0);
-                case LEFT -> tileOptionsToTurn.removeIf(d -> d == 2);
-                case RIGHT -> tileOptionsToTurn.removeIf(d -> d == 3);
-            }
-            int i = random.nextInt(0, optionsToTurn);
-            Integer i1 = tileOptionsToTurn.get(i);
 
-            switch (i1) {
+            switch (direction) {
+                case UP -> map.remove(1);
+                case DOWN -> map.remove(0);
+                case LEFT -> map.remove(2);
+                case RIGHT -> map.remove(3);
+            }
+
+            int directionByNumber = 0;
+            if (ghost.getGhostMode() == CHASE && map.size() > 1) {
+                double distanceBetweenPacmanAndTile = Integer.MAX_VALUE;
+                for (Map.Entry<Integer, Tile> integerTileEntry : map.entrySet()) {
+                    Tile tile = integerTileEntry.getValue();
+                    int tileX = tile.getColumnNumber() * TILE_SIZE;
+                    int tileY = tile.getRowNumber() * TILE_SIZE + TILE_SIZE;
+                    double v = distanceBetweenTwoPoints(tileX, tileY, pacmanX, pacmanY);
+                    if (v <= distanceBetweenPacmanAndTile) {
+                        distanceBetweenPacmanAndTile = v;
+                        directionByNumber = integerTileEntry.getKey();
+                        System.out.println(ghostCurrentTileX);
+                        System.out.println(ghostCurrentTileY);
+                    }
+                }
+
+            } else {
+                Integer next = map.keySet().iterator().next();
+                directionByNumber = next;
+            }
+
+            switch (directionByNumber) {
                 case 0 -> {
                     correctXCoordinate(gapX, halfOfTile, ghost);
                     ghost.setDirection(UP);
@@ -97,6 +121,12 @@ public class GhostService {
         } else {
             ghost.setXPosition(ghost.getCoordinateX() + TILE_SIZE - mod);
         }
+    }
+
+    private static double distanceBetweenTwoPoints(int x1, int y1, int x2, int y2) {
+        int diffX = x1 - x2;
+        int diffY = y1 - y2;
+        return Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
     }
 
     private Tile[] tilesAroundGivenTile(int tileX, int tileY) {

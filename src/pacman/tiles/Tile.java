@@ -39,6 +39,14 @@ public class Tile implements Cloneable {
         this.rowNumber = rowNumber;
     }
 
+    public int getColumnNumber() {
+        return columnNumber;
+    }
+
+    public int getRowNumber() {
+        return rowNumber;
+    }
+
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();

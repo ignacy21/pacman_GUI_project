@@ -64,7 +64,7 @@ public class Pacman implements Player {
         this.animationDown = animationDown;
         this.animationLeft = animationLeft;
         this.animationRight = animationRight;
-        this.direction = Direction.RIGHT;
+        this.direction = Direction.UP;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.speed = speed;
