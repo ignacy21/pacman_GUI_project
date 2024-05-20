@@ -8,6 +8,7 @@ import java.util.*;
 public class BoardService {
 
     Map<Integer, Tile> nameTileMap = new HashMap<>();
+
     {
         Tile voidTile = new Tile("void", null);
         nameTileMap.put(0, voidTile);
@@ -22,26 +23,40 @@ public class BoardService {
 
     public List<List<Tile>> createBoardFromFile(String path) throws IOException {
         List<List<Tile>> tiles = new ArrayList<>();
+        int rowCount = 0;
         try (
                 BufferedReader bufferedReader = new BufferedReader(new FileReader(path))
         ) {
             while (true) {
                 String line = bufferedReader.readLine();
                 if (line == null) break;
-                List<Tile> row = Arrays.stream(line.split(" "))
-                        .map(Integer::parseInt)
-                        .map(this::convertIntToTile)
-                        .toList();
+                List<Tile> row = new ArrayList<>();
+                String[] s = line.split(" ");
+                for (int i = 0; i < s.length; i++) {
+                    Tile tile = convertIntToTile(Integer.parseInt(s[i]));
+                    tile.setRowNumber(rowCount);
+                    tile.setColumnNumber(i);
+                    row.add(tile);
+                }
                 tiles.add(row);
+                rowCount++;
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+        System.out.println(tiles.getFirst().size());
+        System.out.println(tiles.size());
         return tiles;
     }
 
-    private Tile convertIntToTile(Integer tileNumber) {
-        return nameTileMap.get(tileNumber);
+    private Tile convertIntToTile(Integer tileNumber)  {
+        Tile clone;
+        try {
+            clone = (Tile) nameTileMap.get(tileNumber).clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+        return clone;
     }
 
     private static BufferedImage findImage(String tileName) {
