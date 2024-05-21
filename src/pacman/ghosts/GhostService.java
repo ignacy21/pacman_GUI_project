@@ -1,11 +1,9 @@
 package pacman.ghosts;
 
 import pacman.playerControl.Direction;
-import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static pacman.ghosts.GhostMode.CHASE;
 import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
@@ -76,8 +74,6 @@ public class GhostService {
                     if (v <= distanceBetweenPacmanAndTile) {
                         distanceBetweenPacmanAndTile = v;
                         directionByNumber = integerTileEntry.getKey();
-                        System.out.println(ghostCurrentTileX);
-                        System.out.println(ghostCurrentTileY);
                     }
                 }
 

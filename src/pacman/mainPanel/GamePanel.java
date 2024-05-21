@@ -13,7 +13,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.pacmanPanel = pacmanPanel;
         thread.start();
 
-        setLayout(new BorderLayout());
+        this.setLayout(new BorderLayout());
         scoreLabel = new JLabel("0", SwingConstants.CENTER);
 
         JPanel displayPanel = displayPanelCreation(displayHeight);

@@ -44,8 +44,7 @@ public class BoardService {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(tiles.getFirst().size());
-        System.out.println(tiles.size());
+        System.out.printf("BOARD: width[%s]  height[%s]%n", tiles.getFirst().size(), tiles.size());
         return tiles;
     }
 

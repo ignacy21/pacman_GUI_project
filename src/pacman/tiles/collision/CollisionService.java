@@ -12,13 +12,61 @@ import static pacman.playerControl.Direction.*;
 
 public class CollisionService {
 
-
     private final Pacman player;
+
     private final List<List<Tile>> board;
 
     public CollisionService(Pacman player, List<List<Tile>> board) {
         this.player = player;
         this.board = board;
+    }
+
+    public void checkCollision() {
+        Direction direction = player.getDirection();
+        int spareAdd = 1;
+        int halfOfTile = TILE_SIZE / 2;
+
+        int playersUp = player.getCoordinateY();
+        int playersLeft = player.getCoordinateX();
+        int playersRight = playersLeft + TILE_SIZE;
+        int playersBottom = playersUp + TILE_SIZE;
+
+        int yUp = (playersUp - spareAdd) / TILE_SIZE;
+        int xUpLt = (playersLeft - spareAdd) / TILE_SIZE;
+        int xUpRt = (playersRight - spareAdd) / TILE_SIZE;
+        Tile tileUpLt = board.get(yUp).get(xUpLt);
+        Tile tileUpRt = board.get(yUp).get(xUpRt);
+
+        int xBotLt = (playersLeft + spareAdd) / TILE_SIZE;
+        int xBotRt = (playersRight + spareAdd) / TILE_SIZE;
+        int yBot = (playersBottom) / TILE_SIZE;
+        Tile tileBotLt = board.get(yBot).get(xBotLt);
+        Tile tileBotRt = board.get(yBot).get(xBotRt);
+
+        int yRtUp = (playersUp + spareAdd) / TILE_SIZE;
+        int yRtBot = (playersBottom + spareAdd) / TILE_SIZE;
+        int xRt = (playersRight) / TILE_SIZE;
+        Tile tileRightUp = board.get(yRtUp).get(xRt);
+        Tile tileRightBot = board.get(yRtBot).get(xRt);
+
+        int yLtUp = (playersUp + spareAdd) / TILE_SIZE;
+        int yLtBot = (playersBottom + spareAdd) / TILE_SIZE;
+        int xLt = (playersLeft - spareAdd) / TILE_SIZE;
+        Tile tileLeftUp = board.get(yLtUp).get(xLt);
+        Tile tileLeftBot = board.get(yLtBot).get(xLt);
+
+        if (direction == UP && (tileUpLt.isCollision() || tileUpRt.isCollision())) {
+            collisionDetection(playersLeft, playersRight, tileUpRt, player, halfOfTile, "Y");
+        } else if (direction == DOWN && (tileBotLt.isCollision() || tileBotRt.isCollision())) {
+            collisionDetection(playersLeft, playersRight, tileBotLt, player, halfOfTile, "Y");
+        } else if (direction == LEFT && (tileLeftUp.isCollision() || tileLeftBot.isCollision())) {
+            collisionDetection(playersUp, playersBottom, tileLeftUp, player, halfOfTile, "X");
+            player.setColliding(playersUp % TILE_SIZE != 0 || playersBottom % TILE_SIZE != 0 || tileLeftUp.isCollision());
+        } else if (direction == RIGHT && (tileRightUp.isCollision() || tileRightBot.isCollision())) {
+            collisionDetection(playersUp, playersBottom, tileRightUp, player, halfOfTile, "X");
+        } else {
+            player.setColliding(false);
+        }
     }
 
     public boolean canPacmanTurn(Direction currentDirection, Direction direction) {
@@ -75,7 +123,6 @@ public class CollisionService {
 
         return false;
     }
-
     private static boolean allowPacmanToReverse(Direction currentDirection, Direction direction) {
         boolean wantToReverse = false;
         switch (currentDirection) {
@@ -90,54 +137,10 @@ public class CollisionService {
         return false;
     }
 
+    private static void allowPacmanToChangeSides() {
 
-    public void checkCollision() {
-        Direction direction = player.getDirection();
-        int spareAdd = 1;
-        int halfOfTile = TILE_SIZE / 2;
-
-        int playersUp = player.getCoordinateY();
-        int playersLeft = player.getCoordinateX();
-        int playersRight = player.getCoordinateX() + TILE_SIZE;
-        int playersBottom = player.getCoordinateY() + TILE_SIZE;
-
-        int yUp = (playersUp - spareAdd) / TILE_SIZE;
-        int xUpLt = (playersLeft - spareAdd) / TILE_SIZE;
-        int xUpRt = (playersRight - spareAdd) / TILE_SIZE;
-        Tile tileUpLt = board.get(yUp).get(xUpLt);
-        Tile tileUpRt = board.get(yUp).get(xUpRt);
-
-        int xBotLt = (playersLeft + spareAdd) / TILE_SIZE;
-        int xBotRt = (playersRight + spareAdd) / TILE_SIZE;
-        int yBot = (playersBottom) / TILE_SIZE;
-        Tile tileBotLt = board.get(yBot).get(xBotLt);
-        Tile tileBotRt = board.get(yBot).get(xBotRt);
-
-        int yRtUp = (playersUp + spareAdd) / TILE_SIZE;
-        int yRtBot = (playersBottom + spareAdd) / TILE_SIZE;
-        int xRt = (playersRight) / TILE_SIZE;
-        Tile tileRightUp = board.get(yRtUp).get(xRt);
-        Tile tileRightBot = board.get(yRtBot).get(xRt);
-
-        int yLtUp = (playersUp + spareAdd) / TILE_SIZE;
-        int yLtBot = (playersBottom + spareAdd) / TILE_SIZE;
-        int xLt = (playersLeft - spareAdd) / TILE_SIZE;
-        Tile tileLeftUp = board.get(yLtUp).get(xLt);
-        Tile tileLeftBot = board.get(yLtBot).get(xLt);
-
-        if (direction == UP && (tileUpLt.isCollision() || tileUpRt.isCollision())) {
-            collisionDetection(playersLeft, playersRight, tileUpRt, player, halfOfTile, "Y");
-        } else if (direction == DOWN && (tileBotLt.isCollision() || tileBotRt.isCollision())) {
-            collisionDetection(playersLeft, playersRight, tileBotLt, player, halfOfTile, "Y");
-        } else if (direction == LEFT && (tileLeftUp.isCollision() || tileLeftBot.isCollision())) {
-            collisionDetection(playersUp, playersBottom, tileLeftUp, player, halfOfTile, "X");
-            player.setColliding(playersUp % TILE_SIZE != 0 || playersBottom % TILE_SIZE != 0 || tileLeftUp.isCollision());
-        } else if (direction == RIGHT && (tileRightUp.isCollision() || tileRightBot.isCollision())) {
-            collisionDetection(playersUp, playersBottom, tileRightUp, player, halfOfTile, "X");
-        } else {
-            player.setColliding(false);
-        }
     }
+
 
     private void collisionDetection(
             int crucialCoordinate1,

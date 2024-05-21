@@ -1,7 +1,6 @@
 package pacman.mainPanel;
 
 import pacman.ghosts.Ghost;
-import pacman.ghosts.GhostMode;
 import pacman.playerControl.Direction;
 import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
@@ -88,7 +87,7 @@ public class PacmanPanel extends JPanel {
         blinky.setGhostMode(CHASE);
         inky.setGhostMode(CHASE);
         pinky.setGhostMode(CHASE);
-        enemies.add(clyde);
+//        enemies.add(clyde);
 //        enemies.add(blinky);
 //        enemies.add(inky);
 //        enemies.add(pinky);
@@ -134,8 +133,7 @@ public class PacmanPanel extends JPanel {
 
     private void checkCollisions() {
         collisionService.checkCollision();
-        List<List<Tile>> lists = pointCounterService.collectPoints(pacman, board);
-        this.board = lists;
+        this.board = pointCounterService.collectPoints(pacman, board);
     }
 
     private void drawPacman(Graphics2D g2) {
