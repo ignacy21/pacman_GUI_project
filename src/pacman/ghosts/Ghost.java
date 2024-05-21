@@ -30,7 +30,7 @@ public class Ghost implements Entity {
     private GhostMode ghostMode;
     public String ghostName;
 
-    public Ghost(int xPosition, int yPosition, Direction direction, int speed, int size, List<List<Tile>> board, int[] pacmanCoordinate,int[] cornerCoordinate, String ghostName) {
+    public Ghost(int xPosition, int yPosition, Direction direction, int speed, int size, List<List<Tile>> board, int[] pacmanCoordinate,int[] cornerCoordinate, String ghostName, int rowThatSwitchSides) {
         this.direction = direction;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
@@ -40,7 +40,7 @@ public class Ghost implements Entity {
         this.board = board;
         this.pacmanCoordinate = pacmanCoordinate;
         this.cornerCoordinate = cornerCoordinate;
-        ghostService = new GhostService(this, board);
+        ghostService = new GhostService(this, board, rowThatSwitchSides);
         String pathName = "resources/images/ghosts";
         try {
             animationDown = List.of(
@@ -83,6 +83,7 @@ public class Ghost implements Entity {
 
     @Override
     public void update() {
+        ghostService.allowGhostToChangeSides();
         ghostService.whereGhostShouldTurn();
         switch (direction) {
             case UP -> yPosition -= speed;
@@ -103,7 +104,7 @@ public class Ghost implements Entity {
         }
         int animationUpdate = 4;
         if (animationCounter >= animationList.size() * animationUpdate) {
-            animationCounter = animationUpdate;
+            animationCounter = 0;
         }
 
         BufferedImage bufferedImage = animationList.get(animationCounter / animationUpdate);

@@ -141,8 +141,8 @@ public class PacmanService {
 
     public void allowPacmanToChangeSides() {
         int tileY = player.getCoordinateY() / TILE_SIZE;
-        int playerX = player.getCoordinateX();
         if (tileY == rowThatSwitchSides) {
+            int playerX = player.getCoordinateX();
             if (playerX <= TILE_SIZE) {
                 player.setDirection(LEFT);
                 player.setCoordinateX(board.getFirst().size() * TILE_SIZE - TILE_SIZE * 2);
@@ -151,7 +151,6 @@ public class PacmanService {
                 player.setCoordinateX(TILE_SIZE * 2);
             }
         }
-
     }
 
 

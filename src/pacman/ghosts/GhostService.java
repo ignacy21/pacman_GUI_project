@@ -12,10 +12,12 @@ import static pacman.playerControl.Direction.*;
 public class GhostService {
 
     private final Ghost ghost;
+    private final int rowThatSwitchSides;
     private final List<List<Tile>> board;
 
-    public GhostService(Ghost ghost, List<List<Tile>> board) {
+    public GhostService(Ghost ghost, List<List<Tile>> board, int rowThatSwitchSides) {
         this.ghost = ghost;
+        this.rowThatSwitchSides = rowThatSwitchSides;
         this.board = board;
     }
 
@@ -95,6 +97,20 @@ public class GhostService {
                     correctYCoordinate(gapY, halfOfTile, ghost);
                     ghost.setDirection(LEFT);
                 }
+            }
+        }
+    }
+
+    public void allowGhostToChangeSides() {
+        int tileY = ghost.getCoordinateY() / TILE_SIZE;
+        if (tileY == rowThatSwitchSides) {
+            int ghostX = ghost.getCoordinateX();
+            if (ghostX <= TILE_SIZE) {
+                ghost.setDirection(LEFT);
+                ghost.setCoordinateX(board.getFirst().size() * TILE_SIZE - TILE_SIZE * 2);
+            } else if (ghostX >= board.getFirst().size() * TILE_SIZE - TILE_SIZE * 2){
+                ghost.setDirection(RIGHT);
+                ghost.setCoordinateX(TILE_SIZE * 2);
             }
         }
     }
