@@ -41,10 +41,6 @@ public class GhostService {
             Random random = new Random();
             Tile[] tiles = tilesAroundGivenTile(ghostCurrentTileX, ghostCurrentTileY);
             Map<Integer, Tile> map = new HashMap<>();
-//            map.put(0, tiles[0]);   // upper tile
-//            map.put(1, tiles[1]);   // lower tile
-//            map.put(2, tiles[2]);   // right tile
-//            map.put(3, tiles[3]);   // left tile
 
             List<Integer> tileOptionsToTurnNum = new ArrayList<>();
             for (int i = 0; i < tiles.length; i++) {
@@ -105,17 +101,17 @@ public class GhostService {
 
     private static void correctYCoordinate(int mod, int halfOfTile, Ghost ghost) {
         if (mod < halfOfTile) {
-            ghost.setYPosition(ghost.getCoordinateY() - mod);
+            ghost.setCoordinateY(ghost.getCoordinateY() - mod);
         } else {
-            ghost.setYPosition(ghost.getCoordinateY() + TILE_SIZE - mod);
+            ghost.setCoordinateY(ghost.getCoordinateY() + TILE_SIZE - mod);
         }
     }
 
     private static void correctXCoordinate(int mod, int halfOfTile, Ghost ghost) {
         if (mod < halfOfTile) {
-            ghost.setXPosition(ghost.getCoordinateX() - mod);
+            ghost.setCoordinateX(ghost.getCoordinateX() - mod);
         } else {
-            ghost.setXPosition(ghost.getCoordinateX() + TILE_SIZE - mod);
+            ghost.setCoordinateX(ghost.getCoordinateX() + TILE_SIZE - mod);
         }
     }
 

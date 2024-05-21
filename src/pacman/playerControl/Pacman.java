@@ -1,7 +1,7 @@
 package pacman.playerControl;
 
 import pacman.tiles.Tile;
-import pacman.tiles.collision.CollisionService;
+import pacman.tiles.collision.PacmanService;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,7 +17,7 @@ public class Pacman implements Player {
     private Direction direction;
     private Direction wantToTurn;
     private int countTurn = 0;
-    private final CollisionService collisionService;
+    private final PacmanService pacmanService;
     private int xPosition;
     private int yPosition;
     private int speed;
@@ -68,7 +68,7 @@ public class Pacman implements Player {
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.speed = speed;
-        collisionService = new CollisionService(this, board);
+        pacmanService = new PacmanService(this, board);
     }
 
     @Override
@@ -87,19 +87,19 @@ public class Pacman implements Player {
 
     private void turn(int keyCode) {
         if (keyCode == KeyEvent.VK_UP) {
-            if (collisionService.canPacmanTurn(direction, Direction.UP))
+            if (pacmanService.canPacmanTurn(direction, Direction.UP))
                 direction = Direction.UP;
             wantToTurn = Direction.UP;
         } else if (keyCode == KeyEvent.VK_DOWN) {
-            if (collisionService.canPacmanTurn(direction, Direction.DOWN))
+            if (pacmanService.canPacmanTurn(direction, Direction.DOWN))
                 direction = Direction.DOWN;
             wantToTurn = Direction.DOWN;
         } else if (keyCode == KeyEvent.VK_LEFT) {
-            if (collisionService.canPacmanTurn(direction, Direction.LEFT))
+            if (pacmanService.canPacmanTurn(direction, Direction.LEFT))
                 direction = Direction.LEFT;
             wantToTurn = Direction.LEFT;
         } else if (keyCode == KeyEvent.VK_RIGHT) {
-            if (collisionService.canPacmanTurn(direction, Direction.RIGHT))
+            if (pacmanService.canPacmanTurn(direction, Direction.RIGHT))
                 direction = Direction.RIGHT;
             wantToTurn = Direction.RIGHT;
         }
@@ -183,11 +183,13 @@ public class Pacman implements Player {
         return speed;
     }
 
-    public void setXPosition(int xPosition) {
+    @Override
+    public void setCoordinateX(int xPosition) {
         this.xPosition = xPosition;
     }
 
-    public void setYPosition(int yPosition) {
+    @Override
+    public void setCoordinateY(int yPosition) {
         this.yPosition = yPosition;
     }
 

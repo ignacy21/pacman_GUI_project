@@ -5,7 +5,7 @@ import pacman.playerControl.Direction;
 import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
 import pacman.tiles.TileManager;
-import pacman.tiles.collision.CollisionService;
+import pacman.tiles.collision.PacmanService;
 import pacman.tiles.point.PointCounterService;
 
 import javax.swing.*;
@@ -22,7 +22,7 @@ public class PacmanPanel extends JPanel {
     private final Pacman pacman;
     private List<List<Tile>> board;
     private final TileManager tileManager = new TileManager();
-    private final CollisionService collisionService;
+    private final PacmanService pacmanService;
     private final PointCounterService pointCounterService = new PointCounterService(this);
     private final List<Ghost> enemies = new ArrayList<>();
     private int enemiesSpeed;
@@ -32,7 +32,7 @@ public class PacmanPanel extends JPanel {
         this.board = board;
         TILE_SIZE = tileSeize;
         this.pacman = pacman;
-        collisionService = new CollisionService(pacman, board);
+        pacmanService = new PacmanService(pacman, board);
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(pacman);
@@ -132,7 +132,7 @@ public class PacmanPanel extends JPanel {
     }
 
     private void checkCollisions() {
-        collisionService.checkCollision();
+        pacmanService.checkCollision();
         this.board = pointCounterService.collectPoints(pacman, board);
     }
 

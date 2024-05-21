@@ -75,6 +75,7 @@ public class Ghost implements Entity {
         return yPosition;
     }
 
+
     @Override
     public int getSpeed() {
         return speed;
@@ -131,7 +132,8 @@ public class Ghost implements Entity {
         this.direction = direction;
     }
 
-    public void setXPosition(int xPosition) {
+    @Override
+    public void setCoordinateX(int xPosition) {
         this.xPosition = xPosition;
     }
 
@@ -143,7 +145,7 @@ public class Ghost implements Entity {
         this.ghostMode = ghostMode;
     }
 
-    public void setYPosition(int yPosition) {
+    public void setCoordinateY(int yPosition) {
         this.yPosition = yPosition;
     }
 
