@@ -183,11 +183,13 @@ public class Pacman implements Player {
         return speed;
     }
 
-    public void setXPosition(int xPosition) {
+    @Override
+    public void setCoordinateX(int xPosition) {
         this.xPosition = xPosition;
     }
 
-    public void setYPosition(int yPosition) {
+    @Override
+    public void setCoordinateY(int yPosition) {
         this.yPosition = yPosition;
     }
 

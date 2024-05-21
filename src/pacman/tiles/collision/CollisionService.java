@@ -166,17 +166,17 @@ public class CollisionService {
 
     private static void correctYCoordinate(int mod, int halfOfTile, Pacman pacman) {
         if (mod < halfOfTile) {
-            pacman.setYPosition(pacman.getCoordinateY() - mod);
+            pacman.setCoordinateY(pacman.getCoordinateY() - mod);
         } else {
-            pacman.setYPosition(pacman.getCoordinateY() + TILE_SIZE - mod);
+            pacman.setCoordinateY(pacman.getCoordinateY() + TILE_SIZE - mod);
         }
     }
 
     private static void correctXCoordinate(int mod, int halfOfTile, Pacman pacman) {
         if (mod < halfOfTile) {
-            pacman.setXPosition(pacman.getCoordinateX() - mod);
+            pacman.setCoordinateX(pacman.getCoordinateX() - mod);
         } else {
-            pacman.setXPosition(pacman.getCoordinateX() + TILE_SIZE - mod);
+            pacman.setCoordinateX(pacman.getCoordinateX() + TILE_SIZE - mod);
         }
     }
 
