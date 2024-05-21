@@ -30,7 +30,7 @@ public class Pacman implements Player {
     private final List<BufferedImage> animationRight;
 
 
-    public Pacman(int xPosition, int yPosition, int speed, int size, List<List<Tile>> board) {
+    public Pacman(int xPosition, int yPosition, int speed, int size, List<List<Tile>> board, int rowThatSwitchSides) {
         this.size = size;
         List<BufferedImage> animationUp;
         List<BufferedImage> animationDown;
@@ -68,7 +68,7 @@ public class Pacman implements Player {
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.speed = speed;
-        pacmanService = new PacmanService(this, board);
+        pacmanService = new PacmanService(this, board, rowThatSwitchSides);
     }
 
     @Override
@@ -191,6 +191,10 @@ public class Pacman implements Player {
     @Override
     public void setCoordinateY(int yPosition) {
         this.yPosition = yPosition;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     @Override

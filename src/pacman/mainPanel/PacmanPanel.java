@@ -27,12 +27,12 @@ public class PacmanPanel extends JPanel {
     private final List<Ghost> enemies = new ArrayList<>();
     private int enemiesSpeed;
 
-    public PacmanPanel(Pacman pacman, int tileSeize, List<List<Tile>> board, int enemiesSpeed) {
+    public PacmanPanel(Pacman pacman, int tileSeize, List<List<Tile>> board, int enemiesSpeed, int rowThatSwitchSides) {
         this.enemiesSpeed = enemiesSpeed;
         this.board = board;
         TILE_SIZE = tileSeize;
         this.pacman = pacman;
-        pacmanService = new PacmanService(pacman, board);
+        pacmanService = new PacmanService(pacman, board, rowThatSwitchSides);
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(pacman);
@@ -132,6 +132,7 @@ public class PacmanPanel extends JPanel {
     }
 
     private void checkCollisions() {
+        pacmanService.allowPacmanToChangeSides();
         pacmanService.checkCollision();
         this.board = pointCounterService.collectPoints(pacman, board);
     }

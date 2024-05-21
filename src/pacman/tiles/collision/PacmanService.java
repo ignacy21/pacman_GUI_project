@@ -13,11 +13,13 @@ import static pacman.playerControl.Direction.*;
 public class PacmanService {
 
     private final Pacman player;
+    private final int rowThatSwitchSides;
 
     private final List<List<Tile>> board;
 
-    public PacmanService(Pacman player, List<List<Tile>> board) {
+    public PacmanService(Pacman player, List<List<Tile>> board, int rowThatSwitchSides) {
         this.player = player;
+        this.rowThatSwitchSides = rowThatSwitchSides;
         this.board = board;
     }
 
@@ -137,7 +139,18 @@ public class PacmanService {
         return false;
     }
 
-    private static void allowPacmanToChangeSides() {
+    public void allowPacmanToChangeSides() {
+        int tileY = player.getCoordinateY() / TILE_SIZE;
+        int playerX = player.getCoordinateX();
+        if (tileY == rowThatSwitchSides) {
+            if (playerX <= TILE_SIZE) {
+                player.setDirection(LEFT);
+                player.setCoordinateX(board.getFirst().size() * TILE_SIZE - TILE_SIZE * 2);
+            } else if (playerX >= board.getFirst().size() * TILE_SIZE - TILE_SIZE * 2){
+                player.setDirection(RIGHT);
+                player.setCoordinateX(TILE_SIZE * 2);
+            }
+        }
 
     }
 
