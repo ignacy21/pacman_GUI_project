@@ -32,7 +32,7 @@ public class PacmanPanel extends JPanel {
         this.board = board;
         TILE_SIZE = tileSeize;
         this.pacman = pacman;
-        pacmanService = new PacmanService(pacman, board, rowThatSwitchSides);
+        this.pacmanService = new PacmanService(pacman, board, rowThatSwitchSides);
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(pacman);
@@ -91,15 +91,27 @@ public class PacmanPanel extends JPanel {
         blinky.setGhostMode(CHASE);
         inky.setGhostMode(CHASE);
         pinky.setGhostMode(CHASE);
-        enemies.add(clyde);
-        enemies.add(blinky);
-        enemies.add(inky);
-        enemies.add(pinky);
+//        enemies.add(clyde);
+//        enemies.add(blinky);
+//        enemies.add(inky);
+//        enemies.add(pinky);
     }
 
     public void updatePacman() {
         pacman.update();
         enemies.forEach(Ghost::update);
+    }
+
+    public JViewport returnJPanelWithViewPoint(int width, int height) {
+        JViewport viewport = new JViewport() {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(width, height);
+            }
+        };
+        viewport.setView(this);
+        viewport.setViewPosition(new Point(TILE_SIZE * 2, 0));
+        return viewport;
     }
 
 

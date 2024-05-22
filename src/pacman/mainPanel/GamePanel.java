@@ -9,7 +9,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final JLabel scoreLabel;
     private final PacmanPanel pacmanPanel;
 
-    public GamePanel(PacmanPanel pacmanPanel, int displayHeight) {
+    public GamePanel(PacmanPanel pacmanPanel, int displayHeight, int width, int height) {
         this.pacmanPanel = pacmanPanel;
         thread.start();
 
@@ -18,9 +18,15 @@ public class GamePanel extends JPanel implements Runnable {
 
         JPanel displayPanel = displayPanelCreation(displayHeight);
 
-        this.add(displayPanel, BorderLayout.NORTH);
-        this.add(pacmanPanel, BorderLayout.CENTER);
+        JViewport jViewport = pacmanPanel.returnJPanelWithViewPoint(width, height);
+        this.add(jViewport, BorderLayout.CENTER);
+
+//        this.add(pacmanPanel, BorderLayout.CENTER);
+
+//        this.add(displayPanel, BorderLayout.NORTH);
+
     }
+
 
     @Override
     public void run() {
