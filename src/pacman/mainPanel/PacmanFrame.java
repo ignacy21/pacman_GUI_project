@@ -9,7 +9,6 @@ public class PacmanFrame extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(new Dimension(width, height));
-//        this.getContentPane().setBackground(Color.BLACK);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setTitle("PACMAN");

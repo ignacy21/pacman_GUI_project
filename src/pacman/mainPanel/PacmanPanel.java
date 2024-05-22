@@ -27,17 +27,22 @@ public class PacmanPanel extends JPanel {
     private final List<Ghost> enemies = new ArrayList<>();
     private int enemiesSpeed;
 
-    public PacmanPanel(Pacman pacman, int tileSeize, List<List<Tile>> board, int enemiesSpeed, int rowThatSwitchSides) {
-        this.enemiesSpeed = enemiesSpeed;
-        this.board = board;
-        TILE_SIZE = tileSeize;
-        this.pacman = pacman;
-        this.pacmanService = new PacmanService(pacman, board, rowThatSwitchSides);
+    public PacmanPanel(int width, int height, Pacman pacman, int tileSeize, List<List<Tile>> board, int enemiesSpeed, int rowThatSwitchSides) {
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(pacman);
         this.setFocusable(true);
+        this.setPreferredSize(new Dimension(width, height));
+
+        this.enemiesSpeed = enemiesSpeed;
+        this.board = board;
+        this.pacman = pacman;
+
+        TILE_SIZE = tileSeize;
         int[] pacmanCoordinate = {pacman.getCoordinateX(), pacman.getCoordinateY()};
+
+        this.pacmanService = new PacmanService(pacman, board, rowThatSwitchSides);
+
         Ghost blinky = new Ghost(
                 TILE_SIZE * (board.getFirst().size() - 2),
                 TILE_SIZE,
@@ -102,15 +107,10 @@ public class PacmanPanel extends JPanel {
         enemies.forEach(Ghost::update);
     }
 
-    public JViewport returnJPanelWithViewPoint(int width, int height) {
-        JViewport viewport = new JViewport() {
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(width, height);
-            }
-        };
+    public JViewport returnJPanelWithViewPoint(int correctPositionOfPanelToMatchScreen) {
+        JViewport viewport = new JViewport();
         viewport.setView(this);
-        viewport.setViewPosition(new Point(TILE_SIZE * 2, 0));
+        viewport.setViewPosition(new Point(correctPositionOfPanelToMatchScreen, 0));
         return viewport;
     }
 
