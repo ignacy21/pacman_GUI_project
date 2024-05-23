@@ -8,6 +8,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final Thread thread = new Thread(this);
     private final JLabel scoreLabel;
     private final PacmanPanel pacmanPanel;
+    private int ghostModeCounter = 0;
 
     public GamePanel(PacmanPanel pacmanPanel, int displayHeight, int correctPositionOfPanelToMatchScreen) {
         thread.start();
@@ -39,6 +40,7 @@ public class GamePanel extends JPanel implements Runnable {
                 throw new RuntimeException(e);
             }
             scoreLabel.setText(String.valueOf(pacmanPanel.getSCORE()));
+            pacmanPanel.steerGhostMode();
             repaint();
         }
     }

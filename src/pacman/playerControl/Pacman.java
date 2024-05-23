@@ -86,19 +86,19 @@ public class Pacman implements Player {
     }
 
     private void turn(int keyCode) {
-        if (keyCode == KeyEvent.VK_UP) {
+        if (keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_W) {
             if (pacmanService.canPacmanTurn(direction, Direction.UP))
                 direction = Direction.UP;
             wantToTurn = Direction.UP;
-        } else if (keyCode == KeyEvent.VK_DOWN) {
+        } else if (keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_S) {
             if (pacmanService.canPacmanTurn(direction, Direction.DOWN))
                 direction = Direction.DOWN;
             wantToTurn = Direction.DOWN;
-        } else if (keyCode == KeyEvent.VK_LEFT) {
+        } else if (keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_A) {
             if (pacmanService.canPacmanTurn(direction, Direction.LEFT))
                 direction = Direction.LEFT;
             wantToTurn = Direction.LEFT;
-        } else if (keyCode == KeyEvent.VK_RIGHT) {
+        } else if (keyCode == KeyEvent.VK_RIGHT || keyCode == KeyEvent.VK_D) {
             if (pacmanService.canPacmanTurn(direction, Direction.RIGHT))
                 direction = Direction.RIGHT;
             wantToTurn = Direction.RIGHT;

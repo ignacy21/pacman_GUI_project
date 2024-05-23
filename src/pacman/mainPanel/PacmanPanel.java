@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static pacman.ghosts.GhostMode.CHASE;
+import static pacman.ghosts.GhostMode.SCATTER;
 
 public class PacmanPanel extends JPanel {
 
@@ -26,6 +27,7 @@ public class PacmanPanel extends JPanel {
     private final PointCounterService pointCounterService = new PointCounterService(this);
     private final List<Ghost> enemies = new ArrayList<>();
     private int enemiesSpeed;
+    private int ghostModeCounter = 0;
 
     public PacmanPanel(int width, int height, Pacman pacman, int tileSeize, List<List<Tile>> board, int enemiesSpeed, int rowThatSwitchSides) {
         this.setBackground(Color.BLACK);
@@ -42,64 +44,79 @@ public class PacmanPanel extends JPanel {
         int[] pacmanCoordinate = {pacman.getCoordinateX(), pacman.getCoordinateY()};
 
         this.pacmanService = new PacmanService(pacman, board, rowThatSwitchSides);
-
+        int[] respawnPoint = new int[]{TILE_SIZE * (board.getFirst().size() / 2), TILE_SIZE * (board.size() / 2)};
         Ghost blinky = new Ghost(
-                TILE_SIZE * (board.getFirst().size() - 2),
+                TILE_SIZE * (board.getFirst().size() - 4),
                 TILE_SIZE,
                 Direction.LEFT,
                 enemiesSpeed,
                 TILE_SIZE,
                 board,
                 pacmanCoordinate,
-                new int[]{TILE_SIZE * (board.getFirst().size() - 2), TILE_SIZE},
+                new int[]{TILE_SIZE * (board.getFirst().size() - 3), 0},
+                respawnPoint,
                 "blinky",
                 rowThatSwitchSides
         );
         Ghost pinky = new Ghost(
-                TILE_SIZE,
+                TILE_SIZE * 3,
                 TILE_SIZE,
                 Direction.RIGHT,
                 enemiesSpeed,
                 TILE_SIZE,
                 board,
                 pacmanCoordinate,
-                new int[]{TILE_SIZE, TILE_SIZE},
+                new int[]{TILE_SIZE * 2, 0},
+                respawnPoint,
                 "pinky",
                 rowThatSwitchSides
         );
         Ghost clyde = new Ghost(
-                TILE_SIZE,
+                TILE_SIZE * 3,
                 TILE_SIZE * (board.size() - 2),
                 Direction.RIGHT,
                 enemiesSpeed,
                 TILE_SIZE,
                 board,
                 pacmanCoordinate,
-                new int[]{TILE_SIZE, TILE_SIZE * (board.size() - 2)},
+                new int[]{TILE_SIZE * 2, TILE_SIZE * (board.size() - 1)},
+                respawnPoint,
                 "clyde",
                 rowThatSwitchSides
         );
         Ghost inky = new Ghost(
-                TILE_SIZE * (board.getFirst().size() - 2),
+                TILE_SIZE * (board.getFirst().size() - 4),
                 TILE_SIZE * (board.size() - 2),
                 Direction.LEFT,
                 enemiesSpeed,
                 TILE_SIZE,
                 board,
                 pacmanCoordinate,
-                new int[]{TILE_SIZE * (board.getFirst().size() - 2), TILE_SIZE * (board.size() - 2)},
+                new int[]{TILE_SIZE * (board.getFirst().size() - 3), TILE_SIZE * (board.size() - 1)},
+                respawnPoint,
                 "inky",
                 rowThatSwitchSides
         );
 
-        clyde.setGhostMode(CHASE);
-        blinky.setGhostMode(CHASE);
-        inky.setGhostMode(CHASE);
-        pinky.setGhostMode(CHASE);
-//        enemies.add(clyde);
-//        enemies.add(blinky);
-//        enemies.add(inky);
-//        enemies.add(pinky);
+
+        enemies.add(clyde);
+        enemies.add(blinky);
+        enemies.add(inky);
+        enemies.add(pinky);
+        enemies.forEach(ghost -> ghost.setGhostMode(CHASE));
+    }
+
+    public void steerGhostMode() {
+        if (ghostModeCounter == 0) {
+            enemies.forEach(ghost -> ghost.setGhostMode(CHASE));
+            System.out.println("CHASE");
+        } else if (ghostModeCounter == 1000) {
+            enemies.forEach(ghost -> ghost.setGhostMode(SCATTER));
+            System.out.println("SCATTER");
+        } else if (ghostModeCounter == 1500) {
+            ghostModeCounter = -1;
+        }
+        ghostModeCounter++;
     }
 
     public void updatePacman() {
@@ -156,5 +173,6 @@ public class PacmanPanel extends JPanel {
     private void drawPacman(Graphics2D g2) {
         pacman.drawEntity(g2);
     }
+
 
 }

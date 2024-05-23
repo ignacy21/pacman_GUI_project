@@ -18,6 +18,7 @@ public class Ghost implements Entity {
     private int yPosition;
     private int[] pacmanCoordinate;
     private final int[] cornerCoordinate;
+    private final int[] respawnPoint;
     private int speed;
     private final int size;
     private int animationCounter = 0;
@@ -30,10 +31,11 @@ public class Ghost implements Entity {
     private GhostMode ghostMode;
     public String ghostName;
 
-    public Ghost(int xPosition, int yPosition, Direction direction, int speed, int size, List<List<Tile>> board, int[] pacmanCoordinate,int[] cornerCoordinate, String ghostName, int rowThatSwitchSides) {
+    public Ghost(int xPosition, int yPosition, Direction direction, int speed, int size, List<List<Tile>> board, int[] pacmanCoordinate, int[] cornerCoordinate, int[] respawnPoint, String ghostName, int rowThatSwitchSides) {
         this.direction = direction;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
+        this.respawnPoint = respawnPoint;
         this.speed = speed;
         this.size = size;
         this.ghostName = ghostName;
@@ -127,6 +129,10 @@ public class Ghost implements Entity {
 
     public int[] getCornerCoordinate() {
         return cornerCoordinate;
+    }
+
+    public int[] getRespawnPoint() {
+        return respawnPoint;
     }
 
     public void setDirection(Direction direction) {

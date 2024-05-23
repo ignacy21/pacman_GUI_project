@@ -5,7 +5,7 @@ import pacman.tiles.Tile;
 
 import java.util.*;
 
-import static pacman.ghosts.GhostMode.CHASE;
+import static pacman.ghosts.GhostMode.*;
 import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
 import static pacman.playerControl.Direction.*;
 
@@ -25,9 +25,6 @@ public class GhostService {
         int halfOfTile = TILE_SIZE / 2;
 
         Direction direction = ghost.getDirection();
-        int pacmanX = ghost.getPacmanCoordinate()[0];
-        int pacmanY = ghost.getPacmanCoordinate()[1];
-
 
         int ghostLeft = ghost.getCoordinateX();
         int ghostBottom = ghost.getCoordinateY() + TILE_SIZE;
@@ -40,7 +37,6 @@ public class GhostService {
             int ghostCurrentTileX = (ghostLeft + halfOfTile) / TILE_SIZE;
             int ghostCurrentTileY = (ghostBottom - halfOfTile) / TILE_SIZE;
 
-            Random random = new Random();
             Tile[] tiles = tilesAroundGivenTile(ghostCurrentTileX, ghostCurrentTileY);
             Map<Integer, Tile> map = new HashMap<>();
 
@@ -62,19 +58,39 @@ public class GhostService {
             }
 
             int directionByNumber = 0;
-            if (ghost.getGhostMode() == CHASE && map.size() > 1) {
-                double distanceBetweenPacmanAndTile = Integer.MAX_VALUE;
-                for (Map.Entry<Integer, Tile> integerTileEntry : map.entrySet()) {
-                    Tile tile = integerTileEntry.getValue();
-                    int tileX = tile.getColumnNumber() * TILE_SIZE;
-                    int tileY = tile.getRowNumber() * TILE_SIZE + TILE_SIZE;
-                    double v = distanceBetweenTwoPoints(tileX, tileY, pacmanX, pacmanY);
-                    if (v <= distanceBetweenPacmanAndTile) {
-                        distanceBetweenPacmanAndTile = v;
-                        directionByNumber = integerTileEntry.getKey();
-                    }
-                }
+            if (map.size() > 1) {
+                GhostMode ghostMode = ghost.getGhostMode();
+                if (ghostMode == CHASE) {
+                    int pacmanX = ghost.getPacmanCoordinate()[0];
+                    int pacmanY = ghost.getPacmanCoordinate()[1];
 
+                    directionByNumber = getDirectionBasedOnDestinationCoordinate(map, pacmanX, pacmanY, directionByNumber);
+                } else if (ghostMode == SCATTER) {
+                    int cornerX = ghost.getCornerCoordinate()[0];
+                    int cornerY = ghost.getCornerCoordinate()[1];
+
+                    directionByNumber = getDirectionBasedOnDestinationCoordinate(map, cornerX, cornerY, directionByNumber);
+                } else if (ghostMode == RUN) {
+                    int pacmanX = ghost.getPacmanCoordinate()[0];
+                    int pacmanY = ghost.getPacmanCoordinate()[1];
+                    double distanceBetweenPacmanAndTile = Integer.MAX_VALUE;
+                    for (Map.Entry<Integer, Tile> integerTileEntry : map.entrySet()) {
+                        Tile tile = integerTileEntry.getValue();
+                        int tileX = tile.getColumnNumber() * TILE_SIZE;
+                        int tileY = tile.getRowNumber() * TILE_SIZE + TILE_SIZE;
+                        double v = distanceBetweenTwoPoints(tileX, tileY, pacmanX, pacmanY);
+                        if (v >= distanceBetweenPacmanAndTile) {
+                            distanceBetweenPacmanAndTile = v;
+                            directionByNumber = integerTileEntry.getKey();
+                        }
+                    }
+                } else if (ghostMode == RESPAWN) {
+                    int respawnPointX = ghost.getRespawnPoint()[0];
+                    int respawnPointY = ghost.getRespawnPoint()[1];
+                    directionByNumber = getDirectionBasedOnDestinationCoordinate(
+                            map, respawnPointX, respawnPointY, directionByNumber
+                    );
+                }
             } else {
                 Integer next = map.keySet().iterator().next();
                 directionByNumber = next;
@@ -101,6 +117,26 @@ public class GhostService {
         }
     }
 
+    private static int getDirectionBasedOnDestinationCoordinate(
+            Map<Integer, Tile> map,
+            int pacmanX,
+            int pacmanY,
+            int directionByNumber
+    ) {
+        double distanceBetweenPacmanAndTile = Integer.MAX_VALUE;
+        for (Map.Entry<Integer, Tile> integerTileEntry : map.entrySet()) {
+            Tile tile = integerTileEntry.getValue();
+            int tileX = tile.getColumnNumber() * TILE_SIZE;
+            int tileY = tile.getRowNumber() * TILE_SIZE + TILE_SIZE;
+            double v = distanceBetweenTwoPoints(tileX, tileY, pacmanX, pacmanY);
+            if (v <= distanceBetweenPacmanAndTile) {
+                distanceBetweenPacmanAndTile = v;
+                directionByNumber = integerTileEntry.getKey();
+            }
+        }
+        return directionByNumber;
+    }
+
     public void allowGhostToChangeSides() {
         int tileY = ghost.getCoordinateY() / TILE_SIZE;
         if (tileY == rowThatSwitchSides) {
@@ -108,7 +144,7 @@ public class GhostService {
             if (ghostX <= TILE_SIZE) {
                 ghost.setDirection(LEFT);
                 ghost.setCoordinateX(board.getFirst().size() * TILE_SIZE - TILE_SIZE * 2);
-            } else if (ghostX >= board.getFirst().size() * TILE_SIZE - TILE_SIZE * 2){
+            } else if (ghostX >= board.getFirst().size() * TILE_SIZE - TILE_SIZE * 2) {
                 ghost.setDirection(RIGHT);
                 ghost.setCoordinateX(TILE_SIZE * 2);
             }
