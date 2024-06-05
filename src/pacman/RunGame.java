@@ -22,9 +22,15 @@ public class RunGame {
     }
     public RunGame(int lives) {
         this.frame = new PacmanFrame(500, 400);
+        this.newGameButton = new JButton("Continue");
+        newGameButton.addActionListener(e -> startGame1(lives));
+
+        frame.add(newGameButton, BorderLayout.CENTER);
         frame.revalidate();
         frame.repaint();
-
+    }
+    private void startGame1(int lives) {
+        newGameButton.setEnabled(false);
         frame.dispose();
         new RunPacman("board2_2.txt", lives);
     }
