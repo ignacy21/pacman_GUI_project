@@ -1,19 +1,22 @@
 package pacman.mainPanel;
 
+import pacman.tiles.collision.PacmanAndGhostCollision;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable {
     private final Thread thread = new Thread(this);
-    private final JLabel scoreLabel;
     private final PacmanPanel pacmanPanel;
-    private int ghostModeCounter = 0;
+    private final PacmanAndGhostCollision pacmanAndGhostCollision;
+
+    private final JLabel scoreLabel;
 
     public GamePanel(PacmanPanel pacmanPanel, int displayHeight, int correctPositionOfPanelToMatchScreen) {
         thread.start();
-
         this.pacmanPanel = pacmanPanel;
+        pacmanAndGhostCollision = new PacmanAndGhostCollision(pacmanPanel.getPacman(), pacmanPanel.getEnemies());
 
         JViewport jViewport = pacmanPanel.returnJPanelWithViewPoint(correctPositionOfPanelToMatchScreen);
 
@@ -22,8 +25,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.add(jViewport, BorderLayout.CENTER);
 
         scoreLabel = new JLabel("0", SwingConstants.CENTER);
-        JPanel displayPanel = displayPanelCreation(displayHeight);
 
+        JPanel displayPanel = displayPanelCreation(displayHeight);
         this.add(displayPanel, BorderLayout.NORTH);
     }
 
@@ -33,7 +36,10 @@ public class GamePanel extends JPanel implements Runnable {
         while (thread != null) {
 
 
-            pacmanPanel.updatePacman();
+            pacmanPanel.updatePacmanAndGhosts();
+            if (pacmanAndGhostCollision.isGameOver()) {
+                return;
+            }
             try {
                 Thread.sleep(16);
             } catch (InterruptedException e) {
@@ -44,8 +50,6 @@ public class GamePanel extends JPanel implements Runnable {
             repaint();
         }
     }
-
-
 
     private JPanel displayPanelCreation(int displayHeight) {
         JPanel displayPanel = new JPanel();

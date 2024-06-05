@@ -5,6 +5,7 @@ import pacman.playerControl.Direction;
 import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
 import pacman.tiles.TileManager;
+import pacman.tiles.collision.PacmanAndGhostCollision;
 import pacman.tiles.collision.PacmanService;
 import pacman.tiles.point.PointCounterService;
 
@@ -24,10 +25,13 @@ public class PacmanPanel extends JPanel {
     private List<List<Tile>> board;
     private final TileManager tileManager = new TileManager();
     private final PacmanService pacmanService;
+
     private final PointCounterService pointCounterService = new PointCounterService(this);
     private final List<Ghost> enemies = new ArrayList<>();
     private int enemiesSpeed;
     private int ghostModeCounter = 0;
+    private final int width;
+    private final int height;
 
     public PacmanPanel(int width, int height, Pacman pacman, int tileSeize, List<List<Tile>> board, int enemiesSpeed, int rowThatSwitchSides) {
         this.setBackground(Color.BLACK);
@@ -39,6 +43,8 @@ public class PacmanPanel extends JPanel {
         this.enemiesSpeed = enemiesSpeed;
         this.board = board;
         this.pacman = pacman;
+        this.height = height;
+        this.width = width;
 
         TILE_SIZE = tileSeize;
         int[] pacmanCoordinate = {pacman.getCoordinateX(), pacman.getCoordinateY()};
@@ -104,6 +110,9 @@ public class PacmanPanel extends JPanel {
         enemies.add(inky);
         enemies.add(pinky);
         enemies.forEach(ghost -> ghost.setGhostMode(CHASE));
+
+
+
     }
 
     public void steerGhostMode() {
@@ -119,7 +128,7 @@ public class PacmanPanel extends JPanel {
         ghostModeCounter++;
     }
 
-    public void updatePacman() {
+    public void updatePacmanAndGhosts() {
         pacman.update();
         enemies.forEach(Ghost::update);
     }
@@ -174,5 +183,7 @@ public class PacmanPanel extends JPanel {
         pacman.drawEntity(g2);
     }
 
-
+    public List<Ghost> getEnemies() {
+        return enemies;
+    }
 }
