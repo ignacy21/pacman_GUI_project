@@ -6,15 +6,15 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
-public class GamePanel extends JPanel implements Runnable {
-    private final Thread thread = new Thread(this);
+public class GamePanel extends JPanel {
+//    private final Thread thread = new Thread(this);
     private final PacmanPanel pacmanPanel;
     private final PacmanAndGhostCollision pacmanAndGhostCollision;
 
     private final JLabel scoreLabel;
 
     public GamePanel(PacmanPanel pacmanPanel, int displayHeight, int correctPositionOfPanelToMatchScreen) {
-        thread.start();
+//        thread.start();
         this.pacmanPanel = pacmanPanel;
         pacmanAndGhostCollision = new PacmanAndGhostCollision(pacmanPanel.getPacman(), pacmanPanel.getEnemies());
 
@@ -30,25 +30,20 @@ public class GamePanel extends JPanel implements Runnable {
         this.add(displayPanel, BorderLayout.NORTH);
     }
 
-
-    @Override
-    public void run() {
-        while (thread != null) {
-
-
-            pacmanPanel.updatePacmanAndGhosts();
-            if (pacmanAndGhostCollision.isGameOver()) {
-                return;
-            }
-            try {
-                Thread.sleep(16);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            scoreLabel.setText(String.valueOf(pacmanPanel.getSCORE()));
-            pacmanPanel.steerGhostMode();
-            repaint();
+    public boolean startGame() {
+        pacmanPanel.updatePacmanAndGhosts();
+        if (pacmanAndGhostCollision.isGameOver()) {
+            return false;
         }
+        try {
+            Thread.sleep(16);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        scoreLabel.setText(String.valueOf(pacmanPanel.getSCORE()));
+        pacmanPanel.steerGhostMode();
+        repaint();
+        return true;
     }
 
     private JPanel displayPanelCreation(int displayHeight) {

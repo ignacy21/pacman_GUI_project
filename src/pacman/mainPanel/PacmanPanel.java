@@ -47,10 +47,12 @@ public class PacmanPanel extends JPanel {
         this.width = width;
 
         TILE_SIZE = tileSeize;
-        int[] pacmanCoordinate = {pacman.getCoordinateX(), pacman.getCoordinateY()};
 
         this.pacmanService = new PacmanService(pacman, board, rowThatSwitchSides);
+
+        int[] pacmanCoordinate = {pacman.getCoordinateX(), pacman.getCoordinateY()};
         int[] respawnPoint = new int[]{TILE_SIZE * (board.getFirst().size() / 2), TILE_SIZE * (board.size() / 2)};
+
         Ghost blinky = new Ghost(
                 TILE_SIZE * (board.getFirst().size() - 4),
                 TILE_SIZE,

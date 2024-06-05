@@ -14,56 +14,155 @@ import java.util.List;
 
 public class RunPacman {
 
-    public static void main(String[] args) throws IOException {
-        BoardService boardService = new BoardService();
-//        List<List<Tile>> boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1_1.txt");
-//        List<List<Tile>> boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1.txt");
-//        List<List<Tile>> boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board2.txt");
-        List<List<Tile>> boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board2_2.txt");
+
+    private List<List<Tile>> boardFromFile;
+
+    private PacmanFrame pacmanFrame;
+    private Pacman pacman;
+    private PacmanPanel pacmanPanel;
+    private GamePanel gamePanel;
+    private JLayeredPane layeredPane;
+    private JLabel gameOverLabel;
+    private boolean isGameContinue = true;
+
+    public void startGame() {
+        createBoard("board2_2.txt");
         int tilesHeight = boardFromFile.size();
         int tilesWidth = boardFromFile.getFirst().size();
-        SwingUtilities.invokeLater(() -> {
-            int TILE_SIZE = 25;
 
-            int pacmanPanelWidth = TILE_SIZE * tilesWidth;
-            int pacmanPanelHeight = TILE_SIZE * tilesHeight;
+        int TILE_SIZE = 25;
 
-            int displayHeight = TILE_SIZE * 2;
+        int pacmanPanelWidth = TILE_SIZE * tilesWidth;
+        int pacmanPanelHeight = TILE_SIZE * tilesHeight;
 
-            int screenWidth = TILE_SIZE * (tilesWidth - 4) ;
-            int screenHeight = pacmanPanelHeight + displayHeight + 30;
+        int displayHeight = TILE_SIZE * 2;
 
-            int rowThatSwitchSides = 14;
+        int screenWidth = TILE_SIZE * (tilesWidth - 4) ;
+        int screenHeight = pacmanPanelHeight + displayHeight + 30;
 
-            Pacman pacman = new Pacman(
-                    TILE_SIZE * 11,
-                    TILE_SIZE * 17,
-                    3,
-                    TILE_SIZE,
-                    boardFromFile,
-                    rowThatSwitchSides
-            );
+        int rowThatSwitchSides = 14;
 
-            PacmanFrame pacmanFrame = new PacmanFrame(screenWidth, screenHeight);
+        createStructureOfPacman(
+                screenWidth,
+                screenHeight,
+                TILE_SIZE,
+                rowThatSwitchSides,
+                pacmanPanelWidth,
+                pacmanPanelHeight,
+                displayHeight
+        );
+        layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(pacmanFrame.getSize());
 
-            PacmanPanel pacmanPanel = new PacmanPanel(
-                    pacmanPanelWidth,
-                    pacmanPanelHeight,
-                    pacman,
-                    TILE_SIZE,
-                    boardFromFile,
-                    2,
-                    rowThatSwitchSides
-            );
-            GamePanel gamePanel = new GamePanel(
-                    pacmanPanel,
-                    displayHeight,
-                    TILE_SIZE * 2
-            );
+        gamePanel.setBounds(0, 0, pacmanFrame.getWidth(), pacmanFrame.getHeight());
+        layeredPane.add(gamePanel, JLayeredPane.DEFAULT_LAYER);
 
-            pacmanFrame.setLayout(new BorderLayout());
-            pacmanFrame.add(gamePanel, BorderLayout.CENTER);
+        gameOverLabel = createGameOverLabel();
+        layeredPane.add(gameOverLabel, JLayeredPane.PALETTE_LAYER);
 
-        });
+        pacmanFrame.add(layeredPane, BorderLayout.CENTER);
+        pacmanFrame.revalidate();
+        pacmanFrame.repaint();
+//        pacmanFrame.setLayout(new BorderLayout());
+//        pacmanFrame.add(gamePanel, BorderLayout.CENTER);
+
+        new Thread(() -> {
+
+            while (isGameContinue) {
+                isGameContinue = gamePanel.startGame();
+            }
+
+            SwingUtilities.invokeLater(this::showGameOver);
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            pacmanFrame.dispose();
+            new RunGame();
+        }).start();
     }
+
+    private void showGameOver() {
+        gameOverLabel.setVisible(true);
+        layeredPane.revalidate();
+        layeredPane.repaint();
+    }
+
+    private void createStructureOfPacman(int screenWidth, int screenHeight, int TILE_SIZE, int rowThatSwitchSides, int pacmanPanelWidth, int pacmanPanelHeight, int displayHeight) {
+        pacmanFrame = pacmanFrameCreation(screenWidth, screenHeight);
+        pacman = pacmanCreation(TILE_SIZE, rowThatSwitchSides);
+        pacmanPanel = pacmanPanelCreation(pacmanPanelWidth, pacmanPanelHeight, TILE_SIZE, rowThatSwitchSides);
+        gamePanel = gamePanelCreation(displayHeight, TILE_SIZE);
+    }
+
+    private GamePanel gamePanelCreation(int displayHeight, int TILE_SIZE) {
+        final GamePanel gamePanel;
+        gamePanel = new GamePanel(
+                pacmanPanel,
+                displayHeight,
+                TILE_SIZE * 2
+        );
+        return gamePanel;
+    }
+
+    private PacmanPanel pacmanPanelCreation(int pacmanPanelWidth, int pacmanPanelHeight, int TILE_SIZE, int rowThatSwitchSides) {
+        final PacmanPanel pacmanPanel;
+        pacmanPanel = new PacmanPanel(
+                pacmanPanelWidth,
+                pacmanPanelHeight,
+                pacman,
+                TILE_SIZE,
+                boardFromFile,
+                2,
+                rowThatSwitchSides
+        );
+        return pacmanPanel;
+    }
+
+    private PacmanFrame pacmanFrameCreation(int screenWidth, int screenHeight) {
+        final PacmanFrame pacmanFrame;
+        pacmanFrame = new PacmanFrame(screenWidth, screenHeight);
+        return pacmanFrame;
+    }
+
+    private Pacman pacmanCreation(int TILE_SIZE, int rowThatSwitchSides) {
+        final Pacman pacman;
+        pacman = new Pacman(
+                TILE_SIZE * 11,
+                TILE_SIZE * 17,
+                3,
+                TILE_SIZE,
+                boardFromFile,
+                rowThatSwitchSides
+        );
+        return pacman;
+    }
+
+    private void createBoard(String filePath) {
+        final BoardService boardService;
+        boardService = new BoardService();
+
+
+
+        try {
+            boardFromFile = boardService.createBoardFromFile(String.format("src/pacman/tiles/boards/%s", filePath));
+//            boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1_1.txt");
+//            boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1.txt");
+//            boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board2.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private JLabel createGameOverLabel() {
+        JLabel gameOverLabel = new JLabel("GAME OVER", SwingConstants.CENTER);
+        gameOverLabel.setForeground(Color.RED);
+        gameOverLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        gameOverLabel.setBounds(0, 0, pacmanFrame.getWidth(), pacmanFrame.getHeight());
+        gameOverLabel.setVisible(false);
+        return gameOverLabel;
+    }
+
 }
