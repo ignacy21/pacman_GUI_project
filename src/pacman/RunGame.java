@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class RunGame {
 
-    private JFrame frame;
+    private final JFrame frame;
     private JButton newGameButton;
 
 
@@ -20,11 +20,19 @@ public class RunGame {
         frame.revalidate();
         frame.repaint();
     }
+    public RunGame(int lives) {
+        this.frame = new PacmanFrame(500, 400);
+        frame.revalidate();
+        frame.repaint();
+
+        frame.dispose();
+        new RunPacman("board2_2.txt", lives);
+    }
 
     private void startGame() {
         newGameButton.setEnabled(false);
         frame.dispose();
-        new RunPacman().startGame();
+        new RunPacman("board2_2.txt", 3);
     }
 
     public static void main(String[] args) {

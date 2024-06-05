@@ -5,7 +5,6 @@ import pacman.playerControl.Direction;
 import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
 import pacman.tiles.TileManager;
-import pacman.tiles.collision.PacmanAndGhostCollision;
 import pacman.tiles.collision.PacmanService;
 import pacman.tiles.point.PointCounterService;
 

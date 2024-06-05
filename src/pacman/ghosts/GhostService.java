@@ -3,7 +3,10 @@ package pacman.ghosts;
 import pacman.playerControl.Direction;
 import pacman.tiles.Tile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static pacman.ghosts.GhostMode.*;
 import static pacman.mainPanel.PacmanPanel.TILE_SIZE;

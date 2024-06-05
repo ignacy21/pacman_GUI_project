@@ -14,19 +14,23 @@ import java.util.List;
 
 public class RunPacman {
 
-
     private List<List<Tile>> boardFromFile;
 
     private PacmanFrame pacmanFrame;
     private Pacman pacman;
     private PacmanPanel pacmanPanel;
     private GamePanel gamePanel;
-    private JLayeredPane layeredPane;
-    private JLabel gameOverLabel;
+    private final JLayeredPane layeredPane;
+    private final JLabel gameOverLabel;
     private boolean isGameContinue = true;
+    private final int lives;
+    private final String board;
 
-    public void startGame() {
-        createBoard("board2_2.txt");
+
+    public RunPacman(String board, int lives) {
+        this.lives = lives;
+        this.board = board;
+        createBoard(board);
         int tilesHeight = boardFromFile.size();
         int tilesWidth = boardFromFile.getFirst().size();
 
@@ -37,7 +41,7 @@ public class RunPacman {
 
         int displayHeight = TILE_SIZE * 2;
 
-        int screenWidth = TILE_SIZE * (tilesWidth - 4) ;
+        int screenWidth = TILE_SIZE * (tilesWidth - 4);
         int screenHeight = pacmanPanelHeight + displayHeight + 30;
 
         int rowThatSwitchSides = 14;
@@ -63,25 +67,35 @@ public class RunPacman {
         pacmanFrame.add(layeredPane, BorderLayout.CENTER);
         pacmanFrame.revalidate();
         pacmanFrame.repaint();
-//        pacmanFrame.setLayout(new BorderLayout());
-//        pacmanFrame.add(gamePanel, BorderLayout.CENTER);
 
         new Thread(() -> {
 
             while (isGameContinue) {
                 isGameContinue = gamePanel.startGame();
             }
-
-            SwingUtilities.invokeLater(this::showGameOver);
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
+            if (lives > 1) {
+                continueGameWithMinusOneHeart(lives);
+            } else {
+                endGame();
             }
-            pacmanFrame.dispose();
-            new RunGame();
         }).start();
+    }
+
+    private void continueGameWithMinusOneHeart(int lives) {
+        pacmanFrame.dispose();
+        new RunGame(--lives);
+    }
+
+    private void endGame() {
+        SwingUtilities.invokeLater(this::showGameOver);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        pacmanFrame.dispose();
+        new RunGame();
     }
 
     private void showGameOver() {
@@ -102,7 +116,8 @@ public class RunPacman {
         gamePanel = new GamePanel(
                 pacmanPanel,
                 displayHeight,
-                TILE_SIZE * 2
+                TILE_SIZE * 2,
+                lives
         );
         return gamePanel;
     }
@@ -145,7 +160,6 @@ public class RunPacman {
         boardService = new BoardService();
 
 
-
         try {
             boardFromFile = boardService.createBoardFromFile(String.format("src/pacman/tiles/boards/%s", filePath));
 //            boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1_1.txt");
@@ -164,5 +178,6 @@ public class RunPacman {
         gameOverLabel.setVisible(false);
         return gameOverLabel;
     }
+
 
 }
