@@ -40,16 +40,16 @@ public class GhostService {
             int ghostCurrentTileX = (ghostLeft + halfOfTile) / TILE_SIZE;
             int ghostCurrentTileY = (ghostBottom - halfOfTile) / TILE_SIZE;
 
-            Tile[] tiles = tilesAroundGivenTile(ghostCurrentTileX, ghostCurrentTileY);
+            Tile[] tilesAroundGhost = tilesAroundGivenTile(ghostCurrentTileX, ghostCurrentTileY);
             Map<Integer, Tile> map = new HashMap<>();
 
             List<Integer> tileOptionsToTurnNum = new ArrayList<>();
-            for (int i = 0; i < tiles.length; i++) {
-                if (!tiles[i].isCollision()) {
+            for (int i = 0; i < tilesAroundGhost.length; i++) {
+                if (!tilesAroundGhost[i].isCollision()) {
                     tileOptionsToTurnNum.add(i);
-                    map.put(i, tiles[i]);
+                    map.put(i, tilesAroundGhost[i]);
                 } else {
-                    tiles[i] = null;
+                    tilesAroundGhost[i] = null;
                 }
             }
 
@@ -76,7 +76,7 @@ public class GhostService {
                 } else if (ghostMode == RUN) {
                     int pacmanX = ghost.getPacmanCoordinate()[0];
                     int pacmanY = ghost.getPacmanCoordinate()[1];
-                    double distanceBetweenPacmanAndTile = Integer.MAX_VALUE;
+                    double distanceBetweenPacmanAndTile = Integer.MIN_VALUE;
                     for (Map.Entry<Integer, Tile> integerTileEntry : map.entrySet()) {
                         Tile tile = integerTileEntry.getValue();
                         int tileX = tile.getColumnNumber() * TILE_SIZE;

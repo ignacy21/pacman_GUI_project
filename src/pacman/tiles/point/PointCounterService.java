@@ -1,5 +1,6 @@
 package pacman.tiles.point;
 
+import pacman.ghosts.GhostMode;
 import pacman.mainPanel.PacmanPanel;
 import pacman.playerControl.Player;
 import pacman.tiles.Tile;
@@ -38,6 +39,8 @@ public class PointCounterService {
                 pacmanPanel.setSCORE(pacmanPanel.getSCORE() + 100);
             } else if ("point2".equals(tile.getName())) {
                 pacmanPanel.setSCORE(pacmanPanel.getSCORE() + 500);
+//                pacmanPanel.getEnemies().forEach(ghost -> ghost.setGhostMode(GhostMode.RUN));
+                pacmanPanel.setGhostHunt(true);
             }
         }
         return board;

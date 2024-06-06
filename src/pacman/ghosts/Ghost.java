@@ -27,6 +27,8 @@ public class Ghost implements Entity {
     private final List<BufferedImage> animationDown;
     private final List<BufferedImage> animationLeft;
     private final List<BufferedImage> animationRight;
+    private final List<BufferedImage> blueAnimationRun;
+    private final List<BufferedImage> whiteAnimationRun;
     private final GhostService ghostService;
     private GhostMode ghostMode;
     public String ghostName;
@@ -60,6 +62,14 @@ public class Ghost implements Entity {
             animationRight = List.of(
                     ImageIO.read(new File(String.format("%s/%s/%s_r_1.png", pathName, ghostName, ghostName))),
                     ImageIO.read(new File(String.format("%s/%s/%s_r_2.png", pathName, ghostName, ghostName)))
+            );
+            blueAnimationRun = List.of(
+                    ImageIO.read(new File(String.format("%s/run/blue1.png", pathName))),
+                    ImageIO.read(new File(String.format("%s/run/blue2.png", pathName)))
+            );
+            whiteAnimationRun = List.of(
+                    ImageIO.read(new File(String.format("%s/run/white1.png", pathName))),
+                    ImageIO.read(new File(String.format("%s/run/white2.png", pathName)))
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -99,11 +109,16 @@ public class Ghost implements Entity {
     public void drawEntity(Graphics2D g2) {
         List<BufferedImage> animationList = animationUp;
 
-        switch (direction) {
-            case DOWN -> animationList = animationDown;
-            case LEFT -> animationList = animationLeft;
-            case RIGHT -> animationList = animationRight;
+        if (ghostMode == GhostMode.RUN) {
+            animationList = blueAnimationRun;
+        } else {
+            switch (direction) {
+                case DOWN -> animationList = animationDown;
+                case LEFT -> animationList = animationLeft;
+                case RIGHT -> animationList = animationRight;
+            }
         }
+
         int animationUpdate = 4;
         if (animationCounter >= animationList.size() * animationUpdate) {
             animationCounter = 0;
