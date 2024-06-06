@@ -14,13 +14,9 @@ public class GamePanel extends JPanel {
     private final PacmanPanel pacmanPanel;
     private final PacmanAndGhostCollision pacmanAndGhostCollision;
     private final JLabel scoreLabel;
-    private JPanel displayPanel;
-    private int lives = 3;
-    private int displayHeight;
+    private int lives;
 
     public GamePanel(PacmanPanel pacmanPanel, int displayHeight, int correctPositionOfPanelToMatchScreen, int lives) {
-
-        this.displayHeight = displayHeight;
         this.lives = lives;
         this.pacmanPanel = pacmanPanel;
         pacmanAndGhostCollision = new PacmanAndGhostCollision(pacmanPanel.getPacman(), pacmanPanel.getEnemies());
@@ -32,7 +28,7 @@ public class GamePanel extends JPanel {
 
         scoreLabel = new JLabel("0", SwingConstants.CENTER);
 
-        displayPanel = displayPanelCreation(displayHeight);
+        JPanel displayPanel = displayPanelCreation(displayHeight);
         this.add(displayPanel, BorderLayout.NORTH);
         revalidate();
         repaint();
