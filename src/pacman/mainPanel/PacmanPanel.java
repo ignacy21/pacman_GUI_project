@@ -111,9 +111,6 @@ public class PacmanPanel extends JPanel {
         enemies.add(inky);
         enemies.add(pinky);
         enemies.forEach(ghost -> ghost.setGhostMode(CHASE));
-
-
-
     }
 
     public void steerGhostMode() {

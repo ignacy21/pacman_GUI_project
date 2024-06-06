@@ -69,7 +69,6 @@ public class RunPacman {
         pacmanFrame.repaint();
 
         new Thread(() -> {
-
             while (isGameContinue) {
                 isGameContinue = gamePanel.startGame();
             }
@@ -83,7 +82,8 @@ public class RunPacman {
 
     private void continueGameWithMinusOneHeart(int lives) {
         pacmanFrame.dispose();
-        new RunGame(--lives);
+        int finalLives = --lives;
+        SwingUtilities.invokeLater(() -> new RunPacman(board, finalLives));
     }
 
     private void endGame() {
@@ -95,7 +95,7 @@ public class RunPacman {
             ex.printStackTrace();
         }
         pacmanFrame.dispose();
-        new RunGame();
+        SwingUtilities.invokeLater(RunGame::new);
     }
 
     private void showGameOver() {
