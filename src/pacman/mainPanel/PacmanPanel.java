@@ -26,9 +26,11 @@ public class PacmanPanel extends JPanel {
     private final PacmanService pacmanService;
 
     private final PointCounterService pointCounterService = new PointCounterService(this);
-    private final List<Ghost> enemies = new ArrayList<>();
+    private List<Ghost> enemies = new ArrayList<>();
     private int enemiesSpeed;
     private int ghostModeCounter = 0;
+    private final int rowThatSwitchSides;
+    private final int[] respawnPoint;
     private final int width;
     private final int height;
 
@@ -39,6 +41,7 @@ public class PacmanPanel extends JPanel {
         this.setFocusable(true);
         this.setPreferredSize(new Dimension(width, height));
 
+        this.rowThatSwitchSides = rowThatSwitchSides;
         this.enemiesSpeed = enemiesSpeed;
         this.board = board;
         this.pacman = pacman;
@@ -50,67 +53,61 @@ public class PacmanPanel extends JPanel {
         this.pacmanService = new PacmanService(pacman, board, rowThatSwitchSides);
 
         int[] pacmanCoordinate = {pacman.getCoordinateX(), pacman.getCoordinateY()};
-        int[] respawnPoint = new int[]{TILE_SIZE * (board.getFirst().size() / 2), TILE_SIZE * (board.size() / 2)};
+        this.respawnPoint = new int[]{TILE_SIZE * (board.getFirst().size() / 2), TILE_SIZE * (board.size() / 2)};
 
-        Ghost blinky = new Ghost(
-                TILE_SIZE * (board.getFirst().size() - 4),
-                TILE_SIZE,
-                Direction.LEFT,
-                enemiesSpeed,
-                TILE_SIZE,
-                board,
-                pacmanCoordinate,
-                new int[]{TILE_SIZE * (board.getFirst().size() - 3), 0},
-                respawnPoint,
-                "blinky",
-                rowThatSwitchSides
-        );
-        Ghost pinky = new Ghost(
-                TILE_SIZE * 3,
-                TILE_SIZE,
-                Direction.RIGHT,
-                enemiesSpeed,
-                TILE_SIZE,
-                board,
-                pacmanCoordinate,
-                new int[]{TILE_SIZE * 2, 0},
-                respawnPoint,
-                "pinky",
-                rowThatSwitchSides
-        );
-        Ghost clyde = new Ghost(
-                TILE_SIZE * 3,
-                TILE_SIZE * (board.size() - 2),
-                Direction.RIGHT,
-                enemiesSpeed,
-                TILE_SIZE,
-                board,
-                pacmanCoordinate,
-                new int[]{TILE_SIZE * 2, TILE_SIZE * (board.size() - 1)},
-                respawnPoint,
-                "clyde",
-                rowThatSwitchSides
-        );
-        Ghost inky = new Ghost(
-                TILE_SIZE * (board.getFirst().size() - 4),
-                TILE_SIZE * (board.size() - 2),
-                Direction.LEFT,
-                enemiesSpeed,
-                TILE_SIZE,
-                board,
-                pacmanCoordinate,
-                new int[]{TILE_SIZE * (board.getFirst().size() - 3), TILE_SIZE * (board.size() - 1)},
-                respawnPoint,
-                "inky",
-                rowThatSwitchSides
-        );
-
-
-        enemies.add(clyde);
-        enemies.add(blinky);
-        enemies.add(inky);
-        enemies.add(pinky);
+        enemies = createGhosts(board, enemiesSpeed, rowThatSwitchSides, pacmanCoordinate, respawnPoint);
         enemies.forEach(ghost -> ghost.setGhostMode(CHASE));
+    }
+
+    private List<Ghost> createGhosts(
+            List<List<Tile>> board,
+            int enemiesSpeed,
+            int rowThatSwitchSides,
+            int[] pacmanCoordinate,
+            int[] respawnPoint
+    ) {
+        Ghost blinky = crateGhost(
+                "blinky",
+                respawnPoint,
+                pacmanCoordinate,
+                new int[]{TILE_SIZE * (board.getFirst().size() - 3), 0}
+        );
+        Ghost pinky = crateGhost(
+                "pinky",
+                respawnPoint,
+                pacmanCoordinate,
+                new int[]{TILE_SIZE * 3, TILE_SIZE}
+        );
+        Ghost clyde = crateGhost(
+                "clyde",
+                respawnPoint,
+                pacmanCoordinate,
+                new int[]{TILE_SIZE * 3, TILE_SIZE * (board.size() - 2)}
+        );
+        Ghost inky = crateGhost(
+                "inky",
+                respawnPoint,
+                pacmanCoordinate,
+                new int[]{TILE_SIZE * (board.getFirst().size() - 4), TILE_SIZE * (board.size() - 2)}
+        );
+        return List.of(clyde, blinky, inky, pinky);
+    }
+
+    private Ghost crateGhost(String name, int[] respawnPoint, int[] pacmanCoordinate, int[] corner) {
+        Ghost blinky = new Ghost(
+                respawnPoint[0],
+                respawnPoint[1],
+                Direction.LEFT,
+                enemiesSpeed,
+                TILE_SIZE,
+                board,
+                pacmanCoordinate,
+                corner,
+                respawnPoint,
+                name,
+                rowThatSwitchSides
+        );
+        return blinky;
     }
 
     public void steerGhostMode() {
