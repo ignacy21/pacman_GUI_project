@@ -39,8 +39,8 @@ public class PointCounterService {
                 pacmanPanel.setSCORE(pacmanPanel.getSCORE() + 100);
             } else if ("point2".equals(tile.getName())) {
                 pacmanPanel.setSCORE(pacmanPanel.getSCORE() + 500);
-//                pacmanPanel.getEnemies().forEach(ghost -> ghost.setGhostMode(GhostMode.RUN));
-                pacmanPanel.setGhostHunt(true);
+                pacmanPanel.getEnemies().forEach(ghost -> ghost.setGhostMode(GhostMode.RUN));
+//                pacmanPanel.setGhostHunt(true);
             }
         }
         return board;

@@ -35,18 +35,12 @@ public class GamePanel extends JPanel {
     }
 
     public boolean startGame() {
-
         pacmanPanel.updatePacmanAndGhosts();
         if (pacmanAndGhostCollision.isGameOver()) {
             return false;
         }
-        try {
-            Thread.sleep(16);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         scoreLabel.setText(String.valueOf(pacmanPanel.getSCORE()));
-        pacmanPanel.steerGhostMode();
+//        pacmanPanel.steerGhostMode();
         repaint();
         return true;
     }
@@ -128,5 +122,9 @@ public class GamePanel extends JPanel {
 
     public int getLives() {
         return lives;
+    }
+
+    public PacmanPanel getPacmanPanel() {
+        return pacmanPanel;
     }
 }

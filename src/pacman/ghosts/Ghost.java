@@ -11,7 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class Ghost implements Entity {
+import static pacman.ghosts.GhostMode.*;
+
+public class Ghost implements Entity, Runnable {
 
     private Direction direction;
     private int xPosition;
@@ -174,5 +176,36 @@ public class Ghost implements Entity {
     @Override
     public String toString() {
         return ghostName;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            if (ghostMode == RUN) {
+                try {
+                    Thread.sleep(6000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                System.err.println("RUN");
+                ghostMode = CHASE;
+            } else if (ghostMode == CHASE) {
+                try {
+                    Thread.sleep(7000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                System.err.println("SCATTER");
+                ghostMode = SCATTER;
+            } else if (ghostMode == SCATTER) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                System.err.println("CHASE");
+                ghostMode = CHASE;
+            }
+        }
     }
 }

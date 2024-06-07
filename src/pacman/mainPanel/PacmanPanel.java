@@ -1,6 +1,8 @@
 package pacman.mainPanel;
 
+import pacman.RunGame;
 import pacman.ghosts.Ghost;
+import pacman.ghosts.GhostMode;
 import pacman.playerControl.Direction;
 import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
@@ -30,7 +32,7 @@ public class PacmanPanel extends JPanel {
     private int ghostModeCounter = 499;
     private final int rowThatSwitchSides;
     private final int[] respawnPoint;
-    private boolean ghostHunt = false;
+    //    private boolean ghostHunt = false;
     private final int width;
     private final int height;
 
@@ -54,9 +56,10 @@ public class PacmanPanel extends JPanel {
 
         int[] pacmanCoordinate = {pacman.getCoordinateX(), pacman.getCoordinateY()};
         this.respawnPoint = new int[]{TILE_SIZE * (board.getFirst().size() / 2), TILE_SIZE * (board.size() / 2)};
+//        this.respawnPoint = new int[]{TILE_SIZE * (board.getFirst().size() / 2 + 5), TILE_SIZE * (board.size() / 2)};
 
         enemies = createGhosts(board, pacmanCoordinate, respawnPoint);
-        enemies.forEach(ghost -> ghost.setGhostMode(CHASE));
+//        enemies.forEach(ghost -> ghost.setGhostMode(CHASE));
     }
 
     private List<Ghost> createGhosts(
@@ -92,7 +95,7 @@ public class PacmanPanel extends JPanel {
     }
 
     private Ghost crateGhost(String name, int[] respawnPoint, int[] pacmanCoordinate, int[] corner) {
-        Ghost blinky = new Ghost(
+        Ghost ghost = new Ghost(
                 respawnPoint[0],
                 respawnPoint[1],
                 Direction.LEFT,
@@ -105,27 +108,30 @@ public class PacmanPanel extends JPanel {
                 name,
                 rowThatSwitchSides
         );
-        return blinky;
+        ghost.setGhostMode(SCATTER);
+        SwingUtilities.invokeLater(() -> new Thread(ghost).start());
+        return ghost;
     }
 
-    public void steerGhostMode() {
-        if (ghostHunt) {
-            enemies.forEach(ghost -> ghost.setGhostMode(RUN));
-            ghostModeCounter = -1;
-            ghostHunt = false;
-        } else {
-            if (ghostModeCounter == 500) {
-                enemies.forEach(ghost -> ghost.setGhostMode(CHASE));
-                System.out.println("CHASE");
-            } else if (ghostModeCounter == 1500) {
-                enemies.forEach(ghost -> ghost.setGhostMode(SCATTER));
-                System.out.println("SCATTER");
-            } else if (ghostModeCounter == 2000) {
-                ghostModeCounter = 499;
-            }
-        }
-        ghostModeCounter++;
-    }
+
+//public void steerGhostMode() {
+//    if (ghostHunt) {
+//        enemies.forEach(ghost -> ghost.setGhostMode(RUN));
+//        ghostModeCounter = -1;
+//        ghostHunt = false;
+//    } else {
+//        if (ghostModeCounter == 500) {
+//            enemies.forEach(ghost -> ghost.setGhostMode(CHASE));
+//            System.out.println("CHASE");
+//        } else if (ghostModeCounter == 1500) {
+//            enemies.forEach(ghost -> ghost.setGhostMode(SCATTER));
+//            System.out.println("SCATTER");
+//        } else if (ghostModeCounter == 2000) {
+//            ghostModeCounter = 499;
+//        }
+//    }
+//    ghostModeCounter++;
+//}
 
     public void updatePacmanAndGhosts() {
         pacman.update();
@@ -186,7 +192,7 @@ public class PacmanPanel extends JPanel {
         return enemies;
     }
 
-    public void setGhostHunt(boolean ghostHunt) {
-        this.ghostHunt = ghostHunt;
-    }
+//    public void setGhostHunt(boolean ghostHunt) {
+//        this.ghostHunt = ghostHunt;
+//    }
 }

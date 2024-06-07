@@ -1,5 +1,6 @@
 package pacman;
 
+import pacman.ghosts.Ghost;
 import pacman.mainPanel.GamePanel;
 import pacman.mainPanel.PacmanFrame;
 import pacman.mainPanel.PacmanPanel;
@@ -12,7 +13,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
-public class RunPacman {
+public class RunPacman extends Thread {
 
     private List<List<Tile>> boardFromFile;
 
@@ -67,17 +68,23 @@ public class RunPacman {
         pacmanFrame.add(layeredPane, BorderLayout.CENTER);
         pacmanFrame.revalidate();
         pacmanFrame.repaint();
+    }
 
-        new Thread(() -> {
-            while (isGameContinue) {
-                isGameContinue = gamePanel.startGame();
+    @Override
+    public void run() {
+        while (isGameContinue) {
+            isGameContinue = gamePanel.startGame();
+            try {
+                Thread.sleep(16);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
-            if (lives > 1) {
-                continueGameWithMinusOneHeart(lives);
-            } else {
-                endGame();
-            }
-        }).start();
+        }
+        if (lives > 1) {
+            continueGameWithMinusOneHeart(lives);
+        } else {
+            endGame();
+        }
     }
 
     private void continueGameWithMinusOneHeart(int lives) {
