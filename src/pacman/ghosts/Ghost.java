@@ -51,7 +51,6 @@ public class Ghost implements Entity, Runnable {
         this.cornerCoordinate = cornerCoordinate;
         ghostService = new GhostService(this, board, rowThatSwitchSides);
         thread = new Thread(this);
-//        SwingUtilities.invokeLater(thread);
         thread.start();
         String pathName = "resources/images/ghosts";
         try {

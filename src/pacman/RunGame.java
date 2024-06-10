@@ -24,7 +24,7 @@ public class RunGame {
     private void startGame() {
         newGameButton.setEnabled(false);
         frame.dispose();
-        SwingUtilities.invokeLater(() -> new RunPacman("board2_2.txt", 3).start());
+        SwingUtilities.invokeLater(() -> new RunPacman("board2_2.txt", 3));
     }
 
     public static void main(String[] args) {

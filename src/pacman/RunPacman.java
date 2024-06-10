@@ -13,7 +13,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
-public class RunPacman extends Thread {
+public class RunPacman implements Runnable {
 
     private List<List<Tile>> boardFromFile;
 
@@ -70,23 +70,27 @@ public class RunPacman extends Thread {
         pacmanFrame.add(layeredPane, BorderLayout.CENTER);
         pacmanFrame.revalidate();
         pacmanFrame.repaint();
+
+        run();
     }
 
     @Override
     public void run() {
-        while (isGameContinue) {
-            isGameContinue = gamePanel.startGame();
-            try {
-                Thread.sleep(16);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        new Thread(() -> {
+            while (isGameContinue) {
+                isGameContinue = gamePanel.startGame();
+                try {
+                    Thread.sleep(16);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
-        }
-//        if (lives > 1) {
+        if (lives > 1) {
             continueGameWithMinusOneHeart(lives);
-//        } else {
+        } else {
             endGame();
-//        }
+        }
+        }).start();
     }
 
     private void continueGameWithMinusOneHeart(int lives) {
