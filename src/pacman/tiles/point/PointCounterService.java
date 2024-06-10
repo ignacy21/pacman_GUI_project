@@ -1,8 +1,10 @@
 package pacman.tiles.point;
 
+import pacman.ghosts.Ghost;
 import pacman.ghosts.GhostMode;
 import pacman.mainPanel.PacmanPanel;
 import pacman.playerControl.Player;
+import pacman.tiles.BoardService;
 import pacman.tiles.Tile;
 
 import java.util.ArrayList;
@@ -13,9 +15,11 @@ import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
 public class PointCounterService {
 
     private final PacmanPanel pacmanPanel;
+    private final BoardService boardService;
 
-    public PointCounterService(PacmanPanel pacmanPanel) {
+    public PointCounterService(PacmanPanel pacmanPanel, BoardService boardService) {
         this.pacmanPanel = pacmanPanel;
+        this.boardService = boardService;
     }
 
     public List<List<Tile>> collectPoints(Player player, List<List<Tile>> board) {
@@ -39,8 +43,7 @@ public class PointCounterService {
                 pacmanPanel.setSCORE(pacmanPanel.getSCORE() + 100);
             } else if ("point2".equals(tile.getName())) {
                 pacmanPanel.setSCORE(pacmanPanel.getSCORE() + 500);
-                pacmanPanel.getEnemies().forEach(ghost -> ghost.setGhostMode(GhostMode.RUN));
-//                pacmanPanel.setGhostHunt(true);
+                pacmanPanel.getEnemies().forEach(Ghost::changeToRunMode);
             }
         }
         return board;

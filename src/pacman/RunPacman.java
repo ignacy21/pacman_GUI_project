@@ -27,6 +27,8 @@ public class RunPacman extends Thread {
     private final int lives;
     private final String board;
 
+    final BoardService boardService = new BoardService();
+
 
     public RunPacman(String board, int lives) {
         this.lives = lives;
@@ -111,7 +113,15 @@ public class RunPacman extends Thread {
         layeredPane.repaint();
     }
 
-    private void createStructureOfPacman(int screenWidth, int screenHeight, int TILE_SIZE, int rowThatSwitchSides, int pacmanPanelWidth, int pacmanPanelHeight, int displayHeight) {
+    private void createStructureOfPacman(
+            int screenWidth,
+            int screenHeight,
+            int TILE_SIZE,
+            int rowThatSwitchSides,
+            int pacmanPanelWidth,
+            int pacmanPanelHeight,
+            int displayHeight
+    ) {
         pacmanFrame = pacmanFrameCreation(screenWidth, screenHeight);
         pacman = pacmanCreation(TILE_SIZE, rowThatSwitchSides);
         pacmanPanel = pacmanPanelCreation(pacmanPanelWidth, pacmanPanelHeight, TILE_SIZE, rowThatSwitchSides);
@@ -137,6 +147,7 @@ public class RunPacman extends Thread {
                 pacman,
                 TILE_SIZE,
                 boardFromFile,
+                boardService,
                 2,
                 rowThatSwitchSides
         );
@@ -163,10 +174,6 @@ public class RunPacman extends Thread {
     }
 
     private void createBoard(String filePath) {
-        final BoardService boardService;
-        boardService = new BoardService();
-
-
         try {
             boardFromFile = boardService.createBoardFromFile(String.format("src/pacman/tiles/boards/%s", filePath));
 //            boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1_1.txt");

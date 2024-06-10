@@ -36,7 +36,7 @@ public class BoardService {
                 List<Tile> row = new ArrayList<>();
                 String[] s = line.split(" ");
                 for (int i = 0; i < s.length; i++) {
-                    Tile tile = convertIntToTile(Integer.parseInt(s[i]));
+                    Tile tile = getTileByItsInt(Integer.parseInt(s[i]));
                     tile.setRowNumber(rowCount);
                     tile.setColumnNumber(i);
                     row.add(tile);
@@ -51,7 +51,7 @@ public class BoardService {
         return tiles;
     }
 
-    private Tile convertIntToTile(Integer tileNumber)  {
+    public Tile getTileByItsInt(Integer tileNumber)  {
         Tile clone;
         try {
             clone = (Tile) nameTileMap.get(tileNumber).clone();

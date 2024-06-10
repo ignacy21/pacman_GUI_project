@@ -32,8 +32,10 @@ public class Ghost implements Entity, Runnable {
     private final List<BufferedImage> blueAnimationRun;
     private final List<BufferedImage> whiteAnimationRun;
     private final GhostService ghostService;
-    private GhostMode ghostMode;
+    private volatile GhostMode ghostMode;
     public String ghostName;
+
+    private Thread thread;
 
     public Ghost(int xPosition, int yPosition, Direction direction, int speed, int size, List<List<Tile>> board, int[] pacmanCoordinate, int[] cornerCoordinate, int[] respawnPoint, String ghostName, int rowThatSwitchSides) {
         this.direction = direction;
@@ -47,6 +49,8 @@ public class Ghost implements Entity, Runnable {
         this.pacmanCoordinate = pacmanCoordinate;
         this.cornerCoordinate = cornerCoordinate;
         ghostService = new GhostService(this, board, rowThatSwitchSides);
+        thread = new Thread(this);
+        thread.start();
         String pathName = "resources/images/ghosts";
         try {
             animationDown = List.of(
@@ -181,31 +185,31 @@ public class Ghost implements Entity, Runnable {
     @Override
     public void run() {
         while (true) {
-            if (ghostMode == RUN) {
-                try {
-                    Thread.sleep(6000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                System.err.println("RUN");
-                ghostMode = CHASE;
-            } else if (ghostMode == CHASE) {
-                try {
+            try {
+                if (ghostMode == RUN) {
                     Thread.sleep(7000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    System.err.println("RUN");
+                    ghostMode = CHASE;
+                } else if (ghostMode == CHASE) {
+                    Thread.sleep(6000);
+                    System.err.println("SCATTER");
+                    ghostMode = SCATTER;
+                } else if (ghostMode == SCATTER) {
+                    Thread.sleep(6000);
+                    System.err.println("CHASE");
+                    ghostMode = CHASE;
                 }
-                System.err.println("SCATTER");
-                ghostMode = SCATTER;
-            } else if (ghostMode == SCATTER) {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                if (ghostMode == RUN) {
+                    System.err.println("Interrupted and changing to RUN");
+                    continue;
                 }
-                System.err.println("CHASE");
-                ghostMode = CHASE;
+                throw new RuntimeException(e);
             }
         }
+    }
+    public void changeToRunMode() {
+        ghostMode = RUN;
+        thread.interrupt();
     }
 }

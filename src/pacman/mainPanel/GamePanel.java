@@ -40,7 +40,6 @@ public class GamePanel extends JPanel {
             return false;
         }
         scoreLabel.setText(String.valueOf(pacmanPanel.getSCORE()));
-//        pacmanPanel.steerGhostMode();
         repaint();
         return true;
     }
