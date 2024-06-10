@@ -5,6 +5,7 @@ import pacman.playerControl.Entity;
 import pacman.tiles.Tile;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -34,7 +35,7 @@ public class Ghost implements Entity, Runnable {
     private final GhostService ghostService;
     private volatile GhostMode ghostMode;
     public String ghostName;
-
+    private volatile boolean running = true;
     private Thread thread;
 
     public Ghost(int xPosition, int yPosition, Direction direction, int speed, int size, List<List<Tile>> board, int[] pacmanCoordinate, int[] cornerCoordinate, int[] respawnPoint, String ghostName, int rowThatSwitchSides) {
@@ -50,6 +51,7 @@ public class Ghost implements Entity, Runnable {
         this.cornerCoordinate = cornerCoordinate;
         ghostService = new GhostService(this, board, rowThatSwitchSides);
         thread = new Thread(this);
+//        SwingUtilities.invokeLater(thread);
         thread.start();
         String pathName = "resources/images/ghosts";
         try {
@@ -184,7 +186,7 @@ public class Ghost implements Entity, Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (running) {
             try {
                 if (ghostMode == RUN) {
                     Thread.sleep(7000);
@@ -204,12 +206,20 @@ public class Ghost implements Entity, Runnable {
                     System.err.println("Interrupted and changing to RUN");
                     continue;
                 }
+                if (!running) {
+                    break;
+                }
                 throw new RuntimeException(e);
             }
         }
     }
     public void changeToRunMode() {
         ghostMode = RUN;
+        thread.interrupt();
+    }
+
+    public void stopThread() {
+        this.running = false;
         thread.interrupt();
     }
 }

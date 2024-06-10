@@ -82,14 +82,15 @@ public class RunPacman extends Thread {
                 throw new RuntimeException(e);
             }
         }
-        if (lives > 1) {
+//        if (lives > 1) {
             continueGameWithMinusOneHeart(lives);
-        } else {
+//        } else {
             endGame();
-        }
+//        }
     }
 
     private void continueGameWithMinusOneHeart(int lives) {
+        pacmanPanel.getEnemies().forEach(Ghost::stopThread);
         pacmanFrame.dispose();
         int finalLives = --lives;
         SwingUtilities.invokeLater(() -> new RunPacman(board, finalLives));

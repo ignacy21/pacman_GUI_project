@@ -22,6 +22,8 @@ public class BoardService {
         nameTileMap.put(2, point1Tile);
         Tile point2Tile = new Tile("point2", findImage("point2.png"));
         nameTileMap.put(3, point2Tile);
+        Tile gate = new Tile("gate", findImage("gate.png"));
+        nameTileMap.put(4, gate);
     }
 
     public List<List<Tile>> createBoardFromFile(String path) throws IOException {

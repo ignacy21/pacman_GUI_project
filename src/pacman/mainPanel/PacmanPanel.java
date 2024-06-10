@@ -70,6 +70,9 @@ public class PacmanPanel extends JPanel {
 
         enemies = createGhosts(board, pacmanCoordinate, respawnPoint);
         pointCounterService = new PointCounterService(this, boardService);
+
+        revalidate();
+        repaint();
     }
 
     private List<Ghost> createGhosts(
