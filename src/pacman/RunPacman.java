@@ -34,20 +34,29 @@ public class RunPacman implements Runnable {
         this.lives = lives;
         this.board = board;
         createBoard(board);
-        int tilesHeight = boardFromFile.size();
-        int tilesWidth = boardFromFile.getFirst().size();
+        int heightInTiles = boardFromFile.size();
+        int widthInTiles = boardFromFile.getFirst().size();
 
         int TILE_SIZE = 25;
 
-        int pacmanPanelWidth = TILE_SIZE * tilesWidth;
-        int pacmanPanelHeight = TILE_SIZE * tilesHeight;
+        int pacmanPanelWidth = TILE_SIZE * widthInTiles;
+        int pacmanPanelHeight = TILE_SIZE * heightInTiles;
 
         int displayHeight = TILE_SIZE * 2;
 
-        int screenWidth = TILE_SIZE * (tilesWidth - 4);
+        int screenWidth = TILE_SIZE * (widthInTiles - 4);
         int screenHeight = pacmanPanelHeight + displayHeight + 30;
 
         int rowThatSwitchSides = 14;
+
+        // TODO
+
+        int height = Toolkit.getDefaultToolkit().getScreenSize().height;
+        System.out.println(height);
+        int tileSize = ((height) / (heightInTiles + 2)) - 1;
+        System.out.println(tileSize);
+
+        // TODO
 
         createStructureOfPacman(
                 screenWidth,
@@ -181,7 +190,7 @@ public class RunPacman implements Runnable {
     private void createBoard(String filePath) {
         try {
             boardFromFile = boardService.createBoardFromFile(String.format("src/pacman/tiles/boards/%s", filePath));
-//            boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1_1.txt");
+//            boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1_2.txt");
 //            boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1.txt");
 //            boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board2.txt");
         } catch (IOException e) {

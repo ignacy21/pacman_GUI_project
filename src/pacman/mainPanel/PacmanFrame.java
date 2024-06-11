@@ -13,6 +13,7 @@ public class PacmanFrame extends JFrame {
         this.setResizable(false);
         this.setTitle("PACMAN");
         this.setVisible(true);
+        this.setLayout(new BorderLayout());
 
     }
 }
