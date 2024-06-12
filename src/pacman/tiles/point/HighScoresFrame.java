@@ -1,4 +1,6 @@
-package pacman;
+package pacman.tiles.point;
+
+import pacman.RunGame;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

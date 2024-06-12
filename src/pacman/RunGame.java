@@ -1,11 +1,11 @@
 package pacman;
 
 import pacman.mainPanel.PacmanFrame;
+import pacman.mainPanel.RunPacman;
+import pacman.tiles.point.HighScoresFrame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

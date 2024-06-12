@@ -1,16 +1,12 @@
-package pacman;
+package pacman.mainPanel;
 
+import pacman.RunGame;
 import pacman.ghosts.Ghost;
-import pacman.mainPanel.GamePanel;
-import pacman.mainPanel.PacmanFrame;
-import pacman.mainPanel.PacmanPanel;
 import pacman.playerControl.Pacman;
-import pacman.tiles.BoardService;
 import pacman.tiles.Tile;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.List;
 
 public class RunPacman implements Runnable {
@@ -27,17 +23,17 @@ public class RunPacman implements Runnable {
     private final int lives;
     private final String board;
 
-    final BoardService boardService = new BoardService();
-
-
     public RunPacman(String board, int lives) {
         this.lives = lives;
         this.board = board;
-        createBoard(board);
+
+        GameService gameService = new GameService();
+        boardFromFile = gameService.createBoard(board);
+
         int heightInTiles = boardFromFile.size();
         int widthInTiles = boardFromFile.getFirst().size();
 
-        int TILE_SIZE = 25;
+        int TILE_SIZE = 26;
 
         int pacmanPanelWidth = TILE_SIZE * widthInTiles;
         int pacmanPanelHeight = TILE_SIZE * heightInTiles;
@@ -48,15 +44,6 @@ public class RunPacman implements Runnable {
         int screenHeight = pacmanPanelHeight + displayHeight + 30;
 
         int rowThatSwitchSides = 14;
-
-        // TODO
-
-        int height = Toolkit.getDefaultToolkit().getScreenSize().height;
-        System.out.println(height);
-        int tileSize = ((height) / (heightInTiles + 2)) - 1;
-        System.out.println(tileSize);
-
-        // TODO
 
         createStructureOfPacman(
                 screenWidth,
@@ -94,11 +81,11 @@ public class RunPacman implements Runnable {
                     throw new RuntimeException(e);
                 }
             }
-        if (lives > 1) {
-            continueGameWithMinusOneHeart(lives);
-        } else {
-            endGame();
-        }
+            if (lives > 1) {
+                continueGameWithMinusOneHeart(lives);
+            } else {
+                endGame();
+            }
         }).start();
     }
 
@@ -161,7 +148,6 @@ public class RunPacman implements Runnable {
                 pacman,
                 TILE_SIZE,
                 boardFromFile,
-                boardService,
                 2,
                 rowThatSwitchSides
         );
@@ -177,22 +163,14 @@ public class RunPacman implements Runnable {
     private Pacman pacmanCreation(int TILE_SIZE, int rowThatSwitchSides) {
         final Pacman pacman;
         pacman = new Pacman(
-                TILE_SIZE * 11,
-                TILE_SIZE * 17,
+                TILE_SIZE * 12,
+                TILE_SIZE * 14,
                 3,
                 TILE_SIZE,
                 boardFromFile,
                 rowThatSwitchSides
         );
         return pacman;
-    }
-
-    private void createBoard(String filePath) {
-        try {
-            boardFromFile = boardService.createBoardFromFile(String.format("src/pacman/tiles/boards/%s", filePath));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private JLabel createGameOverLabel() {

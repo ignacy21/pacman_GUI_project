@@ -115,15 +115,4 @@ public class GamePanel extends JPanel {
         return scoreDisplayPanel;
     }
 
-    public void setLives(int lives) {
-        this.lives = lives;
-    }
-
-    public int getLives() {
-        return lives;
-    }
-
-    public PacmanPanel getPacmanPanel() {
-        return pacmanPanel;
-    }
 }

@@ -15,11 +15,9 @@ import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
 public class PointCounterService {
 
     private final PacmanPanel pacmanPanel;
-    private final BoardService boardService;
 
-    public PointCounterService(PacmanPanel pacmanPanel, BoardService boardService) {
+    public PointCounterService(PacmanPanel pacmanPanel) {
         this.pacmanPanel = pacmanPanel;
-        this.boardService = boardService;
     }
 
     public List<List<Tile>> collectPoints(Player player, List<List<Tile>> board) {
