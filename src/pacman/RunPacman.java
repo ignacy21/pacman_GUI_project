@@ -190,9 +190,6 @@ public class RunPacman implements Runnable {
     private void createBoard(String filePath) {
         try {
             boardFromFile = boardService.createBoardFromFile(String.format("src/pacman/tiles/boards/%s", filePath));
-//            boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1_2.txt");
-//            boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board1.txt");
-//            boardFromFile = boardService.createBoardFromFile("src/pacman/tiles/boards/board2.txt");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

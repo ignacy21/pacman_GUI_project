@@ -29,20 +29,28 @@ public class RunGame {
 
         JPanel mapSelectionPanel = new JPanel(new GridLayout(0, 1));
 
-        mapList.put("board1.txt", "10 x 20");
-        mapList.put("board2.txt", "10 x 20");
-        mapList.put("board3.txt", "10 x 20");
-        mapList.put("board4.txt", "10 x 20");
+        mapList.put("board1.txt", "54 x 21");
+        mapList.put("board2.txt", "28 x 31");
+        mapList.put("board3.txt", "50 x 25");
+        mapList.put("board4.txt", "60 x 30");
+        ButtonGroup mapButtonGroup = new ButtonGroup();
         for (Map.Entry<String, String> stringStringEntry : mapList.entrySet()) {
             String map = stringStringEntry.getKey();
-            String dimensions = stringStringEntry.getValue();
-            JCheckBox checkBox = new JCheckBox(dimensions);
+            String mapDimensions = stringStringEntry.getValue();
+            JCheckBox checkBox = new JCheckBox(mapDimensions);
             checkBox.addActionListener(e -> selectedMap = map);
             mapCheckboxes.add(checkBox);
+            mapButtonGroup.add(checkBox);
             mapSelectionPanel.add(checkBox);
         }
 
-        newGameButton.addActionListener(e -> startGame());
+        newGameButton.addActionListener(e -> {
+            if (selectedMap != null) {
+                startGame();
+            } else {
+                JOptionPane.showMessageDialog(frame, "Choose map from below first!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
         highScoresButton.addActionListener(e -> showHighScores());
         exitButton.addActionListener(e -> exitGame());
 
