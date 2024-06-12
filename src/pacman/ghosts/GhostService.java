@@ -3,10 +3,7 @@ package pacman.ghosts;
 import pacman.playerControl.Direction;
 import pacman.tiles.Tile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static pacman.ghosts.GhostMode.*;
 import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
@@ -95,8 +92,13 @@ public class GhostService {
                     );
                 }
             } else {
-                Integer next = map.keySet().iterator().next();
-                directionByNumber = next;
+                try {
+                    Integer next = map.keySet().iterator().next();
+                    directionByNumber = next;
+                } catch (NoSuchElementException e) {
+                    System.err.printf("[%s] ghost has nowhere to turn %n", ghost.getGhostName());
+                    throw new RuntimeException();
+                }
             }
 
             switch (directionByNumber) {
@@ -183,12 +185,13 @@ public class GhostService {
             Tile tileDown = board.get(tileY + 1).get(tileX);
             Tile rightTile = row.get(tileX + 1);
             Tile leftTile = row.get(tileX - 1);
-            if ("inky".equals(ghost.getGhostName()))
+//            System.err.println(ghost.getGhostName());
+//            if ("inky".equals(ghost.getGhostName()))
 //                System.err.printf("%s %s | tiles around: up: %s down: %s, right: %s left: %s%n", tileX, tileY, tileUp, tileDown, rightTile, leftTile);
             return new Tile[]{tileUp, tileDown, rightTile, leftTile};
         } catch (IndexOutOfBoundsException e) {
-            System.err.printf("%s ghost is out of bounds%n", ghost.getGhostName());
-            System.err.printf("X: %s  |  Y: %s%n", tileX, tileY);
+            System.err.printf("[%s] ghost is out of bounds%n", ghost.getGhostName());
+            System.err.printf("X:[%s]  |  Y:[%s]%n", tileX, tileY);
         }
         return null;
     }
