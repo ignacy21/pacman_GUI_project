@@ -2,6 +2,7 @@ package pacman.mainPanel;
 
 import pacman.RunGame;
 import pacman.ghosts.Ghost;
+import pacman.mainPanel.gameData.GameData;
 import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class RunPacman implements Runnable {
 
-    private List<List<Tile>> boardFromFile;
+    private final List<List<Tile>> boardFromFile;
 
     private PacmanFrame pacmanFrame;
     private Pacman pacman;
@@ -22,18 +23,28 @@ public class RunPacman implements Runnable {
     private boolean isGameContinue = true;
     private final int lives;
     private final String board;
+    private int pacmanSpeed;
+    private int ghostSpeed;
 
+    private final int[] ghostRespawnPoint;
+    private final int[] pacmanRespawnPoint;
     public RunPacman(String board, int lives) {
         this.lives = lives;
         this.board = board;
 
         GameService gameService = new GameService();
-        boardFromFile = gameService.createBoard(board);
-
-        int heightInTiles = boardFromFile.size();
-        int widthInTiles = boardFromFile.getFirst().size();
-
-        int TILE_SIZE = 26;
+        GameData gameData = gameService.runGameBasedOnBoard(board);
+        boardFromFile = gameData.getBoard();
+        pacmanSpeed = gameData.getPacmanSpeed();
+        ghostSpeed = gameData.getGhostSpeed();
+//        pacmanSpeed = 0;
+//        ghostSpeed = 0;
+        int widthInTiles = gameData.getWidthInTiles();
+        int heightInTiles = gameData.getHeightInTiles();
+        int TILE_SIZE = gameData.getTileSize();
+        int rowThatSwitchSide = gameData.getRowThatSwitchSide();
+        ghostRespawnPoint = gameData.getGhostRespawnPoint();
+        pacmanRespawnPoint = gameData.getPacmanRespawnPoint();
 
         int pacmanPanelWidth = TILE_SIZE * widthInTiles;
         int pacmanPanelHeight = TILE_SIZE * heightInTiles;
@@ -43,13 +54,12 @@ public class RunPacman implements Runnable {
         int screenWidth = TILE_SIZE * (widthInTiles - 4);
         int screenHeight = pacmanPanelHeight + displayHeight + 30;
 
-        int rowThatSwitchSides = 14;
 
         createStructureOfPacman(
                 screenWidth,
                 screenHeight,
                 TILE_SIZE,
-                rowThatSwitchSides,
+                rowThatSwitchSide,
                 pacmanPanelWidth,
                 pacmanPanelHeight,
                 displayHeight
@@ -148,8 +158,9 @@ public class RunPacman implements Runnable {
                 pacman,
                 TILE_SIZE,
                 boardFromFile,
-                2,
-                rowThatSwitchSides
+                ghostSpeed,
+                rowThatSwitchSides,
+                ghostRespawnPoint
         );
         return pacmanPanel;
     }
@@ -163,9 +174,9 @@ public class RunPacman implements Runnable {
     private Pacman pacmanCreation(int TILE_SIZE, int rowThatSwitchSides) {
         final Pacman pacman;
         pacman = new Pacman(
-                TILE_SIZE * 12,
-                TILE_SIZE * 14,
-                3,
+                pacmanRespawnPoint[0],
+                pacmanRespawnPoint[1],
+                pacmanSpeed,
                 TILE_SIZE,
                 boardFromFile,
                 rowThatSwitchSides

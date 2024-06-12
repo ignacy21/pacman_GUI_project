@@ -7,8 +7,6 @@ import java.util.List;
 public class GameDataBuilder {
 
     private List<List<Tile>> board;
-    private int width;
-    private int height;
     private int widthInTiles;
     private int heightInTiles;
     private int TILE_SIZE;
@@ -22,16 +20,6 @@ public class GameDataBuilder {
 
     public GameDataBuilder withBoard(List<List<Tile>> board) {
         this.board = board;
-        return this;
-    }
-
-    public GameDataBuilder withWidth(int width) {
-        this.width = width;
-        return this;
-    }
-
-    public GameDataBuilder withHeight(int height) {
-        this.height = height;
         return this;
     }
 
@@ -65,9 +53,8 @@ public class GameDataBuilder {
         return this;
     }
 
-    public GameDataBuilder withGhostRespawnPoint(int[] ghostRespawnPoint) {
+    public void withGhostRespawnPoint(int[] ghostRespawnPoint) {
         this.ghostRespawnPoint = ghostRespawnPoint;
-        return this;
     }
 
     public GameDataBuilder withPacmanRespawnPoint(int[] pacmanRespawnPoint) {
@@ -76,6 +63,6 @@ public class GameDataBuilder {
     }
 
     public GameData build() {
-        return new GameData(board, width, height, widthInTiles, heightInTiles, TILE_SIZE, pacmanSpeed, ghostSpeed, rowThatSwitchSize, ghostRespawnPoint, pacmanRespawnPoint);
+        return new GameData(board, widthInTiles, heightInTiles, TILE_SIZE, pacmanSpeed, ghostSpeed, rowThatSwitchSize, ghostRespawnPoint, pacmanRespawnPoint);
     }
 }

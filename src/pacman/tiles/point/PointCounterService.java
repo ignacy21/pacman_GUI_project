@@ -1,10 +1,8 @@
 package pacman.tiles.point;
 
 import pacman.ghosts.Ghost;
-import pacman.ghosts.GhostMode;
 import pacman.mainPanel.PacmanPanel;
 import pacman.playerControl.Player;
-import pacman.tiles.BoardService;
 import pacman.tiles.Tile;
 
 import java.util.ArrayList;

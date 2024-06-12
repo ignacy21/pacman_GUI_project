@@ -5,7 +5,6 @@ import pacman.playerControl.Entity;
 import pacman.tiles.Tile;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;

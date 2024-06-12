@@ -1,11 +1,8 @@
 package pacman.mainPanel;
 
-import pacman.RunGame;
 import pacman.ghosts.Ghost;
-import pacman.ghosts.GhostMode;
 import pacman.playerControl.Direction;
 import pacman.playerControl.Pacman;
-import pacman.tiles.BoardService;
 import pacman.tiles.Tile;
 import pacman.tiles.TileManager;
 import pacman.tiles.collision.PacmanService;
@@ -16,7 +13,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static pacman.ghosts.GhostMode.*;
+import static pacman.ghosts.GhostMode.SCATTER;
 
 public class PacmanPanel extends JPanel {
 
@@ -42,7 +39,8 @@ public class PacmanPanel extends JPanel {
             int tileSeize,
             List<List<Tile>> board,
             int enemiesSpeed,
-            int rowThatSwitchSides
+            int rowThatSwitchSides,
+            int[] respawnPoint
     ) {
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
@@ -62,7 +60,7 @@ public class PacmanPanel extends JPanel {
         this.pacmanService = new PacmanService(pacman, board, rowThatSwitchSides);
 
         int[] pacmanCoordinate = {pacman.getCoordinateX(), pacman.getCoordinateY()};
-        this.respawnPoint = new int[]{TILE_SIZE * (board.getFirst().size() / 2), TILE_SIZE * (board.size() / 2)};
+        this.respawnPoint = respawnPoint;
 
         enemies = createGhosts(board, pacmanCoordinate, respawnPoint);
         pointCounterService = new PointCounterService(this);
