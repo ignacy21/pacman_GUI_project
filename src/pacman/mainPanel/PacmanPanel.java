@@ -26,7 +26,7 @@ public class PacmanPanel extends JPanel {
 
     private final PointCounterService pointCounterService;
     private List<Ghost> enemies = new ArrayList<>();
-    private int enemiesSpeed;
+    private double enemiesSpeed;
     private final int rowThatSwitchSides;
     private final int[] respawnPoint;
     private final int width;
@@ -38,7 +38,7 @@ public class PacmanPanel extends JPanel {
             Pacman pacman,
             int tileSeize,
             List<List<Tile>> board,
-            int enemiesSpeed,
+            double enemiesSpeed,
             int rowThatSwitchSides,
             int[] respawnPoint
     ) {

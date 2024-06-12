@@ -10,8 +10,8 @@ public class GameData {
     private final int widthInTiles;
     private final int heightInTiles;
     private final int TILE_SIZE;
-    private final int pacmanSpeed;
-    private final int ghostSpeed;
+    private final double pacmanSpeed;
+    private final double ghostSpeed;
     private final int rowThatSwitchSide;
     private final int[] ghostRespawnPoint;
     private final int[] pacmanRespawnPoint;
@@ -21,8 +21,8 @@ public class GameData {
             int widthInTiles,
             int heightInTiles,
             int TILE_SIZE,
-            int pacmanSpeed,
-            int ghostSpeed,
+            double pacmanSpeed,
+            double ghostSpeed,
             int rowThatSwitchSide,
             int[] ghostRespawnPoint,
             int[] pacmanRespawnPoint
@@ -54,11 +54,11 @@ public class GameData {
         return TILE_SIZE;
     }
 
-    public int getPacmanSpeed() {
+    public double getPacmanSpeed() {
         return pacmanSpeed;
     }
 
-    public int getGhostSpeed() {
+    public double getGhostSpeed() {
         return ghostSpeed;
     }
 

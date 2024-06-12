@@ -20,7 +20,7 @@ public class Pacman implements Player {
     private final PacmanService pacmanService;
     private int xPosition;
     private int yPosition;
-    private int speed;
+    private double speed;
     private final int size;
     private boolean isColliding = false;
     private int animationCounter = 0;
@@ -30,7 +30,7 @@ public class Pacman implements Player {
     private final List<BufferedImage> animationRight;
 
 
-    public Pacman(int xPosition, int yPosition, int speed, int size, List<List<Tile>> board, int rowThatSwitchSides) {
+    public Pacman(int xPosition, int yPosition, double speed, int size, List<List<Tile>> board, int rowThatSwitchSides) {
         this.size = size;
         List<BufferedImage> animationUp;
         List<BufferedImage> animationDown;
@@ -179,7 +179,7 @@ public class Pacman implements Player {
     }
 
     @Override
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 

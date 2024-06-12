@@ -32,7 +32,7 @@ public class GhostService {
         int ghostLeft = ghost.getCoordinateX();
         int ghostBottom = ghost.getCoordinateY() + TILE_SIZE;
 
-        int gap = ghost.getSpeed() - 1;
+        int gap = (int)ghost.getSpeed() - 1;
         if (ghostLeft % TILE_SIZE <= gap && ghostBottom % TILE_SIZE <= gap) {
             int gapX = ghostLeft % TILE_SIZE;
             int gapY = ghostBottom % TILE_SIZE;
@@ -177,12 +177,19 @@ public class GhostService {
     }
 
     private Tile[] tilesAroundGivenTile(int tileX, int tileY) {
-
-        List<Tile> row = new ArrayList<>(board.get(tileY));
-        Tile tileUp = board.get(tileY - 1).get(tileX);
-        Tile tileDown = board.get(tileY + 1).get(tileX);
-        Tile rightTile = row.get(tileX + 1);
-        Tile leftTile = row.get(tileX - 1);
-        return new Tile[]{tileUp, tileDown, rightTile, leftTile};
+        try {
+            List<Tile> row = new ArrayList<>(board.get(tileY));
+            Tile tileUp = board.get(tileY - 1).get(tileX);
+            Tile tileDown = board.get(tileY + 1).get(tileX);
+            Tile rightTile = row.get(tileX + 1);
+            Tile leftTile = row.get(tileX - 1);
+            if ("inky".equals(ghost.getGhostName()))
+//                System.err.printf("%s %s | tiles around: up: %s down: %s, right: %s left: %s%n", tileX, tileY, tileUp, tileDown, rightTile, leftTile);
+            return new Tile[]{tileUp, tileDown, rightTile, leftTile};
+        } catch (IndexOutOfBoundsException e) {
+            System.err.printf("%s ghost is out of bounds%n", ghost.getGhostName());
+            System.err.printf("X: %s  |  Y: %s%n", tileX, tileY);
+        }
+        return null;
     }
 }

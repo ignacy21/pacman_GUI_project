@@ -23,8 +23,8 @@ public class RunPacman implements Runnable {
     private boolean isGameContinue = true;
     private final int lives;
     private final String board;
-    private int pacmanSpeed;
-    private int ghostSpeed;
+    private double pacmanSpeed;
+    private double ghostSpeed;
 
     private final int[] ghostRespawnPoint;
     private final int[] pacmanRespawnPoint;

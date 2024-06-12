@@ -8,7 +8,7 @@ public interface Entity {
     int getCoordinateY();
     void setCoordinateX(int x);
     void setCoordinateY(int y);
-    int getSpeed();
+    double getSpeed();
     void update();
     void drawEntity(Graphics2D graphics2D);
 }

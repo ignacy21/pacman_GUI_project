@@ -19,8 +19,8 @@ public class GameService {
         int width = board.getFirst().size();
         int height = board.size();
         int tileSize = calculateTileSize(width, height);
-        int pacmanSpeed = 3;
-        int ghostSpeed = 3;
+        double pacmanSpeed = 3;
+        double ghostSpeed = 3.1;
 
         int[] pacmanRespawn;
         int[] ghostRespawn;

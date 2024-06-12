@@ -89,7 +89,7 @@ public class PacmanService {
             return true;
         }
 
-        int turnGap = player.getSpeed() - 1;
+        int turnGap = (int)player.getSpeed() - 1;
         if (playersBottom % TILE_SIZE <= turnGap && playersLeft % TILE_SIZE <= turnGap) {
             if (direction == UP || direction == DOWN) {
                 int mod = playersLeft % TILE_SIZE;

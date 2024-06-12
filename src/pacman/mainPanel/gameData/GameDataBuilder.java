@@ -10,8 +10,8 @@ public class GameDataBuilder {
     private int widthInTiles;
     private int heightInTiles;
     private int TILE_SIZE;
-    private int pacmanSpeed;
-    private int ghostSpeed;
+    private double pacmanSpeed;
+    private double ghostSpeed;
     private int rowThatSwitchSize;
     private int[] ghostRespawnPoint;
     private int[] pacmanRespawnPoint;
@@ -38,12 +38,12 @@ public class GameDataBuilder {
         return this;
     }
 
-    public GameDataBuilder withPacmanSpeed(int pacmanSpeed) {
+    public GameDataBuilder withPacmanSpeed(double pacmanSpeed) {
         this.pacmanSpeed = pacmanSpeed;
         return this;
     }
 
-    public GameDataBuilder withGhostSpeed(int ghostSpeed) {
+    public GameDataBuilder withGhostSpeed(double ghostSpeed) {
         this.ghostSpeed = ghostSpeed;
         return this;
     }

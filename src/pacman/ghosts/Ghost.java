@@ -21,7 +21,7 @@ public class Ghost implements Entity, Runnable {
     private int[] pacmanCoordinate;
     private final int[] cornerCoordinate;
     private final int[] respawnPoint;
-    private int speed;
+    private double speed;
     private final int size;
     private int animationCounter = 0;
     private final List<List<Tile>> board;
@@ -33,11 +33,11 @@ public class Ghost implements Entity, Runnable {
     private final List<BufferedImage> whiteAnimationRun;
     private final GhostService ghostService;
     private volatile GhostMode ghostMode;
-    public String ghostName;
+    private final String ghostName;
     private volatile boolean running = true;
     private Thread thread;
 
-    public Ghost(int xPosition, int yPosition, Direction direction, int speed, int size, List<List<Tile>> board, int[] pacmanCoordinate, int[] cornerCoordinate, int[] respawnPoint, String ghostName, int rowThatSwitchSides) {
+    public Ghost(int xPosition, int yPosition, Direction direction, double speed, int size, List<List<Tile>> board, int[] pacmanCoordinate, int[] cornerCoordinate, int[] respawnPoint, String ghostName, int rowThatSwitchSides) {
         this.direction = direction;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
@@ -95,7 +95,7 @@ public class Ghost implements Entity, Runnable {
 
 
     @Override
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
@@ -188,15 +188,15 @@ public class Ghost implements Entity, Runnable {
             try {
                 if (ghostMode == RUN) {
                     Thread.sleep(7000);
-                    System.err.println("RUN");
+//                    System.err.println("RUN");
                     ghostMode = CHASE;
                 } else if (ghostMode == CHASE) {
                     Thread.sleep(6000);
-                    System.err.println("SCATTER");
+//                    System.err.println("SCATTER");
                     ghostMode = SCATTER;
                 } else if (ghostMode == SCATTER) {
                     Thread.sleep(6000);
-                    System.err.println("CHASE");
+//                    System.err.println("CHASE");
                     ghostMode = CHASE;
                 }
             } catch (InterruptedException e) {
@@ -219,5 +219,9 @@ public class Ghost implements Entity, Runnable {
     public void stopThread() {
         this.running = false;
         thread.interrupt();
+    }
+
+    public String getGhostName() {
+        return ghostName;
     }
 }
