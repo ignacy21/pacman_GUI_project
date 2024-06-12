@@ -8,7 +8,7 @@ import java.util.List;
 public class MirrorBoard {
 
     public static void main(String[] args) {
-        List<String> mirror = mirror("src/pacman/tiles/boards/board1.txt");
+        List<String> mirror = mirror("src/pacman/tiles/boards/board5.txt");
         for (String s : mirror) {
             System.out.println(s);
         }

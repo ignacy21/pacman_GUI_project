@@ -55,6 +55,11 @@ public class GameService {
                 pacmanRespawn = new int[]{tileSize * 12, tileSize * 14};
                 ghostRespawn = new int[]{tileSize * 44, tileSize * 12};
             }
+            case "board5.txt" -> {
+                rowThatSwitchSides = 14;
+                pacmanRespawn = new int[]{tileSize * 11, tileSize * 14};
+                ghostRespawn = new int[]{tileSize * 22, tileSize * 9};
+            }
             default -> throw new RuntimeException("There is no such file as: " + boardPath);
         }
 
@@ -69,12 +74,11 @@ public class GameService {
     private int calculateTileSize(int widthInTiles, int heightInTiles) {
         int height = Toolkit.getDefaultToolkit().getScreenSize().height - 80;
         int width = Toolkit.getDefaultToolkit().getScreenSize().width;
-        int tileSize;
-        if ((heightInTiles + 2) > (widthInTiles - 4)) {
-            tileSize = ((height) / (heightInTiles + 2));
-        } else {
-            tileSize = (width / (widthInTiles - 4));
-        }
+        int tileSize = (width / (widthInTiles - 4));
+        int tileSize1 = ((height) / (heightInTiles + 2));
+        if (tileSize1 < tileSize)
+            tileSize = tileSize1;
+
         return tileSize;
     }
 

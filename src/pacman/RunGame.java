@@ -33,6 +33,7 @@ public class RunGame {
         mapList.put("board2.txt", "28 x 31");
         mapList.put("board3.txt", "50 x 25");
         mapList.put("board4.txt", "60 x 30");
+        mapList.put("board5.txt", "35 x 29");
         ButtonGroup mapButtonGroup = new ButtonGroup();
         for (Map.Entry<String, String> stringStringEntry : mapList.entrySet()) {
             String map = stringStringEntry.getKey();
