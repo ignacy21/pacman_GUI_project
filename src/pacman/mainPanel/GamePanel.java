@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
+
 public class GamePanel extends JPanel {
     private final PacmanPanel pacmanPanel;
     private final PacmanAndGhostCollision pacmanAndGhostCollision;
@@ -17,8 +19,11 @@ public class GamePanel extends JPanel {
     private int lives;
     private boolean nextLevel;
     private int levelNumber;
+    private int time = 0;
+    JLabel timeLabel;
 
-    public GamePanel(PacmanPanel pacmanPanel, int displayHeight, int correctPositionOfPanelToMatchScreen, int lives, int levelNumber) {
+    public GamePanel(PacmanPanel pacmanPanel, int displayHeight, int correctPositionOfPanelToMatchScreen, int lives, int levelNumber, int time) {
+        this.time = time;
         this.lives = lives;
         this.levelNumber = levelNumber;
         this.pacmanPanel = pacmanPanel;
@@ -33,6 +38,7 @@ public class GamePanel extends JPanel {
 
         JPanel displayPanel = displayPanelCreation(displayHeight);
         this.add(displayPanel, BorderLayout.NORTH);
+        startTime();
         revalidate();
         repaint();
     }
@@ -57,7 +63,8 @@ public class GamePanel extends JPanel {
     }
 
     private JPanel displayPanelCreation(int displayHeight) {
-        JPanel mainDisplayPanel = createRightPanel();
+        JPanel mainDisplayPanel = new JPanel();
+        mainDisplayPanel.setBackground(Color.BLACK);
         mainDisplayPanel.setLayout(new GridLayout(1, 3));
         mainDisplayPanel.setPreferredSize(new Dimension(getWidth(), displayHeight));
         Border border = BorderFactory.createLineBorder(Color.BLUE, 4);
@@ -65,7 +72,7 @@ public class GamePanel extends JPanel {
 
         JPanel heartsPanel = createLivesPanel(displayHeight, lives);
         JPanel scoreDisplayPanel = createScorePanel(displayHeight);
-        JPanel rightPanel = createRightPanel();
+        JPanel rightPanel = createRightPanel(displayHeight);
 
         mainDisplayPanel.add(heartsPanel);
         mainDisplayPanel.add(scoreDisplayPanel);
@@ -74,13 +81,19 @@ public class GamePanel extends JPanel {
         return mainDisplayPanel;
     }
 
-    private static JPanel createRightPanel() {
+    private JPanel createRightPanel(int displayHeight) {
         JPanel rightPanel = new JPanel();
         rightPanel.setBackground(Color.BLACK);
+        Font pacFont = new Font("Pac-Font", Font.BOLD, displayHeight / 2);
+        timeLabel = new JLabel("Time: " + formatTime(time++));
+        timeLabel.setFont(pacFont);
+        timeLabel.setForeground(Color.WHITE);
+
+        rightPanel.add(timeLabel);
         return rightPanel;
     }
 
-    private static JPanel createLivesPanel(int displayHeight, int lives) {
+    private JPanel createLivesPanel(int displayHeight, int lives) {
         BufferedImage pacmanImage;
         try {
             pacmanImage = ImageIO.read(new File("resources/images/pacman/right/pacman_1.png"));
@@ -127,11 +140,34 @@ public class GamePanel extends JPanel {
         return scoreDisplayPanel;
     }
 
+    private void startTime() {
+        Thread timerThread = new Thread(() -> {
+            try {
+                while (true) {
+                    Thread.sleep(1000);
+                    SwingUtilities.invokeLater(() -> timeLabel.setText("Time: " + formatTime(time++)));
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        timerThread.start();
+    }
+    private String formatTime(int seconds) {
+        int hours = seconds / 3600;
+        int minutes = (seconds % 3600) / 60;
+        int secs = seconds % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, secs);
+    }
     public int getLevelNumber() {
         return levelNumber;
     }
 
     public boolean isNextLevel() {
         return nextLevel;
+    }
+
+    public int getTime() {
+        return time;
     }
 }
