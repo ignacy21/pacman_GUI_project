@@ -11,6 +11,8 @@ import java.util.Map;
 public class BoardService {
 
     Map<Integer, Tile> nameTileMap = new HashMap<>();
+    Map<String, Integer> nameIntTileMap = new HashMap<>();
+    private String currentMap;
 
     {
         Tile voidTile = new Tile("void", null);
@@ -35,6 +37,18 @@ public class BoardService {
         nameTileMap.put(8, blockade);
     }
 
+    {
+        nameIntTileMap.put("void", 0);
+        nameIntTileMap.put("block", 1);
+        nameIntTileMap.put("point1", 2);
+        nameIntTileMap.put("point2", 3);
+        nameIntTileMap.put("gate", 4);
+        nameIntTileMap.put("gate2", 5);
+        nameIntTileMap.put("gate3", 6);
+        nameIntTileMap.put("gate4", 7);
+        nameIntTileMap.put("blockade", 8);
+    }
+
     public List<List<Tile>> createBoardFromFile(String path) throws IOException {
         List<List<Tile>> tiles = new ArrayList<>();
         int rowCount = 0;
@@ -56,13 +70,14 @@ public class BoardService {
                 rowCount++;
             }
         } catch (FileNotFoundException e) {
+            System.err.printf("cannot find file:[%s]%n", path);
             throw new RuntimeException(e);
         }
         System.out.printf("BOARD: width[%s]  height[%s]%n", tiles.getFirst().size(), tiles.size());
         return tiles;
     }
 
-    public Tile getTileByItsInt(Integer tileNumber)  {
+    private Tile getTileByItsInt(Integer tileNumber) {
         Tile clone;
         try {
             clone = (Tile) nameTileMap.get(tileNumber).clone();
@@ -78,5 +93,76 @@ public class BoardService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String writeCurrentBoard(List<List<Tile>> board, String boardName) {
+        currentMap = "current_%s.txt".formatted(boardName);
+        createFileIfItDoesntExist("src/pacman/tiles/boards/" + currentMap);
+        List<String> boardAsStrings = boardToStringList("src/pacman/tiles/boards/" + boardName);
+        for (int rowNum = 0; rowNum < boardAsStrings.size(); rowNum++) {
+            StringBuilder sb = correctAllCollectedPoints(board, boardAsStrings, rowNum);
+            boardAsStrings.set(rowNum, sb.toString());
+        }
+        writeLine(boardAsStrings);
+        return currentMap;
+    }
+
+    private static StringBuilder correctAllCollectedPoints(List<List<Tile>> board, List<String> boardAsStrings, int rowNum) {
+        String row = boardAsStrings.get(rowNum);
+        String[] splitRow = row.split(" ");
+
+        StringBuilder sb = new StringBuilder(row);
+
+        for (int colNum = 0; colNum < splitRow.length; colNum++) {
+            String tileAsString = splitRow[colNum];
+            if ("2".equals(tileAsString) || "3".equals(tileAsString)) {
+                Tile tile = board.get(rowNum).get(colNum);
+                if ("void".equals(tile.getName())) {
+                    sb.setCharAt(colNum * 2, '0');
+                }
+            }
+        }
+        return sb;
+    }
+
+    private void writeLine(List<String> boardAsStrings) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/pacman/tiles/boards/" + currentMap))) {
+            for (String line : boardAsStrings) {
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.printf("while rewriting updated game board:[%s] error occurred%n", currentMap);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void createFileIfItDoesntExist(String fileName) {
+        File file = new File(fileName);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                System.err.printf("creating file:[%s] went wrong%n", fileName);
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private List<String> boardToStringList(String path) {
+        List<String> stringBoard = new ArrayList<>();
+        try (
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(path))
+        ) {
+            while (true) {
+                String line = bufferedReader.readLine();
+                if (line == null) break;
+                stringBoard.add(line);
+
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return stringBoard;
     }
 }

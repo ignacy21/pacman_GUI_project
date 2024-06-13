@@ -177,4 +177,7 @@ public class PacmanPanel extends JPanel {
         return enemies;
     }
 
+    public List<List<Tile>> getBoard() {
+        return board;
+    }
 }

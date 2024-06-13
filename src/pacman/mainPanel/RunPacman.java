@@ -25,6 +25,7 @@ public class RunPacman implements Runnable {
     private final String board;
     private double pacmanSpeed;
     private double ghostSpeed;
+    private final GameService gameService = new GameService();
 
     private final int[] ghostRespawnPoint;
     private final int[] pacmanRespawnPoint;
@@ -32,7 +33,6 @@ public class RunPacman implements Runnable {
         this.lives = lives;
         this.board = board;
 
-        GameService gameService = new GameService();
         GameData gameData = gameService.runGameBasedOnBoard(board);
         boardFromFile = gameData.getBoard();
         pacmanSpeed = gameData.getPacmanSpeed();
@@ -103,7 +103,9 @@ public class RunPacman implements Runnable {
         pacmanPanel.getEnemies().forEach(Ghost::stopThread);
         pacmanFrame.dispose();
         int finalLives = --lives;
-        SwingUtilities.invokeLater(() -> new RunPacman(board, finalLives));
+        List<List<Tile>> updatedBoard = pacmanPanel.getBoard();
+        String mapPath = gameService.rewriteBoard(updatedBoard, board);
+        SwingUtilities.invokeLater(() -> new RunPacman(mapPath, finalLives));
     }
 
     private void endGame() {

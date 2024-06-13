@@ -34,34 +34,29 @@ public class GameService {
                 .withPacmanSpeed(pacmanSpeed)
                 .withGhostSpeed(ghostSpeed);
 
-        switch (boardPath) {
-            case "board1.txt" -> {
+            if (boardPath.contains("board1.txt")) {
                 rowThatSwitchSides = 10;
                 pacmanRespawn = new int[]{tileSize * 13, tileSize * 10};
                 ghostRespawn = new int[]{tileSize * 29, tileSize * 11};
-            }
-            case "board2.txt" -> {
+            } else if (boardPath.contains("board2.txt")) {
                 rowThatSwitchSides = 14;
                 pacmanRespawn = new int[]{tileSize * 15, tileSize * 23};
                 ghostRespawn = new int[]{tileSize * 15, tileSize * 15};
-            }
-            case "board3.txt" -> {
+            } else if (boardPath.contains("board3.txt")) {
                 rowThatSwitchSides = 12;
                 pacmanRespawn = new int[]{tileSize * 9, tileSize * 12};
                 ghostRespawn = new int[]{tileSize * 44, tileSize * 7};
-            }
-            case "board4.txt" -> {
+            } else if (boardPath.contains("board4.txt")) {
                 rowThatSwitchSides = 15;
                 pacmanRespawn = new int[]{tileSize * 12, tileSize * 14};
                 ghostRespawn = new int[]{tileSize * 44, tileSize * 12};
-            }
-            case "board5.txt" -> {
+            } else if (boardPath.contains("board5.txt")) {
                 rowThatSwitchSides = 14;
                 pacmanRespawn = new int[]{tileSize * 11, tileSize * 14};
                 ghostRespawn = new int[]{tileSize * 22, tileSize * 9};
+            } else {
+                throw new RuntimeException("There is no such file as: " + boardPath);
             }
-            default -> throw new RuntimeException("There is no such file as: " + boardPath);
-        }
 
         gameDataBuilder
                 .withRowThatSwitchSize(rowThatSwitchSides)
@@ -69,6 +64,10 @@ public class GameService {
                 .withGhostRespawnPoint(ghostRespawn);
 
         return gameDataBuilder.build();
+    }
+
+    public String rewriteBoard(List<List<Tile>> board, String boardName) {
+        return boardService.writeCurrentBoard(board, boardName);
     }
 
     private int calculateTileSize(int widthInTiles, int heightInTiles) {
