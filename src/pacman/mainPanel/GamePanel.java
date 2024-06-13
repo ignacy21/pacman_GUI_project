@@ -10,8 +10,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
-
 public class GamePanel extends JPanel {
     private final PacmanPanel pacmanPanel;
     private final PacmanAndGhostCollision pacmanAndGhostCollision;
@@ -19,10 +17,13 @@ public class GamePanel extends JPanel {
     private int lives;
     private boolean nextLevel;
     private int levelNumber;
-    private int time = 0;
+    private int time;
+    private boolean playTime = true;
+    private boolean leaveGame;
     JLabel timeLabel;
 
     public GamePanel(PacmanPanel pacmanPanel, int displayHeight, int correctPositionOfPanelToMatchScreen, int lives, int levelNumber, int time) {
+        this.leaveGame = false;
         this.time = time;
         this.lives = lives;
         this.levelNumber = levelNumber;
@@ -39,6 +40,8 @@ public class GamePanel extends JPanel {
         JPanel displayPanel = displayPanelCreation(displayHeight);
         this.add(displayPanel, BorderLayout.NORTH);
         startTime();
+        SwingUtilities.invokeLater(pacmanPanel::requestFocusInWindow);
+
         revalidate();
         repaint();
     }
@@ -55,6 +58,7 @@ public class GamePanel extends JPanel {
         pacmanPanel.updatePacmanAndGhosts();
         if (pacmanAndGhostCollision.isGameOver()) {
             scoreLabel.setText(String.valueOf(pacmanPanel.getSCORE()));
+            playTime = false;
             return false;
         }
         scoreLabel.setText(String.valueOf(pacmanPanel.getSCORE()));
@@ -71,25 +75,45 @@ public class GamePanel extends JPanel {
         mainDisplayPanel.setBorder(border);
 
         JPanel heartsPanel = createLivesPanel(displayHeight, lives);
-        JPanel scoreDisplayPanel = createScorePanel(displayHeight);
-        JPanel rightPanel = createRightPanel(displayHeight);
+        JPanel centralPanel = createCentralPanel(displayHeight);
+        JPanel rightPanel = createTimerPanel(displayHeight);
 
         mainDisplayPanel.add(heartsPanel);
-        mainDisplayPanel.add(scoreDisplayPanel);
+        mainDisplayPanel.add(centralPanel);
         mainDisplayPanel.add(rightPanel);
 
         return mainDisplayPanel;
     }
 
-    private JPanel createRightPanel(int displayHeight) {
+    private JPanel createTimerPanel(int displayHeight) {
         JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new GridLayout(2, 1));
         rightPanel.setBackground(Color.BLACK);
-        Font pacFont = new Font("Pac-Font", Font.BOLD, displayHeight / 2);
+
+        JPanel timerPanel = new JPanel();
+        timerPanel.setBackground(Color.BLACK);
+        Font pacFont = new Font("Pac-Font", Font.BOLD, displayHeight / 3);
         timeLabel = new JLabel("Time: " + formatTime(time++));
         timeLabel.setFont(pacFont);
         timeLabel.setForeground(Color.WHITE);
+        timerPanel.add(timeLabel);
 
-        rightPanel.add(timeLabel);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.BLACK);
+
+        JButton restartButton = new JButton("Restart");
+        restartButton.setFont(new Font("Pac-Font", Font.BOLD, displayHeight / 4));
+        restartButton.setForeground(Color.WHITE);
+        restartButton.setBackground(Color.BLACK);
+        restartButton.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+        restartButton.setFocusPainted(false);
+
+        restartButton.addActionListener(e -> leaveGame = true);
+
+        buttonPanel.add(restartButton);
+
+        rightPanel.add(timerPanel);
+        rightPanel.add(buttonPanel);
         return rightPanel;
     }
 
@@ -122,7 +146,11 @@ public class GamePanel extends JPanel {
         return heartsPanel;
     }
 
-    private JPanel createScorePanel(int displayHeight) {
+    private JPanel createCentralPanel(int displayHeight) {
+        JPanel centralPanel = new JPanel();
+        centralPanel.setLayout(new GridLayout(1, 2));
+        centralPanel.setBackground(Color.BLACK);
+
         JPanel scoreDisplayPanel = new JPanel();
         scoreDisplayPanel.setLayout(new GridLayout(2, 1));
         scoreDisplayPanel.setBackground(Color.BLACK);
@@ -137,13 +165,23 @@ public class GamePanel extends JPanel {
         scoreLabel.setForeground(Color.WHITE);
         scoreDisplayPanel.add(scoreText);
         scoreDisplayPanel.add(scoreLabel);
-        return scoreDisplayPanel;
+
+        JPanel levelDisplayPanel = new JPanel();
+        levelDisplayPanel.setBackground(Color.BLACK);
+        JLabel level = new JLabel("Level: " + levelNumber);
+        level.setFont(pacFont);
+        level.setForeground(Color.WHITE);
+        levelDisplayPanel.add(level);
+
+        centralPanel.add(levelDisplayPanel);
+        centralPanel.add(scoreDisplayPanel);
+        return centralPanel;
     }
 
     private void startTime() {
         Thread timerThread = new Thread(() -> {
             try {
-                while (true) {
+                while (playTime) {
                     Thread.sleep(1000);
                     SwingUtilities.invokeLater(() -> timeLabel.setText("Time: " + formatTime(time++)));
                 }
@@ -169,5 +207,9 @@ public class GamePanel extends JPanel {
 
     public int getTime() {
         return time;
+    }
+
+    public boolean isLeaveGame() {
+        return leaveGame;
     }
 }

@@ -7,6 +7,7 @@ import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
 
 import javax.swing.*;
+import javax.swing.plaf.TableHeaderUI;
 import java.awt.*;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class RunPacman implements Runnable {
     private final GameService gameService = new GameService();
     private final int[] ghostRespawnPoint;
     private final int[] pacmanRespawnPoint;
+    private Thread thread;
 
     public RunPacman(String board, int lives, int score, int level, int time) {
         this.lives = lives;
@@ -81,14 +83,13 @@ public class RunPacman implements Runnable {
         pacmanFrame.repaint();
         pacmanPanel.setSCORE(score);
 
-
         run();
     }
 
 
     @Override
     public void run() {
-        new Thread(() -> {
+        thread = new Thread(() -> {
             waitForStart();
             while (isGameContinue) {
                 isGameContinue = gamePanel.startGame();
@@ -96,6 +97,10 @@ public class RunPacman implements Runnable {
                     Thread.sleep(16);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
+                }
+                if (gamePanel.isLeaveGame()) {
+                    isGameContinue = false;
+                    endGame(pacmanPanel.getSCORE(), false);
                 }
             }
             if (lives >= 1) {
@@ -105,12 +110,13 @@ public class RunPacman implements Runnable {
                     if (lives != 1)
                         continueGameWithMinusOneHeart(lives, pacmanPanel.getSCORE());
                     else
-                        endGame(pacmanPanel.getSCORE());
+                        endGame(pacmanPanel.getSCORE(), true);
                 }
             } else {
-                endGame(pacmanPanel.getSCORE());
+                endGame(pacmanPanel.getSCORE(), true);
             }
-        }).start();
+        });
+        thread.start();
     }
 
     private void continueGameWithMinusOneHeart(int lives, int score) {
@@ -129,22 +135,25 @@ public class RunPacman implements Runnable {
         SwingUtilities.invokeLater(() -> new RunPacman(substring, lives, score, gamePanel.getLevelNumber(), gamePanel.getTime()));
     }
 
-    private void endGame(int score) {
-        SwingUtilities.invokeLater(this::showGameOver);
+    private void endGame(int score, boolean showGameOver) {
+        if (showGameOver) {
+            SwingUtilities.invokeLater(this::showGameOver);
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+
+            String playerName;
+
+            do {
+                playerName = JOptionPane.showInputDialog(pacmanFrame, "Enter your name:", "Game Over", JOptionPane.PLAIN_MESSAGE);
+            } while (playerName == null || playerName.trim().isEmpty());
+            gameService.writeScoreToLeaderBoard(playerName.trim(), score);
         }
-
-        String playerName;
-
-        do {
-            playerName = JOptionPane.showInputDialog(pacmanFrame, "Enter your name:", "Game Over", JOptionPane.PLAIN_MESSAGE);
-        } while (playerName == null || playerName.trim().isEmpty());
-
-        gameService.writeScoreToLeaderBoard(playerName.trim(), score);
+        thread.interrupt();
+        pacmanPanel.getEnemies().forEach(Ghost::stopThread);
         pacmanFrame.dispose();
         SwingUtilities.invokeLater(RunGame::new);
     }
@@ -235,6 +244,5 @@ public class RunPacman implements Runnable {
         gameOverLabel.setVisible(false);
         return gameOverLabel;
     }
-
 
 }
