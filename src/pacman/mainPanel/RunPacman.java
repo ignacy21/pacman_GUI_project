@@ -26,12 +26,13 @@ public class RunPacman implements Runnable {
     private double pacmanSpeed;
     private double ghostSpeed;
     private final GameService gameService = new GameService();
-
     private final int[] ghostRespawnPoint;
     private final int[] pacmanRespawnPoint;
-    public RunPacman(String board, int lives) {
+    private int score;
+    public RunPacman(String board, int lives, int score) {
         this.lives = lives;
         this.board = board;
+        this.score = score;
 
         GameData gameData = gameService.runGameBasedOnBoard(board);
         boardFromFile = gameData.getBoard();
@@ -76,6 +77,7 @@ public class RunPacman implements Runnable {
         pacmanFrame.add(layeredPane, BorderLayout.CENTER);
         pacmanFrame.revalidate();
         pacmanFrame.repaint();
+        pacmanPanel.setSCORE(score);
 
         run();
     }
@@ -92,20 +94,21 @@ public class RunPacman implements Runnable {
                 }
             }
             if (lives > 1) {
-                continueGameWithMinusOneHeart(lives);
+                score = pacmanPanel.getSCORE();
+                continueGameWithMinusOneHeart(lives, score);
             } else {
                 endGame();
             }
         }).start();
     }
 
-    private void continueGameWithMinusOneHeart(int lives) {
+    private void continueGameWithMinusOneHeart(int lives, int score) {
         pacmanPanel.getEnemies().forEach(Ghost::stopThread);
         pacmanFrame.dispose();
         int finalLives = --lives;
         List<List<Tile>> updatedBoard = pacmanPanel.getBoard();
         String mapPath = gameService.rewriteBoard(updatedBoard, board);
-        SwingUtilities.invokeLater(() -> new RunPacman(mapPath, finalLives));
+        SwingUtilities.invokeLater(() -> new RunPacman(mapPath, finalLives, score));
     }
 
     private void endGame() {
