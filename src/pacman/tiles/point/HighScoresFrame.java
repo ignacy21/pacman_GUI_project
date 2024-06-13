@@ -90,7 +90,12 @@ public class HighScoresFrame extends JFrame {
 
     private DefaultTableModel loadAndSortScores() {
         String[] columnNames = {"Score", "Player"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
         List<String[]> scores = new ArrayList<>();
         File file = new File("src/pacman/wyniki.txt");

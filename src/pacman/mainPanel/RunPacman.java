@@ -97,7 +97,7 @@ public class RunPacman implements Runnable {
                 score = pacmanPanel.getSCORE();
                 continueGameWithMinusOneHeart(lives, score);
             } else {
-                endGame();
+                endGame(score);
             }
         }).start();
     }
@@ -111,7 +111,7 @@ public class RunPacman implements Runnable {
         SwingUtilities.invokeLater(() -> new RunPacman(mapPath, finalLives, score));
     }
 
-    private void endGame() {
+    private void endGame(int score) {
         SwingUtilities.invokeLater(this::showGameOver);
 
         try {
@@ -119,6 +119,14 @@ public class RunPacman implements Runnable {
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
+
+        String playerName;
+
+        do {
+            playerName = JOptionPane.showInputDialog(pacmanFrame, "Enter your name:", "Game Over", JOptionPane.PLAIN_MESSAGE);
+        } while (playerName == null || playerName.trim().isEmpty());
+
+        gameService.writeScoreToLeaderBoard(playerName.trim(), score);
         pacmanFrame.dispose();
         SwingUtilities.invokeLater(RunGame::new);
     }

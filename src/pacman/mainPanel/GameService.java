@@ -6,6 +6,9 @@ import pacman.tiles.BoardService;
 import pacman.tiles.Tile;
 
 import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
@@ -89,5 +92,19 @@ public class GameService {
             throw new RuntimeException(e);
         }
         return boardFromFile;
+    }
+
+    public void writeScoreToLeaderBoard(String playersName, int score) {
+        File file = new File( "src/pacman/wyniki.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+            writer.write(String.valueOf(score));
+            writer.write(";");
+            writer.write(playersName);
+            writer.newLine();
+        } catch (IOException e) {
+            System.err.println("An error occurred while writing the score to the leaderboard.");
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }
