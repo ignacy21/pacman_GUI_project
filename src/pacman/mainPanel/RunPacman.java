@@ -8,7 +8,10 @@ import pacman.tiles.Tile;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class RunPacman implements Runnable {
 
@@ -80,12 +83,23 @@ public class RunPacman implements Runnable {
         pacmanFrame.repaint();
         pacmanPanel.setSCORE(score);
 
+
         run();
+    }
+
+
+    private void waitForStart() {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
     }
 
     @Override
     public void run() {
         new Thread(() -> {
+            waitForStart();
             while (isGameContinue) {
                 isGameContinue = gamePanel.startGame();
                 try {
