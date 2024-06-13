@@ -201,7 +201,7 @@ public class Ghost implements Entity, Runnable {
                 }
             } catch (InterruptedException e) {
                 if (ghostMode == RUN) {
-                    System.err.println("Interrupted and changing to RUN");
+//                    System.err.println("Interrupted and changing to RUN");
                     continue;
                 }
                 if (!running) {

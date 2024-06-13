@@ -22,18 +22,18 @@ public class RunPacman implements Runnable {
     private final JLabel gameOverLabel;
     private boolean isGameContinue = true;
     private final int lives;
-    private final String board;
+    private String board;
     private double pacmanSpeed;
     private double ghostSpeed;
     private final GameService gameService = new GameService();
     private final int[] ghostRespawnPoint;
     private final int[] pacmanRespawnPoint;
-    private int score;
-    public RunPacman(String board, int lives, int score) {
+
+    public RunPacman(String board, int lives, int score, int level) {
         this.lives = lives;
         this.board = board;
-        this.score = score;
 
+        System.out.println("board: " + board);
         GameData gameData = gameService.runGameBasedOnBoard(board);
         boardFromFile = gameData.getBoard();
         pacmanSpeed = gameData.getPacmanSpeed();
@@ -63,7 +63,8 @@ public class RunPacman implements Runnable {
                 rowThatSwitchSide,
                 pacmanPanelWidth,
                 pacmanPanelHeight,
-                displayHeight
+                displayHeight,
+                level
         );
         layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(pacmanFrame.getSize());
@@ -93,11 +94,17 @@ public class RunPacman implements Runnable {
                     throw new RuntimeException(e);
                 }
             }
-            if (lives > 1) {
-                score = pacmanPanel.getSCORE();
-                continueGameWithMinusOneHeart(lives, score);
+            if (lives >= 1) {
+                if (gamePanel.isNextLevel()) {
+                    playNextLevel(lives, pacmanPanel.getSCORE());
+                } else {
+                    if (lives != 1)
+                        continueGameWithMinusOneHeart(lives, pacmanPanel.getSCORE());
+                    else
+                        endGame(pacmanPanel.getSCORE());
+                }
             } else {
-                endGame(score);
+                endGame(pacmanPanel.getSCORE());
             }
         }).start();
     }
@@ -108,7 +115,14 @@ public class RunPacman implements Runnable {
         int finalLives = --lives;
         List<List<Tile>> updatedBoard = pacmanPanel.getBoard();
         String mapPath = gameService.rewriteBoard(updatedBoard, board);
-        SwingUtilities.invokeLater(() -> new RunPacman(mapPath, finalLives, score));
+        SwingUtilities.invokeLater(() -> new RunPacman(mapPath, finalLives, score, gamePanel.getLevelNumber()));
+    }
+
+    private void playNextLevel(int lives, int score) {
+        pacmanPanel.getEnemies().forEach(Ghost::stopThread);
+        pacmanFrame.dispose();
+        String substring = board.substring(board.indexOf("b"));
+        SwingUtilities.invokeLater(() -> new RunPacman(substring, lives, score, gamePanel.getLevelNumber()));
     }
 
     private void endGame(int score) {
@@ -144,21 +158,23 @@ public class RunPacman implements Runnable {
             int rowThatSwitchSides,
             int pacmanPanelWidth,
             int pacmanPanelHeight,
-            int displayHeight
+            int displayHeight,
+            int level
     ) {
         pacmanFrame = pacmanFrameCreation(screenWidth, screenHeight);
         pacman = pacmanCreation(TILE_SIZE, rowThatSwitchSides);
         pacmanPanel = pacmanPanelCreation(pacmanPanelWidth, pacmanPanelHeight, TILE_SIZE, rowThatSwitchSides);
-        gamePanel = gamePanelCreation(displayHeight, TILE_SIZE);
+        gamePanel = gamePanelCreation(displayHeight, TILE_SIZE, level);
     }
 
-    private GamePanel gamePanelCreation(int displayHeight, int TILE_SIZE) {
+    private GamePanel gamePanelCreation(int displayHeight, int TILE_SIZE, int level) {
         final GamePanel gamePanel;
         gamePanel = new GamePanel(
                 pacmanPanel,
                 displayHeight,
                 TILE_SIZE * 2,
-                lives
+                lives,
+                level
         );
         return gamePanel;
     }

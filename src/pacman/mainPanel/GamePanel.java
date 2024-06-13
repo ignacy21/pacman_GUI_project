@@ -15,9 +15,12 @@ public class GamePanel extends JPanel {
     private final PacmanAndGhostCollision pacmanAndGhostCollision;
     private final JLabel scoreLabel;
     private int lives;
+    private boolean nextLevel;
+    private int levelNumber;
 
-    public GamePanel(PacmanPanel pacmanPanel, int displayHeight, int correctPositionOfPanelToMatchScreen, int lives) {
+    public GamePanel(PacmanPanel pacmanPanel, int displayHeight, int correctPositionOfPanelToMatchScreen, int lives, int levelNumber) {
         this.lives = lives;
+        this.levelNumber = levelNumber;
         this.pacmanPanel = pacmanPanel;
         pacmanAndGhostCollision = new PacmanAndGhostCollision(pacmanPanel.getPacman(), pacmanPanel.getEnemies());
 
@@ -35,8 +38,17 @@ public class GamePanel extends JPanel {
     }
 
     public boolean startGame() {
+        if (pacmanPanel.getSCORE() == 33600 * levelNumber) {
+            scoreLabel.setText(String.valueOf(pacmanPanel.getSCORE()));
+            System.out.println("NEXT LEVEL");
+            nextLevel = true;
+            levelNumber++;
+            return false;
+        }
+        nextLevel = false;
         pacmanPanel.updatePacmanAndGhosts();
         if (pacmanAndGhostCollision.isGameOver()) {
+            scoreLabel.setText(String.valueOf(pacmanPanel.getSCORE()));
             return false;
         }
         scoreLabel.setText(String.valueOf(pacmanPanel.getSCORE()));
@@ -115,4 +127,11 @@ public class GamePanel extends JPanel {
         return scoreDisplayPanel;
     }
 
+    public int getLevelNumber() {
+        return levelNumber;
+    }
+
+    public boolean isNextLevel() {
+        return nextLevel;
+    }
 }
