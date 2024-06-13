@@ -96,7 +96,11 @@ public class BoardService {
     }
 
     public String writeCurrentBoard(List<List<Tile>> board, String boardName) {
-        currentMap = "current_%s.txt".formatted(boardName);
+        if (boardName.contains("current")) {
+            currentMap = boardName;
+        } else {
+            currentMap = "current_%s".formatted(boardName);
+        }
         createFileIfItDoesntExist("src/pacman/tiles/boards/" + currentMap);
         List<String> boardAsStrings = boardToStringList("src/pacman/tiles/boards/" + boardName);
         for (int rowNum = 0; rowNum < boardAsStrings.size(); rowNum++) {
