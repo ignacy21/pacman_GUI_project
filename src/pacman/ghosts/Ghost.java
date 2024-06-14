@@ -184,7 +184,7 @@ public class Ghost implements Entity, Runnable {
 
     @Override
     public void run() {
-        while (running) {
+        while (running && !Thread.currentThread().isInterrupted()) {
             try {
                 if (ghostMode == RUN) {
                     Thread.sleep(7000);

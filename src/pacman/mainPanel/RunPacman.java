@@ -7,7 +7,6 @@ import pacman.playerControl.Pacman;
 import pacman.tiles.Tile;
 
 import javax.swing.*;
-import javax.swing.plaf.TableHeaderUI;
 import java.awt.*;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class RunPacman implements Runnable {
     private final JLayeredPane layeredPane;
     private final JLabel gameOverLabel;
     private boolean isGameContinue = true;
-    private final int lives;
+    private int lives;
     private String board;
     private double pacmanSpeed;
     private double ghostSpeed;
@@ -93,7 +92,6 @@ public class RunPacman implements Runnable {
     public void run() {
         thread = new Thread(() -> {
             waitForStart();
-//            gamePanel.startSuperpowerThread();
             while (isGameContinue) {
                 isGameContinue = gamePanel.startGame();
                 try {
@@ -103,6 +101,7 @@ public class RunPacman implements Runnable {
                 }
                 if (gamePanel.isLeaveGame()) {
                     isGameContinue = false;
+                    lives = -1;
                     endGame(pacmanPanel.getSCORE(), false);
                 }
             }
@@ -112,19 +111,20 @@ public class RunPacman implements Runnable {
                 } else {
                     if (lives != 1)
                         continueGameWithMinusOneHeart(lives, pacmanPanel.getSCORE());
-                    else
+                    else {
+                        isGameContinue = false;
                         endGame(pacmanPanel.getSCORE(), true);
+                    }
                 }
             } else {
-                endGame(pacmanPanel.getSCORE(), true);
+                if (lives != -1)
+                    endGame(pacmanPanel.getSCORE(), true);
             }
         });
         thread.start();
-//        SwingUtilities.invokeLater(thread);
     }
 
     private void continueGameWithMinusOneHeart(int lives, int score) {
-//        gamePanel.stopSuperpowerThread();
         pacmanPanel.getEnemies().forEach(Ghost::stopThread);
         pacmanFrame.dispose();
         int finalLives = --lives;
@@ -134,7 +134,6 @@ public class RunPacman implements Runnable {
     }
 
     private void playNextLevel(int lives, int score) {
-//        gamePanel.stopSuperpowerThread();
         pacmanPanel.getEnemies().forEach(Ghost::stopThread);
         pacmanFrame.dispose();
         String substring = board.substring(board.indexOf("b"));
@@ -159,7 +158,7 @@ public class RunPacman implements Runnable {
             gameService.writeScoreToLeaderBoard(playerName.trim(), score);
         }
 //        gamePanel.stopSuperpowerThread();
-        thread.interrupt();
+//        thread.interrupt();
         pacmanPanel.getEnemies().forEach(Ghost::stopThread);
         pacmanFrame.dispose();
         SwingUtilities.invokeLater(RunGame::new);

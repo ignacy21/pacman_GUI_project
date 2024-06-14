@@ -154,7 +154,7 @@ public class GamePanel extends JPanel {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(Color.BLACK);
 
-        JButton restartButton = new JButton("Restart");
+        JButton restartButton = new JButton("MENU");
         restartButton.setFont(new Font("Pac-Font", Font.BOLD, displayHeight / 4));
         restartButton.setForeground(Color.WHITE);
         restartButton.setBackground(Color.BLACK);
