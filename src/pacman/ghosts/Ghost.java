@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static pacman.ghosts.GhostMode.*;
+import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
 
 public class Ghost implements Entity, Runnable {
 
@@ -34,7 +35,7 @@ public class Ghost implements Entity, Runnable {
     private final GhostService ghostService;
     private volatile GhostMode ghostMode;
     private final String ghostName;
-    private int ghostRunModeTime = 7000;
+    private int ghostRunModeTime = 10000;
     private int ghostChaseModeTime = 6000;
     private int ghostScatterModeTime = 6000;
     private volatile boolean running = true;
@@ -152,12 +153,22 @@ public class Ghost implements Entity, Runnable {
                 } else if (ghostMode == SCATTER) {
                     Thread.sleep(ghostScatterModeTime);
                     ghostMode = CHASE;
+                } else if (ghostMode == RESPAWN) {
+                    int gap = TILE_SIZE + 3;
+                    boolean b1 = Math.abs(xPosition - respawnPoint[0]) <= gap;
+                    boolean b2 = Math.abs(yPosition - respawnPoint[1]) <= gap;
+                    if (b1 && b2) {
+                        ghostMode = CHASE;
+                    }
                 }
             } catch (InterruptedException e) {
+                if (ghostMode == RESPAWN) {
+                    continue;
+                }
                 if (ghostMode == RUN) {
                     continue;
                 }
-                if (!running) {
+                if (!running && ghostMode == RUN) {
                     break;
                 }
                 throw new RuntimeException(e);
@@ -167,6 +178,10 @@ public class Ghost implements Entity, Runnable {
 
     public void changeToRunMode() {
         ghostMode = RUN;
+        thread.interrupt();
+    }
+    public void changeToRespawnMode() {
+        ghostMode = RESPAWN;
         thread.interrupt();
     }
     public void stopThread() {
@@ -226,10 +241,6 @@ public class Ghost implements Entity, Runnable {
 
     public void setGhostRunModeTime(int ghostRunModeTime) {
         this.ghostRunModeTime = ghostRunModeTime;
-    }
-
-    public void setGhostChaseModeTime(int ghostChaseModeTime) {
-        this.ghostChaseModeTime = ghostChaseModeTime;
     }
 
     public int getGhostRunModeTime() {

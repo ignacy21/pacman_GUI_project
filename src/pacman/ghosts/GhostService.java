@@ -29,7 +29,7 @@ public class GhostService {
         int ghostLeft = ghost.getCoordinateX();
         int ghostBottom = ghost.getCoordinateY() + TILE_SIZE;
 
-        int gap = (int)ghost.getSpeed() - 1;
+        int gap = (int) ghost.getSpeed() - 1;
         if (ghostLeft % TILE_SIZE <= gap && ghostBottom % TILE_SIZE <= gap) {
             int gapX = ghostLeft % TILE_SIZE;
             int gapY = ghostBottom % TILE_SIZE;
@@ -38,43 +38,49 @@ public class GhostService {
             int ghostCurrentTileY = (ghostBottom - halfOfTile) / TILE_SIZE;
 
             Tile[] tilesAroundGhost = tilesAroundGivenTile(ghostCurrentTileX, ghostCurrentTileY);
-            Map<Integer, Tile> map = new HashMap<>();
+            Map<Integer, Tile> optionOfTurn = new HashMap<>();
 
-            List<Integer> tileOptionsToTurnNum = new ArrayList<>();
             for (int i = 0; i < tilesAroundGhost.length; i++) {
                 if (!tilesAroundGhost[i].isCollision()) {
-                    tileOptionsToTurnNum.add(i);
-                    map.put(i, tilesAroundGhost[i]);
+                    optionOfTurn.put(i, tilesAroundGhost[i]);
                 } else {
                     tilesAroundGhost[i] = null;
                 }
             }
 
             switch (direction) {
-                case UP -> map.remove(1);
-                case DOWN -> map.remove(0);
-                case LEFT -> map.remove(2);
-                case RIGHT -> map.remove(3);
+                case UP -> optionOfTurn.remove(1);
+                case DOWN -> optionOfTurn.remove(0);
+                case LEFT -> optionOfTurn.remove(2);
+                case RIGHT -> optionOfTurn.remove(3);
+            }
+            if (ghost.getGhostMode() == RESPAWN) {
+                Tile[] tilesAroundGhost1 = tilesAroundGivenTile(ghostCurrentTileX, ghostCurrentTileY);
+                Map<Integer, Tile> anyTurn = new HashMap<>();
+                for (int i = 0; i < tilesAroundGhost1.length; i++) {
+                    anyTurn.put(i, tilesAroundGhost1[i]);
+                }
+                optionOfTurn = anyTurn;
             }
 
             int directionByNumber = 0;
-            if (map.size() > 1) {
+            if (optionOfTurn.size() > 1) {
                 GhostMode ghostMode = ghost.getGhostMode();
                 if (ghostMode == CHASE) {
                     int pacmanX = ghost.getPacmanCoordinate()[0];
                     int pacmanY = ghost.getPacmanCoordinate()[1];
 
-                    directionByNumber = getDirectionBasedOnDestinationCoordinate(map, pacmanX, pacmanY, directionByNumber);
+                    directionByNumber = getDirectionBasedOnDestinationCoordinate(optionOfTurn, pacmanX, pacmanY, directionByNumber);
                 } else if (ghostMode == SCATTER) {
                     int cornerX = ghost.getCornerCoordinate()[0];
                     int cornerY = ghost.getCornerCoordinate()[1];
 
-                    directionByNumber = getDirectionBasedOnDestinationCoordinate(map, cornerX, cornerY, directionByNumber);
+                    directionByNumber = getDirectionBasedOnDestinationCoordinate(optionOfTurn, cornerX, cornerY, directionByNumber);
                 } else if (ghostMode == RUN) {
                     int pacmanX = ghost.getPacmanCoordinate()[0];
                     int pacmanY = ghost.getPacmanCoordinate()[1];
                     double distanceBetweenPacmanAndTile = Integer.MIN_VALUE;
-                    for (Map.Entry<Integer, Tile> integerTileEntry : map.entrySet()) {
+                    for (Map.Entry<Integer, Tile> integerTileEntry : optionOfTurn.entrySet()) {
                         Tile tile = integerTileEntry.getValue();
                         int tileX = tile.getColumnNumber() * TILE_SIZE;
                         int tileY = tile.getRowNumber() * TILE_SIZE + TILE_SIZE;
@@ -88,12 +94,12 @@ public class GhostService {
                     int respawnPointX = ghost.getRespawnPoint()[0];
                     int respawnPointY = ghost.getRespawnPoint()[1];
                     directionByNumber = getDirectionBasedOnDestinationCoordinate(
-                            map, respawnPointX, respawnPointY, directionByNumber
+                            optionOfTurn, respawnPointX, respawnPointY, directionByNumber
                     );
                 }
             } else {
                 try {
-                    Integer next = map.keySet().iterator().next();
+                    Integer next = optionOfTurn.keySet().iterator().next();
                     directionByNumber = next;
                 } catch (NoSuchElementException e) {
                     System.err.printf("[%s] ghost has nowhere to turn %n", ghost.getGhostName());

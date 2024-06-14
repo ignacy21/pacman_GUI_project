@@ -1,10 +1,12 @@
 package pacman.tiles.collision;
 
 import pacman.ghosts.Ghost;
+import pacman.ghosts.GhostMode;
 import pacman.playerControl.Pacman;
 
 import java.util.List;
 
+import static pacman.ghosts.GhostMode.RUN;
 import static pacman.mainPanel.PacmanPanel.TILE_SIZE;
 
 public class PacmanAndGhostCollision {
@@ -25,7 +27,13 @@ public class PacmanAndGhostCollision {
             int xDiff = Math.abs(pacmanX - ghost.getCoordinateX());
             int yDiff = Math.abs(pacmanY - ghost.getCoordinateY());
             if (xDiff < TILE_SIZE - 3 && yDiff < TILE_SIZE - 3) {
-                return true;
+                if (!(ghost.getGhostMode() == RUN || ghost.getGhostMode() == GhostMode.RESPAWN)) {
+                    return true;
+                } else {
+                    if (ghost.getGhostMode() == RUN) {
+                        ghost.changeToRespawnMode();
+                    }
+                }
             }
         }
         return false;
