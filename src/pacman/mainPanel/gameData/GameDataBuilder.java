@@ -15,6 +15,7 @@ public class GameDataBuilder {
     private int rowThatSwitchSize;
     private int[] ghostRespawnPoint;
     private int[] pacmanRespawnPoint;
+    private int maximumPoints;
 
     public GameDataBuilder() {}
 
@@ -53,16 +54,21 @@ public class GameDataBuilder {
         return this;
     }
 
-    public void withGhostRespawnPoint(int[] ghostRespawnPoint) {
+    public GameDataBuilder withGhostRespawnPoint(int[] ghostRespawnPoint) {
         this.ghostRespawnPoint = ghostRespawnPoint;
+        return this;
     }
 
     public GameDataBuilder withPacmanRespawnPoint(int[] pacmanRespawnPoint) {
         this.pacmanRespawnPoint = pacmanRespawnPoint;
         return this;
     }
+    public GameDataBuilder withMaximumPoints(int maximumPoints) {
+        this.maximumPoints = maximumPoints;
+        return this;
+    }
 
     public GameData build() {
-        return new GameData(board, widthInTiles, heightInTiles, TILE_SIZE, pacmanSpeed, ghostSpeed, rowThatSwitchSize, ghostRespawnPoint, pacmanRespawnPoint);
+        return new GameData(board, widthInTiles, heightInTiles, TILE_SIZE, pacmanSpeed, ghostSpeed, rowThatSwitchSize, ghostRespawnPoint, pacmanRespawnPoint, maximumPoints);
     }
 }

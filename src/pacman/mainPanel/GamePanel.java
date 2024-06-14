@@ -21,8 +21,10 @@ public class GamePanel extends JPanel {
     private boolean playTime = true;
     private boolean leaveGame;
     JLabel timeLabel;
+    private final int maximumPoints;
 
-    public GamePanel(PacmanPanel pacmanPanel, int displayHeight, int correctPositionOfPanelToMatchScreen, int lives, int levelNumber, int time) {
+    public GamePanel(PacmanPanel pacmanPanel, int displayHeight, int correctPositionOfPanelToMatchScreen, int lives, int levelNumber, int time, int maximumPoints) {
+        this.maximumPoints = maximumPoints;
         this.leaveGame = false;
         this.time = time;
         this.lives = lives;
@@ -47,7 +49,7 @@ public class GamePanel extends JPanel {
     }
 
     public boolean startGame() {
-        if (pacmanPanel.getSCORE() == 33600 * levelNumber) {
+        if (pacmanPanel.getSCORE() == maximumPoints * levelNumber) {
             scoreLabel.setText(String.valueOf(pacmanPanel.getSCORE()));
             System.out.println("NEXT LEVEL");
             nextLevel = true;

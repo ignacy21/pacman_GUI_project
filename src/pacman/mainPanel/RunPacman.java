@@ -29,6 +29,7 @@ public class RunPacman implements Runnable {
     private final GameService gameService = new GameService();
     private final int[] ghostRespawnPoint;
     private final int[] pacmanRespawnPoint;
+    private final int maxPoints;
     private Thread thread;
 
     public RunPacman(String board, int lives, int score, int level, int time) {
@@ -48,6 +49,7 @@ public class RunPacman implements Runnable {
         int rowThatSwitchSide = gameData.getRowThatSwitchSide();
         ghostRespawnPoint = gameData.getGhostRespawnPoint();
         pacmanRespawnPoint = gameData.getPacmanRespawnPoint();
+        maxPoints = gameData.getMaximumPoints();
 
         int pacmanPanelWidth = TILE_SIZE * widthInTiles;
         int pacmanPanelHeight = TILE_SIZE * heightInTiles;
@@ -197,7 +199,8 @@ public class RunPacman implements Runnable {
                 TILE_SIZE * 2,
                 lives,
                 level,
-                time
+                time,
+                maxPoints
         );
         return gamePanel;
     }

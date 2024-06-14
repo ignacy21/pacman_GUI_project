@@ -15,6 +15,7 @@ public class GameData {
     private final int rowThatSwitchSide;
     private final int[] ghostRespawnPoint;
     private final int[] pacmanRespawnPoint;
+    private final int maximumPoints;
 
     public GameData(
             List<List<Tile>> board,
@@ -25,7 +26,8 @@ public class GameData {
             double ghostSpeed,
             int rowThatSwitchSide,
             int[] ghostRespawnPoint,
-            int[] pacmanRespawnPoint
+            int[] pacmanRespawnPoint,
+            int maximumPoints
     ) {
         this.board = board;
         this.widthInTiles = widthInTiles;
@@ -36,6 +38,7 @@ public class GameData {
         this.rowThatSwitchSide = rowThatSwitchSide;
         this.ghostRespawnPoint = ghostRespawnPoint;
         this.pacmanRespawnPoint = pacmanRespawnPoint;
+        this.maximumPoints = maximumPoints;
     }
 
     public List<List<Tile>> getBoard() {
@@ -72,5 +75,9 @@ public class GameData {
 
     public int[] getPacmanRespawnPoint() {
         return pacmanRespawnPoint;
+    }
+
+    public int getMaximumPoints() {
+        return maximumPoints;
     }
 }

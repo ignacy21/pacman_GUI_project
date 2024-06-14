@@ -28,6 +28,7 @@ public class GameService {
         int[] pacmanRespawn;
         int[] ghostRespawn;
         int rowThatSwitchSides;
+        int maximumPoints;
 
         GameDataBuilder gameDataBuilder = new GameDataBuilder()
                 .withBoard(board)
@@ -41,22 +42,27 @@ public class GameService {
                 rowThatSwitchSides = 10;
                 pacmanRespawn = new int[]{tileSize * 13, tileSize * 10};
                 ghostRespawn = new int[]{tileSize * 29, tileSize * 11};
+                maximumPoints = 45800;
             } else if (boardPath.contains("board2.txt")) {
                 rowThatSwitchSides = 14;
                 pacmanRespawn = new int[]{tileSize * 15, tileSize * 23};
                 ghostRespawn = new int[]{tileSize * 15, tileSize * 15};
+                maximumPoints = 33600;
             } else if (boardPath.contains("board3.txt")) {
                 rowThatSwitchSides = 12;
                 pacmanRespawn = new int[]{tileSize * 9, tileSize * 12};
                 ghostRespawn = new int[]{tileSize * 44, tileSize * 7};
+                maximumPoints = 44100;
             } else if (boardPath.contains("board4.txt")) {
                 rowThatSwitchSides = 15;
                 pacmanRespawn = new int[]{tileSize * 12, tileSize * 14};
                 ghostRespawn = new int[]{tileSize * 44, tileSize * 12};
+                maximumPoints = 55300;
             } else if (boardPath.contains("board5.txt")) {
                 rowThatSwitchSides = 14;
                 pacmanRespawn = new int[]{tileSize * 11, tileSize * 14};
                 ghostRespawn = new int[]{tileSize * 22, tileSize * 9};
+                maximumPoints = 42600;
             } else {
                 throw new RuntimeException("There is no such file as: " + boardPath);
             }
@@ -64,7 +70,8 @@ public class GameService {
         gameDataBuilder
                 .withRowThatSwitchSize(rowThatSwitchSides)
                 .withPacmanRespawnPoint(pacmanRespawn)
-                .withGhostRespawnPoint(ghostRespawn);
+                .withGhostRespawnPoint(ghostRespawn)
+                .withMaximumPoints(maximumPoints);
 
         return gameDataBuilder.build();
     }
