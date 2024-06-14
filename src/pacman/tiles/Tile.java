@@ -9,10 +9,13 @@ public class Tile implements Cloneable {
     private boolean collision = false;
     private int columnNumber;
     private int rowNumber;
+    private boolean isPoint;
 
-    public Tile(String name, BufferedImage image) {
+    public Tile(String name, BufferedImage image, boolean isPoint) {
         this.name = name;
         this.image = image;
+        this.isPoint = isPoint;
+
     }
 
     public BufferedImage getImage() {
@@ -56,5 +59,9 @@ public class Tile implements Cloneable {
     public String toString() {
         return "tileName: " + name;
 
+    }
+
+    public boolean isPoint() {
+        return isPoint;
     }
 }

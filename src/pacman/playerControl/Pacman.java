@@ -207,4 +207,8 @@ public class Pacman implements Player {
                 ", isColliding=" + isColliding +
                 '}';
     }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
 }

@@ -34,6 +34,9 @@ public class Ghost implements Entity, Runnable {
     private final GhostService ghostService;
     private volatile GhostMode ghostMode;
     private final String ghostName;
+    private int ghostRunModeTime = 7000;
+    private int ghostChaseModeTime = 6000;
+    private int ghostScatterModeTime = 6000;
     private volatile boolean running = true;
     private Thread thread;
 
@@ -136,6 +139,41 @@ public class Ghost implements Entity, Runnable {
         g2.drawImage(bufferedImage, xPosition, yPosition, size, size, null);
     }
 
+    @Override
+    public void run() {
+        while (running && !Thread.currentThread().isInterrupted()) {
+            try {
+                if (ghostMode == RUN) {
+                    Thread.sleep(ghostRunModeTime);
+                    ghostMode = CHASE;
+                } else if (ghostMode == CHASE) {
+                    Thread.sleep(ghostChaseModeTime);
+                    ghostMode = SCATTER;
+                } else if (ghostMode == SCATTER) {
+                    Thread.sleep(ghostScatterModeTime);
+                    ghostMode = CHASE;
+                }
+            } catch (InterruptedException e) {
+                if (ghostMode == RUN) {
+                    continue;
+                }
+                if (!running) {
+                    break;
+                }
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void changeToRunMode() {
+        ghostMode = RUN;
+        thread.interrupt();
+    }
+    public void stopThread() {
+        this.running = false;
+        thread.interrupt();
+    }
+
     public void setPacmanCoordinate(int[] pacmanCoordinate) {
         this.pacmanCoordinate = pacmanCoordinate;
     }
@@ -182,46 +220,27 @@ public class Ghost implements Entity, Runnable {
         return ghostName;
     }
 
-    @Override
-    public void run() {
-        while (running && !Thread.currentThread().isInterrupted()) {
-            try {
-                if (ghostMode == RUN) {
-                    Thread.sleep(7000);
-//                    System.err.println("RUN");
-                    ghostMode = CHASE;
-                } else if (ghostMode == CHASE) {
-                    Thread.sleep(6000);
-//                    System.err.println("SCATTER");
-                    ghostMode = SCATTER;
-                } else if (ghostMode == SCATTER) {
-                    Thread.sleep(6000);
-//                    System.err.println("CHASE");
-                    ghostMode = CHASE;
-                }
-            } catch (InterruptedException e) {
-                if (ghostMode == RUN) {
-//                    System.err.println("Interrupted and changing to RUN");
-                    continue;
-                }
-                if (!running) {
-                    break;
-                }
-                throw new RuntimeException(e);
-            }
-        }
-    }
-    public void changeToRunMode() {
-        ghostMode = RUN;
-        thread.interrupt();
-    }
-
-    public void stopThread() {
-        this.running = false;
-        thread.interrupt();
-    }
-
     public String getGhostName() {
         return ghostName;
+    }
+
+    public void setGhostRunModeTime(int ghostRunModeTime) {
+        this.ghostRunModeTime = ghostRunModeTime;
+    }
+
+    public void setGhostChaseModeTime(int ghostChaseModeTime) {
+        this.ghostChaseModeTime = ghostChaseModeTime;
+    }
+
+    public int getGhostRunModeTime() {
+        return ghostRunModeTime;
+    }
+
+    public int getGhostScatterModeTime() {
+        return ghostScatterModeTime;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 }

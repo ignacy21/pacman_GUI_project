@@ -15,35 +15,35 @@ public class BoardService {
     private String currentMap;
 
     {
-        Tile voidTile = new Tile("void", null);
+        Tile voidTile = new Tile("void", null, false);
         nameTileMap.put(0, voidTile);
-        Tile voidTile1 = new Tile("voidWhereCannotAppearSuperPower", null);
+        Tile voidTile1 = new Tile("voidWhereCannotAppearSuperPower", null, false);
         nameTileMap.put(9, voidTile1);
-        Tile blockTile = new Tile("block", findImage("tile_16x16.png"));
+        Tile blockTile = new Tile("block", findImage("tile_16x16.png"), false);
         blockTile.setCollision(true);
         nameTileMap.put(1, blockTile);
-        Tile point1Tile = new Tile("point1", findImage("point_1.png"));
+        Tile point1Tile = new Tile("point1", findImage("point_1.png"), true);
         nameTileMap.put(2, point1Tile);
-        Tile point2Tile = new Tile("point2", findImage("point2.png"));
+        Tile point2Tile = new Tile("point2", findImage("point2.png"), true);
         nameTileMap.put(3, point2Tile);
-        Tile gate = new Tile("gate", findImage("gate.png"));
+        Tile gate = new Tile("gate", findImage("gate.png"), false);
         nameTileMap.put(4, gate);
-        Tile gate2 = new Tile("gate2", findImage("gate2.png"));
+        Tile gate2 = new Tile("gate2", findImage("gate2.png"), false);
         nameTileMap.put(5, gate2);
-        Tile gate3 = new Tile("gate3", findImage("gate3.png"));
+        Tile gate3 = new Tile("gate3", findImage("gate3.png"), false);
         nameTileMap.put(6, gate3);
-        Tile gate4 = new Tile("gate4", findImage("gate4.png"));
+        Tile gate4 = new Tile("gate4", findImage("gate4.png"), false);
         nameTileMap.put(7, gate4);
-        Tile blockade = new Tile("blockade", findImage("blockade.png"));
+        Tile blockade = new Tile("blockade", findImage("blockade.png"), false);
         blockade.setCollision(true);
         nameTileMap.put(8, blockade);
-        Tile strawberry = new Tile("strawberry", findImage("strawberry.png"));
+        Tile strawberry = new Tile("strawberry", findImage("strawberry.png"), true);
         nameTileMap.put(10, strawberry);
-        Tile pear = new Tile("pear", findImage("pear.png"));
+        Tile pear = new Tile("pear", findImage("pear.png"), true);
         nameTileMap.put(11, pear);
-        Tile cherry = new Tile("cherry", findImage("cherry.png"));
+        Tile cherry = new Tile("cherry", findImage("cherry.png"), true);
         nameTileMap.put(12, cherry);
-        Tile banana = new Tile("banana", findImage("banana.png"));
+        Tile banana = new Tile("banana", findImage("banana.png"), true);
         nameTileMap.put(13, banana);
     }
 
