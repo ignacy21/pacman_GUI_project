@@ -154,7 +154,7 @@ public class RunPacman implements Runnable {
             } while (playerName == null || playerName.trim().isEmpty());
             gameService.writeScoreToLeaderBoard(playerName.trim(), score);
         }
-        thread.interrupt();
+//        thread.interrupt();
         pacmanPanel.getEnemies().forEach(Ghost::stopThread);
         pacmanFrame.dispose();
         SwingUtilities.invokeLater(RunGame::new);

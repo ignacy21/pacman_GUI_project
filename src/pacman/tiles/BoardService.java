@@ -35,6 +35,8 @@ public class BoardService {
         Tile blockade = new Tile("blockade", findImage("blockade.png"));
         blockade.setCollision(true);
         nameTileMap.put(8, blockade);
+        Tile strawberry = new Tile("strawberry", findImage("strawberry.png"));
+        nameTileMap.put(9, strawberry);
     }
 
     {
