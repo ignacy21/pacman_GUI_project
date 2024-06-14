@@ -25,7 +25,6 @@ public class Ghost implements Entity, Runnable {
     private double speed;
     private final int size;
     private int animationCounter = 0;
-    private final List<List<Tile>> board;
     private final List<BufferedImage> animationUp;
     private final List<BufferedImage> animationDown;
     private final List<BufferedImage> animationLeft;
@@ -50,7 +49,6 @@ public class Ghost implements Entity, Runnable {
         this.speed = speed;
         this.size = size;
         this.ghostName = ghostName;
-        this.board = board;
         this.pacmanCoordinate = pacmanCoordinate;
         this.cornerCoordinate = cornerCoordinate;
         ghostService = new GhostService(this, board, rowThatSwitchSides);
@@ -180,7 +178,6 @@ public class Ghost implements Entity, Runnable {
                 if (!running && ghostMode == RUN) {
                     break;
                 }
-                throw new RuntimeException(e);
             }
         }
     }

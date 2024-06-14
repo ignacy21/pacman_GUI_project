@@ -165,10 +165,6 @@ public class Pacman implements Player {
     }
 
     @Override
-    public boolean isColliding() {
-        return isColliding;
-    }
-    @Override
     public Direction getDirection() {
         return direction;
     }

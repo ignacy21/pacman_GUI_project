@@ -267,8 +267,4 @@ public class GamePanel extends JPanel {
     public boolean isLeaveGame() {
         return leaveGame;
     }
-
-    public void stopSuperpowerThread() {
-        superpowerThread.interrupt();
-    }
 }

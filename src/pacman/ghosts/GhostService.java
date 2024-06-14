@@ -191,9 +191,6 @@ public class GhostService {
             Tile tileDown = board.get(tileY + 1).get(tileX);
             Tile rightTile = row.get(tileX + 1);
             Tile leftTile = row.get(tileX - 1);
-//            System.err.println(ghost.getGhostName());
-//            if ("inky".equals(ghost.getGhostName()))
-//                System.err.printf("%s %s | tiles around: up: %s down: %s, right: %s left: %s%n", tileX, tileY, tileUp, tileDown, rightTile, leftTile);
             return new Tile[]{tileUp, tileDown, rightTile, leftTile};
         } catch (IndexOutOfBoundsException e) {
             System.err.printf("[%s] ghost is out of bounds%n", ghost.getGhostName());

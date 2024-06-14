@@ -40,8 +40,6 @@ public class RunPacman implements Runnable {
         boardFromFile = gameData.getBoard();
         pacmanSpeed = gameData.getPacmanSpeed();
         ghostSpeed = gameData.getGhostSpeed();
-//        pacmanSpeed = 0;
-//        ghostSpeed = 0;
         int widthInTiles = gameData.getWidthInTiles();
         int heightInTiles = gameData.getHeightInTiles();
         int TILE_SIZE = gameData.getTileSize();
@@ -157,8 +155,6 @@ public class RunPacman implements Runnable {
             } while (playerName == null || playerName.trim().isEmpty());
             gameService.writeScoreToLeaderBoard(playerName.trim(), score);
         }
-//        gamePanel.stopSuperpowerThread();
-//        thread.interrupt();
         pacmanPanel.getEnemies().forEach(Ghost::stopThread);
         pacmanFrame.dispose();
         SwingUtilities.invokeLater(RunGame::new);

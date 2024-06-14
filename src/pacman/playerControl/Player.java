@@ -7,6 +7,5 @@ public interface Player extends Entity, KeyListener {
     Direction getDirection();
 
     void setColliding(boolean colliding);
-    boolean isColliding();
 
 }

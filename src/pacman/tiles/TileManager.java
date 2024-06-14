@@ -16,7 +16,6 @@ public class TileManager {
                 if (!"void".equals(tile.getName())) {
                     graphics2D.drawImage(tile.getImage(), x, y, TILE_SIZE, TILE_SIZE, null);
                 }
-//                System.out.printf("TILE [%s] x[%s] y[%s]\n",tile.getName(), x, y);
             }
         }
 

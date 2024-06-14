@@ -28,9 +28,6 @@ public class PacmanPanel extends JPanel {
     private List<Ghost> enemies = new ArrayList<>();
     private double enemiesSpeed;
     private final int rowThatSwitchSides;
-    private final int[] respawnPoint;
-    private final int width;
-    private final int height;
 
     public PacmanPanel(
             int width,
@@ -52,15 +49,12 @@ public class PacmanPanel extends JPanel {
         this.enemiesSpeed = enemiesSpeed;
         this.board = board;
         this.pacman = pacman;
-        this.height = height;
-        this.width = width;
 
         TILE_SIZE = tileSeize;
 
         this.pacmanService = new PacmanService(pacman, board, rowThatSwitchSides);
 
         int[] pacmanCoordinate = {pacman.getCoordinateX(), pacman.getCoordinateY()};
-        this.respawnPoint = respawnPoint;
 
         enemies = createGhosts(board, pacmanCoordinate, respawnPoint);
         pointCounterService = new PointCounterService(this);

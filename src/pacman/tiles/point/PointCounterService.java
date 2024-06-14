@@ -2,7 +2,6 @@ package pacman.tiles.point;
 
 import pacman.ghosts.Ghost;
 import pacman.mainPanel.PacmanPanel;
-import pacman.playerControl.Pacman;
 import pacman.playerControl.Player;
 import pacman.tiles.Tile;
 
