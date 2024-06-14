@@ -69,7 +69,14 @@ public class RunGame {
     private void startGame() {
         newGameButton.setEnabled(false);
         frame.dispose();
-        SwingUtilities.invokeLater(() -> new RunPacman(selectedMap, 3, 0, 1, 0));
+        SwingUtilities.invokeLater(() -> new RunPacman(
+                selectedMap,
+                3,
+                0,
+                1,
+                0,
+                new int[]{7000, 6000, 6000}
+        ));
     }
 
     private void showHighScores() {

@@ -29,9 +29,8 @@ public class RunPacman implements Runnable {
     private final int[] ghostRespawnPoint;
     private final int[] pacmanRespawnPoint;
     private final int maxPoints;
-    private Thread thread;
 
-    public RunPacman(String board, int lives, int score, int level, int time) {
+    public RunPacman(String board, int lives, int score, int level, int time, int[] ghostTimeModes) {
         this.lives = lives;
         this.board = board;
 
@@ -40,6 +39,9 @@ public class RunPacman implements Runnable {
         boardFromFile = gameData.getBoard();
         pacmanSpeed = gameData.getPacmanSpeed();
         ghostSpeed = gameData.getGhostSpeed();
+        if (level > 1) {
+            ghostSpeed++;
+        }
         int widthInTiles = gameData.getWidthInTiles();
         int heightInTiles = gameData.getHeightInTiles();
         int TILE_SIZE = gameData.getTileSize();
@@ -66,7 +68,8 @@ public class RunPacman implements Runnable {
                 pacmanPanelHeight,
                 displayHeight,
                 level,
-                time
+                time,
+                ghostTimeModes
         );
         layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(pacmanFrame.getSize());
@@ -88,7 +91,7 @@ public class RunPacman implements Runnable {
 
     @Override
     public void run() {
-        thread = new Thread(() -> {
+        Thread thread = new Thread(() -> {
             waitForStart();
             while (isGameContinue) {
                 isGameContinue = gamePanel.startGame();
@@ -128,14 +131,16 @@ public class RunPacman implements Runnable {
         int finalLives = --lives;
         List<List<Tile>> updatedBoard = pacmanPanel.getBoard();
         String mapPath = gameService.rewriteBoard(updatedBoard, board);
-        SwingUtilities.invokeLater(() -> new RunPacman(mapPath, finalLives, score, gamePanel.getLevelNumber(), gamePanel.getTime()));
+        int[] ghostTimeModes = pacmanPanel.getEnemies().getFirst().getGhostTimeModes();
+        SwingUtilities.invokeLater(() -> new RunPacman(mapPath, finalLives, score, gamePanel.getLevelNumber(), gamePanel.getTime(), ghostTimeModes));
     }
 
     private void playNextLevel(int lives, int score) {
         pacmanPanel.getEnemies().forEach(Ghost::stopThread);
         pacmanFrame.dispose();
         String substring = board.substring(board.indexOf("b"));
-        SwingUtilities.invokeLater(() -> new RunPacman(substring, lives, score, gamePanel.getLevelNumber(), gamePanel.getTime()));
+        int[] ghostTimeModes = pacmanPanel.getEnemies().getFirst().getGhostTimeModes();
+        SwingUtilities.invokeLater(() -> new RunPacman(substring, lives, score, gamePanel.getLevelNumber(), gamePanel.getTime(), ghostTimeModes));
     }
 
     private void endGame(int score, boolean showGameOver) {
@@ -183,11 +188,12 @@ public class RunPacman implements Runnable {
             int pacmanPanelHeight,
             int displayHeight,
             int level,
-            int time
+            int time,
+            int[] ghostTimeModes
     ) {
         pacmanFrame = pacmanFrameCreation(screenWidth, screenHeight);
         pacman = pacmanCreation(TILE_SIZE, rowThatSwitchSides);
-        pacmanPanel = pacmanPanelCreation(pacmanPanelWidth, pacmanPanelHeight, TILE_SIZE, rowThatSwitchSides);
+        pacmanPanel = pacmanPanelCreation(pacmanPanelWidth, pacmanPanelHeight, TILE_SIZE, rowThatSwitchSides, ghostTimeModes);
         gamePanel = gamePanelCreation(displayHeight, TILE_SIZE, level, time);
     }
 
@@ -205,7 +211,7 @@ public class RunPacman implements Runnable {
         return gamePanel;
     }
 
-    private PacmanPanel pacmanPanelCreation(int pacmanPanelWidth, int pacmanPanelHeight, int TILE_SIZE, int rowThatSwitchSides) {
+    private PacmanPanel pacmanPanelCreation(int pacmanPanelWidth, int pacmanPanelHeight, int TILE_SIZE, int rowThatSwitchSides, int[] ghostTimeModes) {
         final PacmanPanel pacmanPanel;
         pacmanPanel = new PacmanPanel(
                 pacmanPanelWidth,
@@ -215,7 +221,9 @@ public class RunPacman implements Runnable {
                 boardFromFile,
                 ghostSpeed,
                 rowThatSwitchSides,
-                ghostRespawnPoint
+                ghostRespawnPoint,
+                ghostTimeModes
+
         );
         return pacmanPanel;
     }

@@ -50,7 +50,7 @@ public class PointCounterService {
             } else if ("banana".equals(tile.getName())) {
                 pacmanPanel.getEnemies().forEach(g -> {
                     if (g.getGhostScatterModeTime() < 10000)
-                        g.setGhostRunModeTime(g.getGhostScatterModeTime() + 1000);
+                        g.setGhostScatterModeTime(g.getGhostScatterModeTime() + 1000);
                 });
             } else if ("pear".equals(tile.getName())) {
                 pacmanPanel.getEnemies().forEach(g -> {

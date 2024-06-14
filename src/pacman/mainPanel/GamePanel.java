@@ -79,13 +79,13 @@ public class GamePanel extends JPanel {
         superpowerThread = new Thread(() -> {
             while (true) {
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
                 Random random = new Random();
                 int i = random.nextInt(1, 100);
-                if (i % 4 == 0) {
+                if (i % 2 == 0) {
                     List<List<Tile>> board = pacmanPanel.getBoard();
                     Tile tile = null;
                     while (tile == null) {

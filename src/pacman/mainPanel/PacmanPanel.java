@@ -37,7 +37,8 @@ public class PacmanPanel extends JPanel {
             List<List<Tile>> board,
             double enemiesSpeed,
             int rowThatSwitchSides,
-            int[] respawnPoint
+            int[] respawnPoint,
+            int[] ghostTimeModes
     ) {
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
@@ -56,7 +57,7 @@ public class PacmanPanel extends JPanel {
 
         int[] pacmanCoordinate = {pacman.getCoordinateX(), pacman.getCoordinateY()};
 
-        enemies = createGhosts(board, pacmanCoordinate, respawnPoint);
+        enemies = createGhosts(board, pacmanCoordinate, respawnPoint, ghostTimeModes);
         pointCounterService = new PointCounterService(this);
 
         revalidate();
@@ -66,36 +67,41 @@ public class PacmanPanel extends JPanel {
     private List<Ghost> createGhosts(
             List<List<Tile>> board,
             int[] pacmanCoordinate,
-            int[] respawnPoint
+            int[] respawnPoint,
+            int[] ghostTimeModes
     ) {
         Ghost blinky = crateGhost(
                 "blinky",
                 respawnPoint,
                 pacmanCoordinate,
-                new int[]{TILE_SIZE * (board.getFirst().size() - 3), 0}
+                new int[]{TILE_SIZE * (board.getFirst().size() - 3), 0},
+                ghostTimeModes
         );
         Ghost pinky = crateGhost(
                 "pinky",
                 respawnPoint,
                 pacmanCoordinate,
-                new int[]{TILE_SIZE * 3, TILE_SIZE}
+                new int[]{TILE_SIZE * 3, TILE_SIZE},
+                ghostTimeModes
         );
         Ghost clyde = crateGhost(
                 "clyde",
                 respawnPoint,
                 pacmanCoordinate,
-                new int[]{TILE_SIZE * 3, TILE_SIZE * (board.size() - 2)}
+                new int[]{TILE_SIZE * 3, TILE_SIZE * (board.size() - 2)},
+                ghostTimeModes
         );
         Ghost inky = crateGhost(
                 "inky",
                 respawnPoint,
                 pacmanCoordinate,
-                new int[]{TILE_SIZE * (board.getFirst().size() - 4), TILE_SIZE * (board.size() - 2)}
+                new int[]{TILE_SIZE * (board.getFirst().size() - 4), TILE_SIZE * (board.size() - 2)},
+                ghostTimeModes
         );
         return List.of(clyde, blinky, inky, pinky);
     }
 
-    private Ghost crateGhost(String name, int[] respawnPoint, int[] pacmanCoordinate, int[] corner) {
+    private Ghost crateGhost(String name, int[] respawnPoint, int[] pacmanCoordinate, int[] corner, int[] ghostTimeModes) {
         Ghost ghost = new Ghost(
                 respawnPoint[0],
                 respawnPoint[1],
@@ -107,7 +113,8 @@ public class PacmanPanel extends JPanel {
                 corner,
                 respawnPoint,
                 name,
-                rowThatSwitchSides
+                rowThatSwitchSides,
+                ghostTimeModes
         );
         ghost.setGhostMode(SCATTER);
         return ghost;

@@ -42,7 +42,7 @@ public class GameService {
                 rowThatSwitchSides = 10;
                 pacmanRespawn = new int[]{tileSize * 13, tileSize * 10};
                 ghostRespawn = new int[]{tileSize * 29, tileSize * 11};
-                maximumPoints = 45800;
+                maximumPoints = 43800;
             } else if (boardPath.contains("board2.txt")) {
                 rowThatSwitchSides = 14;
                 pacmanRespawn = new int[]{tileSize * 15, tileSize * 23};

@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static pacman.ghosts.GhostMode.*;
@@ -35,13 +36,30 @@ public class Ghost implements Entity, Runnable {
     private final GhostService ghostService;
     private volatile GhostMode ghostMode;
     private final String ghostName;
-    private int ghostRunModeTime = 10000;
-    private int ghostChaseModeTime = 6000;
-    private int ghostScatterModeTime = 6000;
+    private int ghostRunModeTime;
+    private int ghostChaseModeTime;
+    private int ghostScatterModeTime;
     private volatile boolean running = true;
     private Thread thread;
 
-    public Ghost(int xPosition, int yPosition, Direction direction, double speed, int size, List<List<Tile>> board, int[] pacmanCoordinate, int[] cornerCoordinate, int[] respawnPoint, String ghostName, int rowThatSwitchSides) {
+    public Ghost(
+            int xPosition,
+            int yPosition,
+            Direction direction,
+            double speed,
+            int size,
+            List<List<Tile>> board,
+            int[] pacmanCoordinate,
+            int[] cornerCoordinate,
+            int[] respawnPoint,
+            String ghostName,
+            int rowThatSwitchSides,
+            int[] ghostTimeModes
+    ) {
+        System.out.println(Arrays.toString(ghostTimeModes));
+        ghostRunModeTime = ghostTimeModes[0];
+        ghostChaseModeTime = ghostTimeModes[1];
+        ghostScatterModeTime = ghostTimeModes[2];
         this.direction = direction;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
@@ -183,8 +201,10 @@ public class Ghost implements Entity, Runnable {
     }
 
     public void changeToRunMode() {
-        ghostMode = RUN;
-        thread.interrupt();
+        if (ghostMode != RESPAWN) {
+            ghostMode = RUN;
+            thread.interrupt();
+        }
     }
     public void changeToRespawnMode() {
         ghostMode = RESPAWN;
@@ -257,7 +277,16 @@ public class Ghost implements Entity, Runnable {
         return ghostScatterModeTime;
     }
 
+    public void setGhostScatterModeTime(int ghostScatterModeTime) {
+        this.ghostScatterModeTime = ghostScatterModeTime;
+    }
+
+    public int[] getGhostTimeModes() {
+        return new int[]{ghostRunModeTime, ghostChaseModeTime, ghostScatterModeTime};
+    }
+
     public void setSpeed(double speed) {
         this.speed = speed;
     }
+
 }
