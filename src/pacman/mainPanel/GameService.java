@@ -62,7 +62,7 @@ public class GameService {
                 rowThatSwitchSides = 14;
                 pacmanRespawn = new int[]{tileSize * 11, tileSize * 14};
                 ghostRespawn = new int[]{tileSize * 22, tileSize * 9};
-                maximumPoints = 42600;
+                maximumPoints = 42200;
             } else {
                 throw new RuntimeException("There is no such file as: " + boardPath);
             }

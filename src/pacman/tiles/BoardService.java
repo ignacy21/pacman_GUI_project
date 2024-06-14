@@ -17,6 +17,8 @@ public class BoardService {
     {
         Tile voidTile = new Tile("void", null);
         nameTileMap.put(0, voidTile);
+        Tile voidTile1 = new Tile("voidWhereCannotAppearSuperPower", null);
+        nameTileMap.put(9, voidTile1);
         Tile blockTile = new Tile("block", findImage("tile_16x16.png"));
         blockTile.setCollision(true);
         nameTileMap.put(1, blockTile);
@@ -36,7 +38,13 @@ public class BoardService {
         blockade.setCollision(true);
         nameTileMap.put(8, blockade);
         Tile strawberry = new Tile("strawberry", findImage("strawberry.png"));
-        nameTileMap.put(9, strawberry);
+        nameTileMap.put(10, strawberry);
+        Tile pear = new Tile("pear", findImage("pear.png"));
+        nameTileMap.put(11, pear);
+        Tile cherry = new Tile("cherry", findImage("cherry.png"));
+        nameTileMap.put(12, cherry);
+        Tile banana = new Tile("banana", findImage("banana.png"));
+        nameTileMap.put(13, banana);
     }
 
     {

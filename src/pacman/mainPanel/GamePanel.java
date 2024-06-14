@@ -50,7 +50,6 @@ public class GamePanel extends JPanel {
         startTime();
         SwingUtilities.invokeLater(pacmanPanel::requestFocusInWindow);
         startSuperpowerThread();
-//        SwingUtilities.invokeLater(superpowerThread);
 
         revalidate();
         repaint();
@@ -90,18 +89,26 @@ public class GamePanel extends JPanel {
                     List<List<Tile>> board = pacmanPanel.getBoard();
                     Tile tile = null;
                     while (tile == null) {
-                        int randomX = random.nextInt(2, board.size() - 2);
-                        int randomY = random.nextInt(1, board.getFirst().size() - 1);
-                        tile = board.get(randomX).get(randomY);
+                        int randomY = random.nextInt(1, board.size() - 1);
+                        int randomX = random.nextInt(2, board.getFirst().size() - 2);
+                        tile = board.get(randomY).get(randomX);
                         if (!"void".equals(tile.getName())) {
                             tile = null;
                         } else {
-                            Tile tileToReplace = pacmanPanel.getBoard().get(randomX).get(randomY);
+                            Tile tileToReplace = pacmanPanel.getBoard().get(randomY).get(randomX);
                             BoardService boardService = new BoardService();
-                            Tile strawberry = boardService.getNameTileMap().get(9);
-                            strawberry.setColumnNumber(tileToReplace.getColumnNumber());
-                            strawberry.setRowNumber(tileToReplace.getRowNumber());
-                            pacmanPanel.getBoard().get(randomX).set(randomY, strawberry);
+                            int whichBoost = random.nextInt(1, 5);
+                            Tile boost;
+                            switch (whichBoost) {
+                                case 1 -> boost = boardService.getNameTileMap().get(10);
+                                case 2 -> boost = boardService.getNameTileMap().get(11);
+                                case 3 -> boost = boardService.getNameTileMap().get(12);
+                                case 4 -> boost = boardService.getNameTileMap().get(13);
+                                default -> throw new RuntimeException("No boost :(");
+                            }
+                            boost.setColumnNumber(tileToReplace.getColumnNumber());
+                            boost.setRowNumber(tileToReplace.getRowNumber());
+                            pacmanPanel.getBoard().get(randomY).set(randomX, boost);
                         }
                     }
 
