@@ -32,6 +32,7 @@ public class Ghost implements Entity, Runnable {
     private final List<BufferedImage> animationRight;
     private final List<BufferedImage> blueAnimationRun;
     private final List<BufferedImage> whiteAnimationRun;
+    private final List<BufferedImage> goBackAnimation;
     private final GhostService ghostService;
     private volatile GhostMode ghostMode;
     private final String ghostName;
@@ -81,6 +82,12 @@ public class Ghost implements Entity, Runnable {
                     ImageIO.read(new File(String.format("%s/run/white1.png", pathName))),
                     ImageIO.read(new File(String.format("%s/run/white2.png", pathName)))
             );
+            goBackAnimation = List.of(
+                    ImageIO.read(new File(String.format("%s/go_back/down.png", pathName))),
+                    ImageIO.read(new File(String.format("%s/go_back/up.png", pathName))),
+                    ImageIO.read(new File(String.format("%s/go_back/left.png", pathName))),
+                    ImageIO.read(new File(String.format("%s/go_back/right.png", pathName)))
+            );
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -121,6 +128,8 @@ public class Ghost implements Entity, Runnable {
 
         if (ghostMode == GhostMode.RUN) {
             animationList = blueAnimationRun;
+        } else if (ghostMode == RESPAWN) {
+            animationList = goBackAnimation;
         } else {
             switch (direction) {
                 case DOWN -> animationList = animationDown;
