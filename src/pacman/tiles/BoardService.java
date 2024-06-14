@@ -171,4 +171,8 @@ public class BoardService {
         }
         return stringBoard;
     }
+
+    public Map<Integer, Tile> getNameTileMap() {
+        return nameTileMap;
+    }
 }

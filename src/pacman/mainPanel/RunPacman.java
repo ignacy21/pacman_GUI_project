@@ -93,6 +93,7 @@ public class RunPacman implements Runnable {
     public void run() {
         thread = new Thread(() -> {
             waitForStart();
+//            gamePanel.startSuperpowerThread();
             while (isGameContinue) {
                 isGameContinue = gamePanel.startGame();
                 try {
@@ -119,9 +120,11 @@ public class RunPacman implements Runnable {
             }
         });
         thread.start();
+//        SwingUtilities.invokeLater(thread);
     }
 
     private void continueGameWithMinusOneHeart(int lives, int score) {
+//        gamePanel.stopSuperpowerThread();
         pacmanPanel.getEnemies().forEach(Ghost::stopThread);
         pacmanFrame.dispose();
         int finalLives = --lives;
@@ -131,6 +134,7 @@ public class RunPacman implements Runnable {
     }
 
     private void playNextLevel(int lives, int score) {
+//        gamePanel.stopSuperpowerThread();
         pacmanPanel.getEnemies().forEach(Ghost::stopThread);
         pacmanFrame.dispose();
         String substring = board.substring(board.indexOf("b"));
@@ -154,7 +158,8 @@ public class RunPacman implements Runnable {
             } while (playerName == null || playerName.trim().isEmpty());
             gameService.writeScoreToLeaderBoard(playerName.trim(), score);
         }
-//        thread.interrupt();
+        gamePanel.stopSuperpowerThread();
+        thread.interrupt();
         pacmanPanel.getEnemies().forEach(Ghost::stopThread);
         pacmanFrame.dispose();
         SwingUtilities.invokeLater(RunGame::new);

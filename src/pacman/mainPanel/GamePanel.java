@@ -1,5 +1,7 @@
 package pacman.mainPanel;
 
+import pacman.tiles.BoardService;
+import pacman.tiles.Tile;
 import pacman.tiles.collision.PacmanAndGhostCollision;
 
 import javax.imageio.ImageIO;
@@ -9,6 +11,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Random;
+
 
 public class GamePanel extends JPanel {
     private final PacmanPanel pacmanPanel;
@@ -22,6 +27,7 @@ public class GamePanel extends JPanel {
     private boolean leaveGame;
     JLabel timeLabel;
     private final int maximumPoints;
+    private Thread superpowerThread;
 
     public GamePanel(PacmanPanel pacmanPanel, int displayHeight, int correctPositionOfPanelToMatchScreen, int lives, int levelNumber, int time, int maximumPoints) {
         this.maximumPoints = maximumPoints;
@@ -43,6 +49,8 @@ public class GamePanel extends JPanel {
         this.add(displayPanel, BorderLayout.NORTH);
         startTime();
         SwingUtilities.invokeLater(pacmanPanel::requestFocusInWindow);
+        startSuperpowerThread();
+//        SwingUtilities.invokeLater(superpowerThread);
 
         revalidate();
         repaint();
@@ -66,6 +74,42 @@ public class GamePanel extends JPanel {
         scoreLabel.setText(String.valueOf(pacmanPanel.getSCORE()));
         repaint();
         return true;
+    }
+
+    public void startSuperpowerThread() {
+        superpowerThread = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                Random random = new Random();
+                int i = random.nextInt(1, 100);
+                if (i % 4 == 0) {
+                    List<List<Tile>> board = pacmanPanel.getBoard();
+                    Tile tile = null;
+                    while (tile == null) {
+                        int randomX = random.nextInt(2, board.size() - 2);
+                        int randomY = random.nextInt(1, board.getFirst().size() - 1);
+                        tile = board.get(randomX).get(randomY);
+                        if (!"void".equals(tile.getName())) {
+                            tile = null;
+                        } else {
+                            Tile tileToReplace = pacmanPanel.getBoard().get(randomX).get(randomY);
+                            BoardService boardService = new BoardService();
+                            Tile strawberry = boardService.getNameTileMap().get(9);
+                            strawberry.setColumnNumber(tileToReplace.getColumnNumber());
+                            strawberry.setRowNumber(tileToReplace.getRowNumber());
+                            pacmanPanel.getBoard().get(randomX).set(randomY, strawberry);
+                        }
+                    }
+
+                }
+
+            }
+        });
+        superpowerThread.start();
     }
 
     private JPanel displayPanelCreation(int displayHeight) {
@@ -193,12 +237,14 @@ public class GamePanel extends JPanel {
         });
         timerThread.start();
     }
+
     private String formatTime(int seconds) {
         int hours = seconds / 3600;
         int minutes = (seconds % 3600) / 60;
         int secs = seconds % 60;
         return String.format("%02d:%02d:%02d", hours, minutes, secs);
     }
+
     public int getLevelNumber() {
         return levelNumber;
     }
@@ -213,5 +259,9 @@ public class GamePanel extends JPanel {
 
     public boolean isLeaveGame() {
         return leaveGame;
+    }
+
+    public void stopSuperpowerThread() {
+        superpowerThread.interrupt();
     }
 }
