@@ -75,7 +75,8 @@ public class RunGame {
                 0,
                 1,
                 0,
-                new int[]{7000, 6000, 6000}
+                new int[]{7000, 6000, 6000},
+                3
         ));
     }
 

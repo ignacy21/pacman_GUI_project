@@ -56,7 +56,6 @@ public class Ghost implements Entity, Runnable {
             int rowThatSwitchSides,
             int[] ghostTimeModes
     ) {
-        System.out.println(Arrays.toString(ghostTimeModes));
         ghostRunModeTime = ghostTimeModes[0];
         ghostChaseModeTime = ghostTimeModes[1];
         ghostScatterModeTime = ghostTimeModes[2];
@@ -109,7 +108,6 @@ public class Ghost implements Entity, Runnable {
         }
     }
 
-
     @Override
     public int getCoordinateX() {
         return xPosition;
@@ -119,7 +117,6 @@ public class Ghost implements Entity, Runnable {
     public int getCoordinateY() {
         return yPosition;
     }
-
 
     @Override
     public double getSpeed() {
@@ -273,14 +270,6 @@ public class Ghost implements Entity, Runnable {
         return ghostRunModeTime;
     }
 
-    public int getGhostScatterModeTime() {
-        return ghostScatterModeTime;
-    }
-
-    public void setGhostScatterModeTime(int ghostScatterModeTime) {
-        this.ghostScatterModeTime = ghostScatterModeTime;
-    }
-
     public int[] getGhostTimeModes() {
         return new int[]{ghostRunModeTime, ghostChaseModeTime, ghostScatterModeTime};
     }
@@ -289,4 +278,11 @@ public class Ghost implements Entity, Runnable {
         this.speed = speed;
     }
 
+    public int getGhostChaseModeTime() {
+        return ghostChaseModeTime;
+    }
+
+    public void setGhostChaseModeTime(int ghostChaseModeTime) {
+        this.ghostChaseModeTime = ghostChaseModeTime;
+    }
 }

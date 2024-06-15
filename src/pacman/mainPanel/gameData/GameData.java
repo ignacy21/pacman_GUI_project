@@ -10,7 +10,6 @@ public class GameData {
     private final int widthInTiles;
     private final int heightInTiles;
     private final int TILE_SIZE;
-    private final double pacmanSpeed;
     private final double ghostSpeed;
     private final int rowThatSwitchSide;
     private final int[] ghostRespawnPoint;
@@ -22,7 +21,6 @@ public class GameData {
             int widthInTiles,
             int heightInTiles,
             int TILE_SIZE,
-            double pacmanSpeed,
             double ghostSpeed,
             int rowThatSwitchSide,
             int[] ghostRespawnPoint,
@@ -33,7 +31,6 @@ public class GameData {
         this.widthInTiles = widthInTiles;
         this.heightInTiles = heightInTiles;
         this.TILE_SIZE = TILE_SIZE;
-        this.pacmanSpeed = pacmanSpeed;
         this.ghostSpeed = ghostSpeed;
         this.rowThatSwitchSide = rowThatSwitchSide;
         this.ghostRespawnPoint = ghostRespawnPoint;
@@ -55,10 +52,6 @@ public class GameData {
 
     public int getTileSize() {
         return TILE_SIZE;
-    }
-
-    public double getPacmanSpeed() {
-        return pacmanSpeed;
     }
 
     public double getGhostSpeed() {

@@ -44,13 +44,13 @@ public class PointCounterService {
                 pacmanPanel.getPacman().setSpeed(pacmanPanel.getPacman().getSpeed() + 1);
             } else if ("cherry".equals(tile.getName())) {
                 pacmanPanel.getEnemies().forEach(g -> {
-                    if (g.getGhostRunModeTime() > 5000)
-                        g.setGhostRunModeTime(g.getGhostRunModeTime() - 1000);
+                    if (g.getGhostChaseModeTime() > 5000)
+                        g.setGhostChaseModeTime(g.getGhostChaseModeTime() - 1000);
                 });
             } else if ("banana".equals(tile.getName())) {
                 pacmanPanel.getEnemies().forEach(g -> {
-                    if (g.getGhostScatterModeTime() < 10000)
-                        g.setGhostScatterModeTime(g.getGhostScatterModeTime() + 1000);
+                    if (g.getGhostRunModeTime() < 10000)
+                        g.setGhostRunModeTime(g.getGhostRunModeTime() + 1000);
                 });
             } else if ("pear".equals(tile.getName())) {
                 pacmanPanel.getEnemies().forEach(g -> {

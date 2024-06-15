@@ -22,7 +22,6 @@ public class GameService {
         int width = board.getFirst().size();
         int height = board.size();
         int tileSize = calculateTileSize(width, height);
-        double pacmanSpeed = 3;
         double ghostSpeed = 2;
 
         int[] pacmanRespawn;
@@ -35,7 +34,6 @@ public class GameService {
                 .withWidthInTiles(width)
                 .withHeightInTiles(height)
                 .withTileSize(tileSize)
-                .withPacmanSpeed(pacmanSpeed)
                 .withGhostSpeed(ghostSpeed);
 
             if (boardPath.contains("board1.txt")) {

@@ -30,14 +30,14 @@ public class RunPacman implements Runnable {
     private final int[] pacmanRespawnPoint;
     private final int maxPoints;
 
-    public RunPacman(String board, int lives, int score, int level, int time, int[] ghostTimeModes) {
+    public RunPacman(String board, int lives, int score, int level, int time, int[] ghostTimeModes, double pacmanSpeed) {
         this.lives = lives;
         this.board = board;
 
         System.out.println("board: " + board);
         GameData gameData = gameService.runGameBasedOnBoard(board);
         boardFromFile = gameData.getBoard();
-        pacmanSpeed = gameData.getPacmanSpeed();
+        this.pacmanSpeed = pacmanSpeed;
         ghostSpeed = gameData.getGhostSpeed();
         if (level > 1) {
             ghostSpeed++;
@@ -132,7 +132,15 @@ public class RunPacman implements Runnable {
         List<List<Tile>> updatedBoard = pacmanPanel.getBoard();
         String mapPath = gameService.rewriteBoard(updatedBoard, board);
         int[] ghostTimeModes = pacmanPanel.getEnemies().getFirst().getGhostTimeModes();
-        SwingUtilities.invokeLater(() -> new RunPacman(mapPath, finalLives, score, gamePanel.getLevelNumber(), gamePanel.getTime(), ghostTimeModes));
+        SwingUtilities.invokeLater(() -> new RunPacman(
+                mapPath,
+                finalLives,
+                score,
+                gamePanel.getLevelNumber(),
+                gamePanel.getTime(),
+                ghostTimeModes,
+                pacmanPanel.getPacman().getSpeed()
+        ));
     }
 
     private void playNextLevel(int lives, int score) {
@@ -140,7 +148,15 @@ public class RunPacman implements Runnable {
         pacmanFrame.dispose();
         String substring = board.substring(board.indexOf("b"));
         int[] ghostTimeModes = pacmanPanel.getEnemies().getFirst().getGhostTimeModes();
-        SwingUtilities.invokeLater(() -> new RunPacman(substring, lives, score, gamePanel.getLevelNumber(), gamePanel.getTime(), ghostTimeModes));
+        SwingUtilities.invokeLater(() -> new RunPacman(
+                substring,
+                lives,
+                score,
+                gamePanel.getLevelNumber(),
+                gamePanel.getTime(),
+                ghostTimeModes,
+                pacmanPanel.getPacman().getSpeed()
+        ));
     }
 
     private void endGame(int score, boolean showGameOver) {
