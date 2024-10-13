@@ -6,10 +6,8 @@ import pacman.tiles.point.HighScoresFrame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class RunGame {
 
@@ -19,30 +17,59 @@ public class RunGame {
     private JButton exitButton;
     private List<JCheckBox> mapCheckboxes;
     private String selectedMap;
-    private Map<String, String> mapList = new HashMap<>();
+    private final Map<String, String> mapList = Map.of(
+            "board1.txt", "54x21",
+            "board2.txt", "28x31",
+            "board3.txt", "50x25",
+            "board4.txt", "60x30",
+            "board5.txt", "35x29"
+    );
+
+    private final Map<String, JLabel> mapIcons = new HashMap<>();
+
+    {
+        for (Map.Entry<String, String> stringStringEntry : mapList.entrySet()) {
+            String map = stringStringEntry.getKey();
+            String mapDimensions = stringStringEntry.getValue();
+            String[] split = mapDimensions.split("x");
+            int dim1 = Integer.parseInt(split[0]);
+            int dim2 = Integer.parseInt(split[1]);
+            int scaleImg = 5;
+            ImageIcon originalIcon = new ImageIcon(String.format("resources/images/maps/%s.png", mapDimensions));
+            Image scaledImage = originalIcon.getImage().getScaledInstance(
+                    dim1 * scaleImg,
+                    dim2 * scaleImg,
+                    Image.SCALE_SMOOTH
+            );
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+            JLabel imageLabel = new JLabel(scaledIcon);
+            mapIcons.put(map, imageLabel);
+        }
+    }
+
     public RunGame() {
-        this.frame = new PacmanFrame(500, 400);
+        this.frame = new PacmanFrame(1200, 600);
         this.newGameButton = new JButton("New Game");
         this.highScoresButton = new JButton("High Scores");
         this.exitButton = new JButton("Exit");
         this.mapCheckboxes = new ArrayList<>();
 
-        JPanel mapSelectionPanel = new JPanel(new GridLayout(0, 1));
+        JPanel mapSelectionPanel = new JPanel(new GridLayout(0, 4));
+        mapSelectionPanel.setBackground(Color.BLACK);
 
-        mapList.put("board1.txt", "54 x 21");
-        mapList.put("board2.txt", "28 x 31");
-        mapList.put("board3.txt", "50 x 25");
-        mapList.put("board4.txt", "60 x 30");
-        mapList.put("board5.txt", "35 x 29");
+
         ButtonGroup mapButtonGroup = new ButtonGroup();
         for (Map.Entry<String, String> stringStringEntry : mapList.entrySet()) {
             String map = stringStringEntry.getKey();
             String mapDimensions = stringStringEntry.getValue();
             JCheckBox checkBox = new JCheckBox(mapDimensions);
+            checkBox.setForeground(Color.WHITE);
             checkBox.addActionListener(e -> selectedMap = map);
+
             mapCheckboxes.add(checkBox);
             mapButtonGroup.add(checkBox);
             mapSelectionPanel.add(checkBox);
+            mapSelectionPanel.add(mapIcons.get(map));
         }
 
         newGameButton.addActionListener(e -> {
