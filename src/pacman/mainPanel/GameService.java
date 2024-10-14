@@ -55,12 +55,12 @@ public class GameService {
                 rowThatSwitchSides = 15;
                 pacmanRespawn = new int[]{tileSize * 12, tileSize * 14};
                 ghostRespawn = new int[]{tileSize * 44, tileSize * 12};
-                maximumPoints = 55300;
+                maximumPoints = 54900;
             } else if (boardPath.contains("board5.txt")) {
                 rowThatSwitchSides = 14;
                 pacmanRespawn = new int[]{tileSize * 11, tileSize * 14};
                 ghostRespawn = new int[]{tileSize * 22, tileSize * 9};
-                maximumPoints = 42200;
+                maximumPoints = 42600;
             } else {
                 throw new RuntimeException("There is no such file as: " + boardPath);
             }
