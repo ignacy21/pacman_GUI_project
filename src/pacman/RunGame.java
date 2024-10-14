@@ -5,17 +5,20 @@ import pacman.mainPanel.RunPacman;
 import pacman.tiles.point.HighScoresFrame;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
 public class RunGame {
 
-    private JFrame frame;
-    private JButton newGameButton;
-    private JButton highScoresButton;
-    private JButton exitButton;
-    private List<JCheckBox> mapCheckboxes;
+    private final JFrame frame;
+    private final JButton newGameButton;
+    private final JButton highScoresButton;
+    private final JButton exitButton;
+    private final List<JCheckBox> mapCheckboxes;
+    private final List<JPanel> chooseBoardPanels;
     private String selectedMap;
     private final Map<String, String> mapList = Map.of(
             "board1.txt", "54x21",
@@ -49,12 +52,19 @@ public class RunGame {
 
     public RunGame() {
         this.frame = new PacmanFrame(1200, 600);
-        this.newGameButton = new JButton("New Game");
-        this.highScoresButton = new JButton("High Scores");
-        this.exitButton = new JButton("Exit");
-        this.mapCheckboxes = new ArrayList<>();
 
-        JPanel mapSelectionPanel = new JPanel(new GridLayout(0, 4));
+        JButton newGameBtn = new JButton("New Game");
+        JButton highScoresBtn = new JButton("High Scores");
+        JButton exitBtn = new JButton("Exit");
+        prettyingButtons(newGameBtn, highScoresBtn, exitBtn);
+
+        this.newGameButton = newGameBtn;
+        this.highScoresButton = highScoresBtn;
+        this.exitButton = exitBtn;
+        this.mapCheckboxes = new ArrayList<>();
+        this.chooseBoardPanels = new ArrayList<>();
+
+        JPanel mapSelectionPanel = new JPanel(new GridLayout(0, 2));
         mapSelectionPanel.setBackground(Color.BLACK);
 
 
@@ -64,12 +74,25 @@ public class RunGame {
             String mapDimensions = stringStringEntry.getValue();
             JCheckBox checkBox = new JCheckBox(mapDimensions);
             checkBox.setForeground(Color.WHITE);
-            checkBox.addActionListener(e -> selectedMap = map);
 
             mapCheckboxes.add(checkBox);
             mapButtonGroup.add(checkBox);
-            mapSelectionPanel.add(checkBox);
-            mapSelectionPanel.add(mapIcons.get(map));
+
+            JPanel chooseBoardPanel = new JPanel();
+            chooseBoardPanel.setBackground(Color.BLACK);
+            chooseBoardPanel.add(checkBox);
+            chooseBoardPanel.add(mapIcons.get(map));
+            chooseBoardPanels.add(chooseBoardPanel);
+            mapSelectionPanel.add(chooseBoardPanel);
+
+            checkBox.addActionListener(e -> {
+                selectedMap = map;
+                Border border = new LineBorder(Color.GREEN);
+                for (JPanel boardPanel : chooseBoardPanels) {
+                    boardPanel.setBorder(null);
+                }
+                chooseBoardPanel.setBorder(border);
+            });
         }
 
         newGameButton.addActionListener(e -> {
@@ -83,6 +106,8 @@ public class RunGame {
         exitButton.addActionListener(e -> exitGame());
 
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.BLACK);
+        buttonPanel.setBorder(new LineBorder(Color.BLUE));
         buttonPanel.add(newGameButton);
         buttonPanel.add(highScoresButton);
         buttonPanel.add(exitButton);
@@ -91,6 +116,23 @@ public class RunGame {
         frame.add(buttonPanel, BorderLayout.NORTH);
         frame.revalidate();
         frame.repaint();
+    }
+
+    private static void prettyingButtons(JButton newGameBtn, JButton highScoresBtn, JButton exitBtn) {
+        List<JButton> headButtons = List.of(
+                newGameBtn,
+                highScoresBtn,
+                exitBtn
+        );
+        for (JButton headButton : headButtons) {
+            headButton.setFont(new Font("PacFont", Font.PLAIN, 16));
+            headButton.setBackground(Color.BLUE);
+            headButton.setForeground(Color.WHITE);
+            headButton.setFocusPainted(false);
+            headButton.setOpaque(true);
+            headButton.setBorderPainted(false);
+
+        }
     }
 
     private void startGame() {
