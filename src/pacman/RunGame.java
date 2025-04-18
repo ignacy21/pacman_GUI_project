@@ -38,7 +38,7 @@ public class RunGame {
             int dim1 = Integer.parseInt(split[0]);
             int dim2 = Integer.parseInt(split[1]);
             int scaleImg = 5;
-            ImageIcon originalIcon = new ImageIcon(String.format("resources/images/maps/%s.png", mapDimensions));
+            ImageIcon originalIcon = new ImageIcon(String.format("src/resources/images/maps/%s.png", mapDimensions));
             Image scaledImage = originalIcon.getImage().getScaledInstance(
                     dim1 * scaleImg,
                     dim2 * scaleImg,

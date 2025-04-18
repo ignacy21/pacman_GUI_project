@@ -173,7 +173,7 @@ public class GamePanel extends JPanel {
     private JPanel createLivesPanel(int displayHeight, int lives) {
         BufferedImage pacmanImage;
         try {
-            pacmanImage = ImageIO.read(new File("resources/images/pacman/right/pacman_1.png"));
+            pacmanImage = ImageIO.read(new File("src/resources/images/pacman/right/pacman_1.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

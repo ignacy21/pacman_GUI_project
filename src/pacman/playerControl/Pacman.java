@@ -36,26 +36,27 @@ public class Pacman implements Player {
         List<BufferedImage> animationDown;
         List<BufferedImage> animationLeft;
         List<BufferedImage> animationRight;
+        String path = "src/resources/images/pacman/";
         try {
             animationUp = List.of(
-                    ImageIO.read(new File("resources/images/pacman/up/pacman_1.png")),
-                    ImageIO.read(new File("resources/images/pacman/up/pacman_2.png")),
-                    ImageIO.read(new File("resources/images/pacman/pacman.png"))
+                    ImageIO.read(new File(path + "up/pacman_1.png")),
+                    ImageIO.read(new File(path + "up/pacman_2.png")),
+                    ImageIO.read(new File(path + "pacman.png"))
             );
             animationDown = List.of(
-                    ImageIO.read(new File("resources/images/pacman/down/pacman_1.png")),
-                    ImageIO.read(new File("resources/images/pacman/down/pacman_2.png")),
-                    ImageIO.read(new File("resources/images/pacman/pacman.png"))
+                    ImageIO.read(new File(path + "down/pacman_1.png")),
+                    ImageIO.read(new File(path + "down/pacman_2.png")),
+                    ImageIO.read(new File(path + "pacman.png"))
                     );
             animationRight = List.of(
-                    ImageIO.read(new File("resources/images/pacman/right/pacman_1.png")),
-                    ImageIO.read(new File("resources/images/pacman/right/pacman_2.png")),
-                    ImageIO.read(new File("resources/images/pacman/pacman.png"))
+                    ImageIO.read(new File(path + "right/pacman_1.png")),
+                    ImageIO.read(new File(path + "right/pacman_2.png")),
+                    ImageIO.read(new File(path + "pacman.png"))
                     );
             animationLeft = List.of(
-                    ImageIO.read(new File("resources/images/pacman/left/pacman_1.png")),
-                    ImageIO.read(new File("resources/images/pacman/left/pacman_2.png")),
-                    ImageIO.read(new File("resources/images/pacman/pacman.png"))
+                    ImageIO.read(new File(path + "left/pacman_1.png")),
+                    ImageIO.read(new File(path + "left/pacman_2.png")),
+                    ImageIO.read(new File(path + "pacman.png"))
                     );
         } catch (IOException e) {
             throw new RuntimeException(e);

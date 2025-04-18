@@ -99,7 +99,7 @@ public class BoardService {
 
     private static BufferedImage findImage(String tileName) {
         try {
-            return ImageIO.read(new File("resources/images/tiles/" + tileName));
+            return ImageIO.read(new File("src/resources/images/tiles/" + tileName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

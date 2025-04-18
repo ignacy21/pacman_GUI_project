@@ -71,7 +71,7 @@ public class Ghost implements Entity, Runnable {
         ghostService = new GhostService(this, board, rowThatSwitchSides);
         thread = new Thread(this);
         thread.start();
-        String pathName = "resources/images/ghosts";
+        String pathName = "src/resources/images/ghosts";
         try {
             animationDown = List.of(
                     ImageIO.read(new File(String.format("%s/%s/%s_d_1.png", pathName, ghostName, ghostName))),
