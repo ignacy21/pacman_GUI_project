@@ -81,3 +81,6 @@
 41100;Zosia Samosia
 51900;Sławek
 55200;igi
+8900;Sylwester Stalone
+6900;BARSZCZ
+3100;jabadabadu smarze giblo z zmoim gangiem
