@@ -35,7 +35,8 @@ Naszym celem jest zdobycie jak największej ilości punktów przy jednoczesnym u
 |   |   |   |- GhostService.java  
 |   |   |- mainPanel\
 |   |   |   |- gameData\
-|   |   |   |   \- GameData.java
+|   |   |   |   |- GameData.java
+|   |   |   |   |- GameDataBuilder.java
 |   |   |   |- GamePanel.java  
 |   |   |   |- GameService.java  
 |   |   |   |- PacmanFrame.java  
@@ -69,11 +70,18 @@ Naszym celem jest zdobycie jak największej ilości punktów przy jednoczesnym u
 |   |   |   |- pacman\
 |   |   |   |- tiles\
 ```
-- `RunGame.java` - dodawanie map i innych komponentów z których składa się `PacmanFrame` - jest to główny panel z
+- `RunGame` - dodawanie map i innych komponentów z których składa się `PacmanFrame` - jest to główny panel z
   którego wybiera się mapę na której będzie rozgrywka, lub przechodzi się do wyników
 - `GhostMode` - enum z dostępnymi kierunkami duszka
-- `Ghost.java` - ma listę z obrazkami duszka, zmienia kierunek pacmana a wraz z nim obrazek duszka,
+- `Ghost` - ma listę z obrazkami duszka, zmienia kierunek pacmana a wraz z nim obrazek duszka,
 - tworzy osobny wątek, który odpowiada za zmianę trybu (i czasem jego trwania) duszka wraz z jego obrazkiem
 - `GhostService` - AI który przy pomocy dostępnej mapy określa poruszanie się duszka w zależnosci od trybu, w którym jest 
-- 
-- 
+- `GameDataBuilder` - builder który pomaga stworzyć klasę `GameData`
+- `GameData` - klasa, która zawiera wszystkie potrzebne inforamcje o mapie na której dzieje się gra
+- `GamePanel` - panel który wyświetla panel gry, punktów, żyć i czasu gry
+- `GameService` - panel, który po określeniu `GameData` oblicza wszystkie potrzebene dane do stworzenia mapy oraz ją tworzy
+- `PacmanFrame` - frame na którym sie wszystko dzieje
+- `PacmanPanel` - panel gry, tworzenie duszków i ich miejsca startowegp, updete położnia gracza i duszków oraz metoda
+odopowiedzialna za ich malowanie
+- `RunPacman` - klasa odpowiedzialna za wątek pacmana oraz posiadająca metody odpowiedzialne za: tracenie żyć i planszy 
+bez punktów które gracz wcześniej zdobył, odpalenie nowego lewelu (duszki maja większą prędkość), zakończenie gry
