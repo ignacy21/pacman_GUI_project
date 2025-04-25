@@ -91,3 +91,13 @@ bez punktów które gracz wcześniej zdobył, odpalenie nowego lewelu (duszki ma
 - `Pacman` - zdeminiowanie obrazów dla Pacmana metoda rysująca, obsłużenie klawiatury i skrętów dla Pacmana, ustawienie prędkości
 - `/tiles/boards` - dostępne mapy: jedna z punktami, druga bez
 - `MirorBoard` - klasa stworzona do duplikowania map (nie modrywa żednej roli w rozgrywce)
+- `PacmanAndGhostCollision` - obsługa kolizji duszków z Pacmanem, zjedzenie Pacmana lub duszka
+- `PacmanService` - Pacman dostaje tablicę i na jej podstawie określa gdzie może iść, czy może skręcić, ewentualne 
+cofnięcie Pacmana jeżeli znajdzie się w ścianie
+- `HighScoreFrame` - frame który obsługuje wyświeltanie się punktów
+- `PointCounterService` - serwis do liczenia punktów
+- `BoardService` - dodanie wszystkich możliwych kafelek, tworzenie mapy na podstanie pliku `.txt`
+- `Tile` - klasa kafelka
+- `TileManager` - rysowanie tablicy na podstawie listy list `Tile`
+- `wyniki.txt` - plik do którego są zapisywane oraz odczytywane i wyświetlane
+
