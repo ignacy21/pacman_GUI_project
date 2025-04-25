@@ -85,3 +85,9 @@ Naszym celem jest zdobycie jak największej ilości punktów przy jednoczesnym u
 odopowiedzialna za ich malowanie
 - `RunPacman` - klasa odpowiedzialna za wątek pacmana oraz posiadająca metody odpowiedzialne za: tracenie żyć i planszy 
 bez punktów które gracz wcześniej zdobył, odpalenie nowego lewelu (duszki maja większą prędkość), zakończenie gry
+- `Direction` - enum z dostępnymi kierunkami
+- `Entity` - interface stworzony dla Duszków i Pacmana
+- `Player` - interface dla Pacmana
+- `Pacman` - zdeminiowanie obrazów dla Pacmana metoda rysująca, obsłużenie klawiatury i skrętów dla Pacmana, ustawienie prędkości
+- `/tiles/boards` - dostępne mapy: jedna z punktami, druga bez
+- `MirorBoard` - klasa stworzona do duplikowania map (nie modrywa żednej roli w rozgrywce)
